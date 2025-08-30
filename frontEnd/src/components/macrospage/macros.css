@@ -1,0 +1,214 @@
+section#MACROS {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100vh;
+	background-color: white;
+	overflow-y: hidden;
+}
+
+section#MACROS::after {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: white;
+		opacity: 0;
+		transition: all ease-in-out 0.2s;
+		z-index: -1;
+	}
+
+	section#MACROS._enter::after {
+		transition: all ease-in-out 0.2s;
+		z-index: 20;
+		opacity: 1;
+	}
+
+
+
+
+section#MACROS div#mainWrapper {
+	position: fixed;
+	height: calc(100vh - 160px);
+	width: 100%;
+	margin-top: 80px;
+	overflow-y: scroll;
+}
+
+section#MACROS div#pageHeader {
+	position: relative;
+	width: 90%;
+	margin: 8px auto;
+
+	padding: 16px 16px 8px;
+	background-color: var(--greyscale-backdrop);
+	border-radius: 8px;
+}
+
+section#MACROS div#pageHeader h3#subHeading {}
+
+section#MACROS div#pageHeader h3#subHeading span.toUserProfile {
+	color: black;
+}
+
+section#MACROS div#pageHeader button#addRemoveRequest {
+	display: block;
+	position: relative;
+	margin-left: auto;
+	font-size: 1em;
+	left: 12px;
+}
+
+section#MACROS div#pageHeader h3#subHeading {
+	font-family: "Raleway";
+	font-weight: 400;
+	font-size: 0.9em;
+	letter-spacing: 2px;
+	word-spacing: 2px;
+	color: var(--greyscale-text);
+	margin-bottom: 8px;
+}
+
+section#MACROS div#pageHeader h2#macroName {
+	font-family: "Raleway";
+	font-weight: 400;
+	font-size: 2.5em;
+	letter-spacing: 4px;
+	color: var(--greyscale-elements);
+	margin-bottom: 8px;
+	text-transform: capitalize;
+
+	margin-top: 24px;
+	margin-left: -4px;
+	max-width: 100%;
+	word-wrap: break-word;
+}
+
+
+section#MACROS div#pageHeader div#infoWrapper {
+	margin: 12px 0 0px;
+	display: flex;
+	flex-direction: row;
+}
+
+
+section#MACROS div#pageHeader h4#postCount,
+section#MACROS div#pageHeader h4#userCount {
+	position: relative;
+	display: inline-block;
+	font-family: "Raleway";
+	font-weight: 600;
+	font-size: 2.5em;
+	letter-spacing: 2px;
+	color: var(--greyscale-elements);
+
+	margin: 0 20px;
+/*	padding: 0 20px;*/
+}
+
+section#MACROS div#pageHeader h4#postCount span,
+section#MACROS div#pageHeader h4#userCount span {
+	display: block;
+	position: relative;
+    font-weight: 400;
+    font-size: 0.5em;
+    left: 8px;
+    top: -22px;
+    color: var(--greyscale-text);
+}
+
+
+section#MACROS div#pageHeader h4#postCount {
+	margin-left: 0;
+}
+
+section#MACROS div#pageHeader h4#userCount {}
+
+section#MACROS div#pageHeader h4#userCount span {
+/*	left: -60px;*/
+}
+
+
+
+section#MACROS h2#noAccess {
+	position: relative;
+	width: 70%;
+	margin: 128px auto;
+	text-align: center;
+	font-family: 'Raleway';
+	font-weight: 600;
+	font-size: 2.5em;
+	letter-spacing: 2px;
+	line-height: 52px;
+	color: var(--greyscale-accent);
+}
+
+
+
+section#MACROS div.log {
+	width: 94%;
+	margin: 24px auto 0;
+}
+
+section#MACROS div.log div.entry.right {
+	text-align: right;
+}
+section#MACROS div.log div.entry.right ul#details {
+	flex-direction: row-reverse;
+} 
+
+
+
+
+
+
+
+
+
+section#MACROS div#menuBar {
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+}
+
+section#MACROS div#menuBar button {
+	height: 100%;
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 24px 0;
+}
+
+section#MACROS div#menuBar ul#menu {
+	width: 100%;
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    list-style-type: none;
+    margin: 0 0;
+    padding: 12px 0;
+    animation: _enter ease-in-out forwards 0.1s;
+}
+
+	section#MACROS div#menuBar ul#menu.leave {
+		animation: _leave ease-in-out forwards 0.1s;
+	}
+
+section#MACROS div#menuBar ul#menu li {
+	width: 100%;
+}
+
+section#MACROS div#menuBar ul#menu li button {
+	position: relative;
+    display: block;
+    padding: 0;
+    margin: 24px auto;
+    text-align: center;
+    left: auto;
+    transform: none;
+/*    width: 100%;*/
+}

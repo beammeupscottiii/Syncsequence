@@ -1,0 +1,701 @@
+
+/* * * 
+L o G  &  P o s t 
+* * */
+
+div.log {
+	scrollbar-width: none;
+}
+
+div.log h2.noPostsToday {
+	margin: 48px 0;
+}
+
+div.log h2.noPostsToday,
+div.log span.postDate {
+	display: block;
+	font-family: "Raleway";
+	font-size: 2.5em;
+	color: var(--greyscale-elements);
+	text-align: right;
+	font-weight: 600;
+}
+
+div.log span.postDate {
+	margin: 16px 0;
+}
+
+
+div.log div.entry {
+	font-family: "Raleway";
+	position: relative;
+	margin: 16px 0px 36px;
+	padding: 20px 8px;
+	transition: all ease-in-out 0.5s;
+}
+
+div.log div.entry:hover {
+	background-color: rgba(112, 112, 112, 0.05);
+	transform: scale(1.05);
+/*	box-sizing: border-box;*/
+/*	padding: 12px;*/
+}
+
+/*div.shiftLeft {
+	animation: shiftLeft ease-in-out forwards 0.2s;
+}
+
+	@keyframes shiftLeft {
+		0% {
+			left: 0;
+		}
+		100% {
+			left: 100px;
+		}
+	}*/
+
+div.log div.entry:first-child {
+	margin-top: 40px;
+}
+
+div.log div.entry:last-child {
+	padding-bottom: 40px;
+}
+
+
+
+div.log div.entry button.toProfile {
+	font-size: 1em;
+	letter-spacing: 1px;
+	background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 16px 0 32px;
+    position: relative;
+}
+
+div.log div.entry button.toProfile img {
+	width: 48px;
+	height: 48px;
+	border-radius: 8px;
+	position: absolute;
+	left: 0;
+	opacity: 0.5;
+}	
+
+div.log div.entry button.toProfile span {
+	display: block;
+	margin-top: 14px;
+	margin-left: 28px;
+}
+
+
+div.log div.entry h2 {
+	font-family: "Raleway";
+	font-size: 1.5em;
+	letter-spacing: 2px;
+	font-weight: 400;
+	line-height: 32px;
+	color: var(--greyscale-details);
+	margin: 0px;
+}
+
+div.log div.entry p {
+	font-family: "Open Sans";
+	font-size: 1em;
+	font-weight: 400;
+	line-height: 26px;
+	color: var(--greyscale-text);
+	margin: 10px 0 0;
+}
+
+div.log div.entry ul#thumbnailsWrapper {
+	width: fit-content;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	list-style-type: none;
+	margin: 24px 0;
+	margin-left: -4px;
+	padding: 0;
+	z-index: 20;
+}
+
+div.log div.entry ul#thumbnailsWrapper li {
+	width: 120px;
+	height: 120px;
+	width: 88px;
+	height: 88px;
+	padding: 0 6px;
+/*	margin: 0 16px;*/
+}
+
+div.log div.entry ul#thumbnailsWrapper li img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+    object-position: center;
+    border-radius: 4px;
+    opacity: 0.75;
+}
+
+
+div.log div.entry ul#details {
+	display: flex;
+	flex-direction: row;
+	list-style-type: none;
+	margin: 8px 0 0 -4px;
+	padding: 0;
+}
+
+div.log div.entry ul#details li {
+	font-weight: 600;
+	font-size: 1em;
+	letter-spacing: 2px;
+	margin: 12px 0;
+	margin-left: 6px;
+	margin-right: 12px;
+	color: var(--greyscale-text);
+}
+
+
+
+
+
+
+/***
+ 	P O S T  P A G E
+***/
+
+
+section#POST {
+	position: fixed;
+/*	may change above rule...*/
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+
+	font-family: "Open Sans";
+/*	background-color: var(--greyscale-background);*/
+}
+
+	section#POST::before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: white;
+		opacity: 0;
+		transition: all ease-in-out 1s;
+		z-index: 0;
+	}
+
+	section#POST._enter::before {
+		transition: all ease-in-out 0.1s;
+		z-index: 20;
+		opacity: 1;
+	}
+
+section#POST header {
+	background-color: transparent;
+	transition: all ease-in-out 0.5s;
+}
+
+section#POST article button#open {
+	font-size: 1em;
+	position: relative;
+/*	top: 15%;*/
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 10;
+	margin-top: 30px;
+}
+
+/* * * D e t a i l s  B o x * * */
+
+article div#details {
+	position: relative;
+	top: -40px;
+	width: 100%;
+	height: 0px;
+	background-color: var(--site-gray-lightest);
+	border-radius: 6px;
+	transition: all 0.3s ease-in-out;
+	overflow: hidden;
+}
+
+	article div#details.open {
+		height: auto;
+	}
+
+
+article div#details h4 {
+	margin: 60px 10px 0;
+}
+
+article div#details p {
+	margin: 10px 10px 0;
+}
+
+
+article div#details ul#options {
+	margin: 20px 0 20px;
+	padding: 0;
+	list-style-type: none;
+}
+
+article div#details ul#options li {
+	display: inline-block;
+	margin: 0 10px;
+}
+
+
+
+
+
+
+
+
+
+/* * * M a i n  C o n t e n t * * */
+
+section#POST header {
+	top: -2px;
+	background-color: white;
+}
+
+section#POST article {
+	width: 90%;
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%);;
+	padding-top: 70px;
+	height: calc(100vh - 140px);
+	overflow-y: scroll;
+	scrollbar-width: none;
+}
+	section#POST article::-webkit-scrollbar {
+		display: none;
+	}
+
+section#POST article div#mainContent {
+/*	margin-top: 44px;*/
+}
+
+section#POST article div#mainContent button.toProfile {
+	font-size: 1em;
+	letter-spacing: 1px;
+	background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 16px 0 8px;
+    position: relative;
+}
+
+section#POST article div#mainContent button.toProfile img {
+	width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    position: absolute;
+    left: 24px;
+    opacity: 0.5;
+}
+
+section#POST article div#mainContent button.toProfile span {
+	display: block;
+    margin-top: 24px;
+    margin-left: 24px;
+}
+
+section#POST article div#mainContent button.toProfile span span {
+	margin-top: 0px;
+	margin-left: 0px;
+	display: inline;
+}
+
+section#POST article div#mainContent h2 {
+	font-size: 1.75em;
+	font-weight: 400;
+	letter-spacing: 2px;
+	color: var(--greyscale-details);
+
+	margin-bottom: 8px;
+}
+
+section#POST article div#mainContent p {
+	font-size: 1em;
+	font-weight: 400;
+	line-height: 28px;
+	color: var(--greyscale-text);
+
+	margin-top: 16px;
+}
+
+section#POST article div#mainContent img {
+	width: 100%;
+	margin: 8px auto;
+	border-radius: 4px;
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+
+
+
+
+
+
+
+
+/* * * 
+	T A G S L I S T
+* * */
+
+section#POST article ul#tagsList {
+	list-style-type: none;
+	padding: 12px 0;
+
+	display: flex;
+	justify-content: center;
+	width: 98%;
+	height: 36px;
+	margin: 36px auto;
+	overflow-x: scroll;
+	scrollbar-width: none;
+}
+
+section#POST article ul#tagsList.alot {
+	justify-content: flex-start;
+}
+
+section#POST article ul#tagsList li {
+	margin: 0px 4px;
+}
+
+section#POST article ul#tagsList li button {
+	font-size: 0.85em;
+	text-transform: capitalize;
+	padding: 8px;
+}
+
+section#POST article ul#tagsList li button.tag {
+	border: 2px solid black;
+	border-radius: 4px;
+}
+
+section#POST article ul#tagsList li button.private {
+	border: 2px solid var(--greyscale-elements);
+	background-color: var(--greyscale-elements);
+	color: var(--greyscale-accent);
+}
+
+
+
+
+
+
+/* * * 
+	C O M M E N T S 
+* * */
+
+div#commentsWrapper {
+	width: 98%;
+	position: relative;
+	margin: 64px auto 40px;
+}
+
+
+div#commentsWrapper h2 {
+	font-size: 1.75em;
+	font-weight: 400;
+	letter-spacing: 2px;
+	color: var(--greyscale-text);
+	margin: 0 0 8px 8px;
+}
+
+div#commentsWrapper h2 span#commentCount {
+	font-size: 1.5em;
+	font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--greyscale-elements);
+    margin: 0px 3px;
+    position: absolute;
+    top: -20px;
+    left: -8px;
+}
+
+
+div#commentsWrapper ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+div#commentsWrapper ul#commentBox li {
+	margin: 48px 0;
+}
+
+div#commentsWrapper ul#replies li {
+	margin: 0px 0px 0px -2px;
+	border-left: 2.5px solid var(--greyscale-accent);
+	padding: 24px 0 24px 12px;
+}
+
+div#commentsWrapper ul#replies li:last-child {
+	padding-bottom: 0px;
+}
+
+
+div#commentsWrapper ul li button.toProfile {
+	font-size: 1em;
+	letter-spacing: 1px;
+	background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 16px 0 32px -4px;
+    position: relative;
+}
+
+div#commentsWrapper ul li button.toProfile img {
+	width: 48px;
+	height: 48px;
+	border-radius: 8px;
+	position: absolute;
+	left: 0;
+	opacity: 0.5;
+}	
+
+div#commentsWrapper ul li button.toProfile span {
+	display: block;
+	margin-top: 14px;
+	margin-left: 28px;
+}
+
+
+div#commentsWrapper ul#commentBox li h4 {
+	font-family: 'Raleway';
+	font-size: 0.9em;
+	font-weight: 300;
+	margin: 0px auto 20px;
+
+}
+
+div#commentsWrapper ul#commentBox li p {
+	color: var(--greyscale-text);
+	font-weight: 400;
+	line-height: 28px;
+	margin: 20px 0 28px;
+}
+
+div#commentsWrapper ul#commentBox li div#optionsWrapper {
+	
+}
+
+
+/* * * O P T I O N S * * */
+
+div#optionsBar {
+	width: 100%;
+	position: fixed;
+	bottom: 0px;
+/*	background-color: var(--greyscale-background);*/
+	background-color: transparent;
+	z-index: 10;
+}
+
+div#optionsBar button#optionsToggle {
+	height: 100%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 24px 0;
+}
+
+
+
+div#optionsBar ul#optionsMenu {
+	width: 100%;
+	background-color: rgba(255, 255, 255, 0.95);
+	position: absolute;
+	bottom: 0;
+
+	list-style-type: none;
+	margin: 0 0;
+	padding: 0px 0 12px;
+	animation: _enter ease-in-out forwards 0.1s;
+	border-radius: 8px;
+/*	border-top: 2px solid var(--greyscale-accent);*/
+}
+
+	div#optionsBar ul#optionsMenu.leave {
+		animation: _leave ease-in-out forwards 0.1s;
+	}
+
+div#optionsBar ul#optionsMenu li {
+	width: 100%;
+	margin: 24px auto;
+}
+
+div#optionsBar ul#optionsMenu button#exit {
+	font-family: 'Open Sans';
+	font-size: 2em;
+}
+
+div#optionsBar ul#optionsMenu li button {
+	position: relative;
+	display: block;
+	margin: 0px auto;
+}
+
+
+
+
+
+div#optionsBar ul#optionsMenu li#info {
+	width: 96%;
+	margin: 16px auto 36px;
+	background-color: var(--greyscale-backdrop);
+	border-radius: 8px;
+	padding: 16px;
+	box-sizing: border-box;
+	font-family: 'Raleway';
+	font-weight: 400;
+	letter-spacing: 1px;
+	color: var(--greyscale-text);
+}
+
+div#optionsBar ul#optionsMenu li#info h4 {
+	font-weight: 400;
+	margin: 0 0 12px;
+}
+
+div#optionsBar ul#optionsMenu li#info p {
+	margin: 0;
+	font-weight: 300;
+}
+
+div#optionsBar ul#optionsMenu li#info ul {
+	margin: 16px auto 8px;
+	padding: 0;
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+div#optionsBar ul#optionsMenu li#info ul li {
+	width: fit-content;
+	margin: 6px 0;
+}
+
+div#optionsBar ul#optionsMenu li#info ul li button {
+	text-transform: capitalize;
+	font-size: 1em;
+	color: black;
+}
+
+
+
+div#optionsBar form {
+	display: block;
+	width: 100%;
+	position: absolute;
+	bottom: 10px;
+	z-index: 12;
+	background-color: white;
+}
+
+div#optionsBar form h3 {
+	font-size: 1.5em;
+	font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--greyscale-accent);
+    margin: 24px 16px;
+    font-family: 'Raleway';
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+
+div#optionsBar form textarea {
+	width: 92%;
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+
+	font-family: 'Raleway';
+    font-weight: 300;
+    font-size: 0.9em;
+    color: var(--greyscale-details);
+    letter-spacing: 2px;
+    line-height: 22px;
+
+	border: none;
+    border-bottom: 2px solid var(--greyscale-elements);
+}
+
+div#optionsBar form textarea:focus {
+	outline: none;
+	border-bottom-color: var(--greyscale-text);
+}
+
+div#optionsBar form div#buttonBox {
+
+}
+
+div#optionsBar form div#buttonBox button {
+	width: 50%;
+	padding: 12px 0;
+}
+
+
+
+
+
+div#optionsBar ul#collections {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: absolute;
+	width: 100%;
+	bottom: 0px;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	z-index: 12;
+	background-color: white;
+	padding: 24px 0;
+}
+
+div#optionsBar ul#collections li {
+	margin: 8px 0;
+}
+
+div#optionsBar ul#collections li:first-child {
+	display: none;
+}
+
+div#optionsBar ul#collections li:last-child button {
+	margin-bottom: -30px;
+	font-size: 3em;
+}
+
+div#optionsBar ul#collections li button {
+	text-transform: none;
+}
+
+
+
+
+
+
+
+
+

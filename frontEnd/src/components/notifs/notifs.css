@@ -1,0 +1,284 @@
+
+/* * * I n t e r a c t i o n s  L i s t * * */
+
+div#interactionsList {
+/*	position: absolute;*/
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 100%;
+/*	background-color: var(--greyscale-background-2);*/
+	background-color: white;
+	z-index: 20;
+/*	animation: 0.5s ease-in-out forwards _active;*/
+}
+
+
+	div#interactionsList::before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: white;
+		opacity: 0;
+		transition: all ease-in-out 0.2s;
+		z-index: -1;
+	}
+
+	div#interactionsList._enter::before {
+		z-index: 20;
+		opacity: 1;
+	}
+
+
+div#interactionsList div#header {
+	width: 95%;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+/*	border-bottom: 2px solid var(--site-gray-mid);*/
+}
+
+	div#interactionsList div#header h2 {
+		position: relative;
+		left: 10px;
+		font-size: 1.75em;
+		font-weight: 400;
+		letter-spacing: 5px;
+		color: var(--greyscale-accent);
+		text-transform: uppercase;
+	}
+
+	div#interactionsList div#header h2 span#username {
+		position: absolute;
+		top: -20px;
+		left: -10px;
+		font-size: 1.5em;
+		font-weight: 600;
+		letter-spacing: 1px;
+		color: var(--greyscale-elements);
+	}
+
+
+
+
+div#interactionsList div#header button {
+	position: relative;
+	top: 0px;
+	border: none;
+	background: transparent;
+	padding: 0px;
+}
+
+div#interactionsList div#header button p {
+	margin: 0;
+	padding: 0;
+
+	font-size: 4em;
+	font-weight: 600;
+	color: var(--site-gray-light);
+}
+
+div#interactionsList div#header button span {
+	position: absolute;
+	top: 12px;
+	left: 14px;
+	font-family: 'Open Sans';
+	font-size: 3em;
+	font-weight: 400;
+	color: var(--greyscale-details);
+}
+
+
+
+
+
+
+div#interactionsList ul#notifList {
+	position: relative;
+/*	width: %;*/
+	height: 84%;
+	margin: 0 auto 0;
+
+	list-style-type: none;
+	padding: 0;
+
+	overflow-y: scroll;
+	overflow-x: hidden;
+	z-index: 10;
+	background-color: rgba(112, 112, 112, 0.05);
+}
+
+div#interactionsList ul#notifList li {
+	display: flex;
+	width: 96%;
+	position: relative;
+/*	margin: 24px auto 24px;*/
+	margin: 1px auto;
+	padding: 16px;
+/*	border-bottom: 1px solid var(--site-gray-light);*/
+	background-color: white;
+}
+	
+	div#interactionsList ul#notifList li:last-child {
+		padding-bottom: 20px;
+	}
+
+div#interactionsList ul#notifList li div#body {
+	width: 90%;
+}
+
+div#interactionsList ul#notifList li span.unread{
+/*	width: %;*/
+
+	text-align: center;
+	font-size: 3em;
+	color: var(--greyscale-accent);
+	padding: 0 8px;
+}
+
+div#interactionsList ul#notifList li p {
+	font-family: 'Open Sans';
+	width: 96%;
+	margin: 16px auto;
+	color: var(--greyscale-text);
+	line-height: 24px;
+}
+
+div#interactionsList ul#notifList li div.options {
+	margin-left: 2px;
+}
+
+div#interactionsList ul#notifList li div.options button {
+	font-size: 0.85em;
+}
+
+
+
+
+div#interactionsList div#buttonBar {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	background-color: white;
+	z-index: 15;
+}
+
+div#interactionsList div#buttonBar button {
+	padding: 24px 0;
+	width: 50%;
+}
+
+
+
+div#interactionsList div#logoutConfirm {
+	position: absolute;
+	top: 0;
+	background-color: white;
+	width: 100%;
+	height: 100%;
+	z-index: 21;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* * * P o p U p  N o t i f s  * * */
+
+div#popUpNotif {
+/*	display: none;*/
+	position: absolute;
+	bottom: -140px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 96%;
+	margin: 0 auto;
+	z-index: 50;
+	background-color: white;
+	border: 2px solid var(--site-gray-lite);
+	border-radius: 3px;
+	box-sizing: border-box;
+	padding: 6px 12px 12px;
+
+	opacity: 0;
+	transition: all 0.5s ease-in-out;
+}
+
+	div#popUpNotif.active {
+		animation: active 0.5s ease-in-out forwards;
+	}
+
+	div#popUpNotif.nonActive {
+		animation: nonActive 0.5s ease-in-out;
+	}
+
+	@keyframes active {
+		0% {
+			display: block;
+			opacity: 0;
+			bottom: -100px;
+		}
+		100% {
+			bottom: 10px;
+			opacity: 1;
+		}
+	}
+
+	@keyframes nonActive {
+		0% {
+			bottom: 10px;
+			opacity: 1;
+		}
+		99% {
+			bottom: -100px;
+			opacity: 0;
+		}
+		100%{
+			display: none;
+		}
+	}
+
+div#popUpNotif p {
+	margin: 10px 0 20px;
+	color: var(--greyscale-text);
+}
+
+div#popUpNotif ul#options {
+	display: flex;
+	flex-direction: row;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+div#popUpNotif ul#options li {
+	margin: 0 12px;
+}
+
+div#popUpNotif ul#options li:first-child {
+	margin-left: 0px;
+}
+
+div#popUpNotif ul#options li button {
+	font-size: 1em;
+	padding: 0;
+}
+
+
+
+

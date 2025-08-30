@@ -1,0 +1,560 @@
+
+div#monthChart {
+	position: absolute;
+	width: 96%;
+	height: calc(100% - 150px);
+	z-index: 15;
+	background-color: white;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	overflow-y: scroll;
+
+	/*border: 2px solid var(--greyscale-accent);
+	border-radius: 4px;*/
+	animation: 0.25s ease-in-out forwards scaleFadeIn;
+}
+
+	div#monthChart.leave {
+		animation: 0.25s ease-in-out forwards scaleFadeOut;
+	}
+
+@keyframes scaleFadeIn {
+	0% {
+		opacity: 0;
+		transform: translate(-50%, -50%) scale(0.8);
+	}
+	100% {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+}
+
+@keyframes scaleFadeOut {
+	0% {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+	100% {
+		opacity: 0;
+		transform: translate(-50%, -50%) scale(0.8);
+	}
+}
+
+
+div#monthChart div#header {
+	position: relative;
+	width: 90%;
+	height: 1.5em;
+	margin: 40px auto 60px;
+}
+
+div#monthChart div#header span {
+	font-family: 'Raleway';
+	font-size: 1.5em;
+	color: var(--site-gray-dark);
+}
+
+div#monthChart div#header span#prev {
+	position: absolute;
+	top: 100%;
+	left: 10%;
+	transform: translateY(-50%);
+	transition: all 0.5s ease-in-out;
+	opacity: 1;
+
+	color: var(--greyscale-detail);
+	text-transform: uppercase;
+}
+
+	div#monthChart div#header span#prev.off {
+		opacity: 0;
+	}
+
+	div#monthChart div#header span#prev.prevStart {
+		animation-name: prevStart;
+		animation-fill-mode: forwards;
+		animation-duration: 1s;
+		animation-timing-function: cubic-bezier(0.6, -0.28, 0.74, 0.05);
+		animation-timing-function: ease-in-out;
+	}
+
+		@keyframes prevStart {
+			0% {
+				top: 100%;
+				left: 10%;
+			}
+			70% {
+				font-size: 3em;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+			100% {
+				opacity: 0;
+				font-size: 3em;
+				top: 50%;
+				left: 50%;	
+				right: unset;
+				transform: translate(-50%, -50%);
+			}
+		}
+
+	div#monthChart div#header span#prev.prevEnd {
+		animation-name: prevEnd;
+		animation-fill-mode: forwards;
+		animation-duration: 0.5s;
+		animation-timing-function: cubic-bezier(0.6, -0.28, 0.74, 0.05);
+		animation-timing-function: ease-in-out;
+	}
+
+		@keyframes prevEnd {
+			0% {
+				opacity: 0;
+				font-size: 3em;
+				top: 50%;
+				left: 50%;
+				right: unset;
+				transform: translate(-50%, -50%);
+			}
+
+			99% {
+				top: 100%;
+				left: 10%;
+				transform: translateY(-50%);
+			}
+
+			100% {
+				opacity: 1;
+				top: 100%;
+				left: 10%;
+				transform: translateY(-50%);
+			}
+		}
+
+div#monthChart div#header div#current {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	opacity: 1;
+
+	font-size: 3em;
+	color: var(--greyscale-text);
+	text-transform: uppercase;
+	transition: all 0.1s ease-in-out;
+}
+
+/*div#monthChart div#header div#current.off {
+	opacity: 0;
+}*/
+
+	div#monthChart div#header span#current.switch {
+		opacity: 0;
+	}
+
+div#monthChart div#header div#current p#month {
+	margin: 0 auto;
+	color: var(--greyscale-text);
+	text-transform: uppercase;
+	transition-delay: 100ms;
+	transition: all 1s ease-in-out;
+} 
+
+div#monthChart div#header div#current p#month.off {
+	opacity: 0;
+}
+
+div#monthChart div#header div#current span#year {
+	letter-spacing: 10px;
+	position: absolute;
+	top: 120%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding-left: 10px;
+	transition: all 0.2s ease-in-out;
+	font-size: 0.75em;
+}
+
+	div#monthChart div#header span#year.off {
+		opacity: 0;
+	}
+
+div#monthChart div#header span#next {
+	position: absolute;
+	top: 100%;
+	right: 10%;
+	transform: translateY(-50%);
+	transition: all 0.5s ease-in-out;
+	opacity: 1;
+
+	color: var(--greyscale-detail);
+	text-transform: uppercase;
+}
+
+	div#monthChart div#header span#next.off {
+		opacity: 0;
+	}
+	
+	div#monthChart div#header span#next.nextStart {
+		animation-name: nextStart;
+		animation-fill-mode: forwards;
+		animation-duration: 1s;
+/*		animation-timing-function: cubic-bezier(0.6, -0.28, 0.74, 0.05);*/
+/*		animation-timing-function: ease-in-out;*/
+		animation-timing-function: cubic-bezier(0.6, -0.28, 0.74, 0.05);
+	}
+
+		@keyframes nextStart {
+			0% {
+				top: 100%;
+				right: 10%;
+			}
+			70% {
+				font-size: 3em;
+				top: 50%;
+				left: 50%;
+				right: unset;
+				transform: translate(-50%, -50%);
+			}
+			100% {
+				opacity: 0;
+				font-size: 3em;
+				top: 50%;
+				left: 50%;
+				right: unset;
+				transform: translate(-50%, -50%);
+			}
+		}
+
+	div#monthChart div#header span#next.nextEnd {
+		animation-name: nextEnd;
+		animation-fill-mode: forwards;
+		animation-duration: 0.5s;	
+/*		animation-timing-function: cubic-bezier(0.6, -0.28, 0.74, 0.05);*/
+/*		animation-timing-function: ease-in-out;*/
+		animation-timing-function: cubic-bezier(0.6, -0.28, 0.74, 0.05);
+	}
+
+		@keyframes nextEnd {
+			0% {
+				opacity: 0;
+				font-size: 3em;
+				top: 50%;
+				left: 50%;
+				right: unset;
+				transform: translate(-50%, -50%);
+			}
+			99% {
+				top: 100%;
+				right: 10%;
+				transform: translateY(-50%);
+			}
+			100% {
+				opacity: 1;
+				top: 100%;
+				right: 10%;
+				transform: translateY(-50%);
+			}
+		}
+
+
+div#monthChart div#calendar {
+
+	margin-top: 72px;
+}
+
+	div#monthChart div#calendar.leave {
+		animation-name: calLeave;
+		animation-fill-mode: forwards;
+		animation-duration: 0.5s;
+		animation-timing-function: ease-in;
+	}
+
+	@keyframes calLeave {
+		0% {
+			opacity: 1;
+			transform: scale(1);
+		}
+		100% {
+			opacity: 0;
+			transform: scale(0.75);
+		}
+	}
+
+	div#monthChart div#calendar.return {
+		animation-name: calReturn;
+		animation-fill-mode: forwards;
+		animation-duration: 0.5s;
+		animation-timing-function: ease-in;
+	}
+
+	@keyframes calReturn {
+		0% {
+			opacity: 0;
+			transform: scale(0.75);
+		}
+		100% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+
+div#monthChart div#calendar div#daysOfTheWeek {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+div#monthChart div#calendar div#daysOfTheWeek div.day {
+	display: inline-block;
+	padding: 10px;
+	color: var(--site-gray-dark);
+
+	font-size: 1.25em;
+	font-weight: 600;
+	color: var(--greyscale-text);
+}
+
+
+div#monthChart div#calendar div#dates {
+	margin: 0 auto;
+	width: 95%;
+}
+
+div#monthChart div#calendar div#dates div.row {
+	display: flex;
+	justify-content: space-evenly;
+	position: relative;
+	margin: -2px 0;
+}
+
+/*div#monthChart div#calendar div#dates div.row:nth-child(6) {
+	display: none;
+}*/
+
+div#monthChart div#calendar div#dates div.row button.cell {
+	font-family: "Open Sans";
+	font-weight: 400;
+	font-size: 1em;
+
+	background-color: transparent;
+	border: none;
+	border: 2px solid transparent;
+	border-radius: 8px;
+	width: calc(100% / 7);
+	margin: 0;
+	position: relative;
+	padding: 4px 0;
+	border-bottom: 2px solid transparent;
+}
+
+div#monthChart div#calendar div#dates div.row button.cell.today {
+	border: 2px solid black;
+}
+
+div#monthChart div#calendar div#dates div.row button.cell:hover {
+	border: 2px solid black;
+}
+
+div#monthChart div#calendar div#dates div.row button.cell:focused {}
+
+div#monthChart div#calendar div#dates div.row button.cell p {
+/*		margin: 24px 0 12px;*/
+		font-family: 'Open Sans';
+		color: black;
+		text-align: center;
+		color: var(--site-gray-dark);
+}
+
+div#monthChart div#calendar div#dates div.row button.today p {
+	font-weight: 600;
+	color: var(--greyscale-details);
+} 	
+
+		div#monthChart div#calendar div#dates div.row button.blank {
+			z-index: -1;
+		}
+		
+		div#monthChart div#calendar div#dates div.row button.blank p {
+			color: transparent;
+		}
+
+
+	div#monthChart  div.row button.cell div.tallyWrapper {
+		display: flex;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%) rotate(180deg) scaleX(-1);
+		justify-content: space-evenly;
+		width: 100%;
+		height: 94%;
+		z-index: -1;
+	}
+
+		div#monthChart  div.row button.cell div.tallyWrapper span.tally {
+			display: inline-block;
+			width: 0px;
+/*			height: 20px;*/
+			border: 1px solid rgba(0, 0, 0, .1);
+			margin: 0 ;
+		}
+
+		div#monthChart  div.row button.cell div.tallyWrapper span.tally.on {
+			border-color: black;
+		}
+
+			span.tally:first-child {
+				height: 16%;
+			}
+			span.tally:nth-child(2) {
+				height: 32%;
+			}
+			span.tally:nth-child(3) {
+				height: 48%;
+			}
+			span.tally:nth-child(4) {
+				height: 70%;
+			}
+			span.tally:last-child {
+				height: 48%;
+			}
+
+
+div#monthChart h2#noPosts {
+	display: block;
+    font-family: "Raleway";
+    font-size: 2.5em;
+    color: var(--site-gray-lightest);
+    text-align: right;
+}
+
+div#monthChart div.log {
+	width: 96%;
+	margin: 20px auto 0;
+}
+
+div#monthChart div.log div.entry {
+	margin-top: 20px;
+}
+
+
+
+
+
+
+
+div#monthChart div#dateSelection {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 20;
+	background-color: white;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+	div#monthChart div#dateSelection::before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: white;
+		opacity: 0;
+		transition: all ease-in-out 0.25s;
+		z-index: -1;
+	}
+
+	div#monthChart div#dateSelection._enter::before {
+		transition: all ease-in-out 0.1s;
+		z-index: 21;
+		opacity: 1;
+	}
+
+
+div#monthChart div#dateSelection p#firstNotice {
+	font-family: 'Raleway';
+	font-weight: 400;
+	color: var(--greyscale-accent);
+	text-align: center;
+	letter-spacing: 2px;
+	line-height: 24px;
+
+	width: 90%;
+	margin: 88px auto 36px;
+}
+
+div#monthChart div#dateSelection p#secondNotice {
+	font-family: 'Raleway';
+	font-weight: 400;
+	color: var(--greyscale-accent);
+	text-align: center;
+	letter-spacing: 2px;
+
+}
+
+
+div#monthChart div#dateSelection ul#monthSelection {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+
+div#monthChart div#dateSelection ul#monthSelection li {
+	width: 25%;
+	margin: 8px 0;
+}
+
+div#monthChart div#dateSelection ul#monthSelection li button {
+	display: block;
+	margin: 0 auto;
+	padding: 16px;
+	color: var(--greyscale-accent);
+}
+
+div#monthChart div#dateSelection ul#monthSelection li button.selected {
+	color: black;
+}
+
+div#monthChart div#dateSelection input {
+	width: 64px;
+    display: block;
+    margin: 64px auto 16px;
+    border: none;
+    border-bottom: 2px solid var(--greyscale-elements);
+    padding: 8px 2px;
+    background-color: transparent;
+
+    font-family: 'Raleway';
+    font-weight: 400;
+    font-size: 1.5em;
+    color: var(--greyscale-text);
+    letter-spacing: 2px;
+    line-height: 22px;
+    text-align: center;
+}
+
+div#monthChart div#dateSelection input:focus {
+	outline: none;
+    border-bottom-color: var(--greyscale-text);
+}
+
+div#monthChart div#dateSelection button#exit {
+
+	display: block;
+	position: absolute;
+	bottom: 15%;
+	left: 50%;
+	transform: translateX(-50%);
+}

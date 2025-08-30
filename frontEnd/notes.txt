@@ -1,0 +1,1060 @@
+
+
+@09. 13. 2023
+
+@2230 Rough draft of To Do Next:
+			- create function housing all api calls
+			- have logIn state var within index.js -> in useAuth.js file
+				create context so that other elements are aware of state status
+
+@1730 Everything will now route through Index.js rather than App.js
+
+Organize file with all api routes and processes
+
+
+
+
+
+
+
+
+
+
+* * * * * React Router Addition (above) * * * * * 
+
+
+@09. 02. 2023
+@1245 websockets now working!
+
+
+
+09. 01. 2023
+@1245 useEffect necessary for websocket operations?
+
+
+@0833 Some notes on react-use-websockets
+			- function, hook, causes a component rerender whenever message recieved,
+			should be in it's own componenet
+			- includes options for how hook / component should operate during 
+				certain events
+			- has included functions for handling websocket operations....
+
+
+
+
+05. 14. 2023
+
+@1315 The contentUpdate FINALLY WORKS !!!
+			Imma merge up from here
+
+@1255 Updated the bloglog so that the first text piece from the content Array shows up
+		  in the preview.
+
+05. 11. 2023
+
+@1515 need to have createPost display confirm after successful upload, 
+		  and then dismount
+
+@0905 Changed the post model schema for content to be an array on the back end already,
+			thus i need to implement changes on the front end to parse them properly T- T
+			for blogLog/DayLog -> only the first text body will be displayed...
+			Will have to write script for blogPost to display each array item correctly
+
+04. 21. 2023
+@1035 new post content will be array of objects:
+	  
+	  for the blogpost:
+	  use forEach on the post.content to discern
+	  how to post what content: 
+
+	  for blogLog:
+	  only display first post.content with text
+	  have all images be thumbnails below the text
+	  	(also need to shorten text displayed on log
+	  	beyond certain amount. Can use enlarged, gray periods
+	  	to indicate there's more text)
+
+
+02. 22. 2023
+
+@1340 frontEnd now -totally- uploads images correctly ...
+
+@0855 blog post now gets parsed through formData then sent
+	  It now sends without issue from front end...
+	  yet theres no data shown on backend...
+
+02. 21. 2023
+@0920 It would seem that I cannot simply send an image file as part of a json request,
+I'd either have to do them seperately, or convert the images first...
+
+since the endpoint can only read one request object at a time, I would
+have to create 2 seperate processes if the images are accepted seperately...
+
+
+02. 20. 2023
+@2120 image upload now works correctly...
+	  formData object formatted as intended
+
+02. 16. 2023
+
+@1210 Added type field to content object, so we can have a check for when there are 5 images
+
+	Also need to add count between all textareas to limit characters to 500
+
+@0945 textarea + image content is now added to the formData state object correctly.
+		had to change onChange to onBlur - as onChange was creating an array index
+		for each keystroke.
+
+		have muted out the code for form submission until i update the backend.
+
+@0830 contentCombo now working correctly :D !
+
+02. 14. 2023
+@0300 Need to rework the contentCombo printing function . . .
+		out of brain juice...
+	  
+
+02. 13. 2023
+@0140 The New textArea + imageAdd button works as intended :D !
+	  Now need to create / edit handleChange function to get the data
+	  from each combo and organize it accordingly...
+
+	  Should be simple enough, as in actuality the 'add image' button is
+	  what will toggle the addition of the new textarea + imageAdd
+
+	  handleChange function can take index as arg, and if event.target.name
+	  is content or image, take it's index and add it's content and add it
+	  to the content state array.
+
+	  doesnt matter if, for whatever reason, the handle change function
+	  doesnt add them in order: that's what the index is for.
+	  in the event and image is added first, it ought to have an index of 0
+
+	  also need to add keys to each returned element...
+
+
+02. 12. 2023
+@0830 textAreaImageAdd can be added into returned element for component using {}
+	  one is placed initially.
+
+	  need to find a way to be able to add new elements to an array so they can
+	  be printed with .map
+
+	  should create an object holding the data of each textarea.
+
+	  could have the submit function then aggregate the info from each object
+	  for submission... which needs to be done as an array in which ever order the 
+	  images + text is in. 
+
+02. 10. 2023
+@0755
+		Current working idea for textarea + imageUpload:
+		create state object which accounts for the textArea + imageAdd combos
+		and their data. 
+
+		eg. event.target.files[0] from the function run to get the image from
+		the input to be stored within object...
+
+		Buttons will trigger additional combos being added.
+
+02. 05. 2023
+@1105 Never finished that previous train of thought . . .
+	  Current idea is to implement a state object, or array, which
+	  we'll run a .map on.
+
+	  for the addImage button, everytime one is added, we add to the
+	  state array, thus generating more textArea + addImage combos.
+
+	  Will need to add some additions to the backend and front end,
+	  concerning blogpost upload and display D:
+	  	- backend will need to be able to accept post body as an array
+	  	- frontend - simply display, in order, whats in the post body
+
+	  it may be possible to discern the post content (whether regular text or an image)
+	  link, and have the front end create an image element or p element based on that
+	  check....
+
+
+01. 31. 2023
+
+@1616 Logic for 'Add an image, add a text box'
+
+	  Requirements:
+	  * Total limit of 500 characters between all textboxes
+	  * When an image is added,
+	  		if total character count is below 500,
+	  		add a new text box below
+
+
+@1555 As of rn - the connections menu is being passed as a prop down to the User menu...
+	  which is weird
+
+	  Will - at some point - put that code within the user menu ...
+
+	  either that, or I'm gonna have to export the createPost component as well...
+
+	  TBH, I may have them both exported.
+
+	  The connections menu will have a few more features, like opening live messaging
+	  with a person, or inviting them into a group.
+
+	  The createPost element will house both the Entry and Event creation - the Event being abit more involved.
+
+	  Plus there's also the page to explain the details and formatting of the post making...
+
+
+01. 19. 2023
+
+@0700 Added post options to the mainMenuButton. Will update CSS styling lateeeeer
+
+@0440 Would like to implement a list of states and triggers for the menu
+		
+List of Modes:
+  - Add Post
+  - Connections
+  - Interactions / LogOut
+  - Exit / Options
+  *in future
+  	- option within tags section
+  	- option within macros section
+
+I believe I will make individual elements for each,
+have them switch upon trigger...
+
+@0420 Should, could be a little embarassed that this project hasn't seen any progress since ... last year xD
+
+Anyhoo, can now open blogPost component with post from monthChart
+
+I do need to resituate the menu button once posts are open, so that it can close them
+
+
+12. 30. 2022
+
+@1305 Proactive posts work !!!
+	  
+	  To Do Next:
+	  - DayLog should remain consistent, js + css should only change display or opacity (and 	z index)
+	  - selecting post from monthChart log opens post in BlogPost component
+	  	- should move [selectedDatesPosts, set_selectedDatesPosts] object to mainApp
+	  - Ensure that tagging other users works as intended (an api matter)
+
+
+@1300 For some reason, one single post is having it's date read incorrectly, thus not getting a header...
+
+@1225 on monthChart toggle, if cal._inView have values yet monthChart isn't active,
+	  set values to null.
+
+	  Move functions to get postsPerDate and allPostsPerDate to calendar object
+	  Move their state objects to the main App.
+	  This will allow us to refresh the monthChart after a user makes a post
+
+@1120 Moved the reordering of posts to the backend
+
+12. 29. 2022
+@1010 
+
+Fixes and Changes to be Made:
+	  - Menu button to say 'Add Post' or 'Connections' depending on active side ✔️
+	  	- should go straight to ConnectionsList or PostsPage ✔️
+	  - rudimentary logout (deleting sessionStorage keys should suffice) 
+	  - Selecting date on MonthChart allows user to make post for said date ✔️
+	  	- gotta connect that main App calendar state object... ✔️
+	  	- XD designs to reflect change from removing the option screen for Entries and Events.
+	  	- within the userMenu (which needs to be renamed, probably remade)
+	  		if date selected isnt the same as today's date, post is automatically
+	  		an event. 
+	  - DayLog should remain consistent, js + css should only change display or opacity (and 	z index)
+
+can be done later
+	  - monthChart toggle to switchSides (css)
+	  - monthChart toggle dissappears when mainOption active (css)
+
+
+12. 25. 2022
+@1431 Need to preserve which side of the DayLog is active after activating the MonthChart
+	 Will most likely need to move the respective state variables up into the App.js file
+
+12. 23. 2022
+
+@1200 The Date is now posted above posts - if posts share the same date, no duplicates
+
+@0850 Currently having issue with storing or checking the date info for the posts
+
+12. 22. 2022
+@1330 For some reason, the social log is 'loading' over the userLog...
+	  I have to adjust the CSS animations on all that anyways
+
+
+12. 21. 2022
+
+@1600 date onClick function added :D 
+
+@1545 Made the html skeleton for the posts headers within the log under the calendar
+	  Next steps:
+	  - date OnClick function (could do css later)
+
+@1510 Function for getting posts for specific day via monthChart works as intended.
+	  Next steps:
+	  On mount, allPostsPerDate run, populating log underneath monthChart
+	  &
+	  date onClick, runs allPostsPerDate, updates log
+	  animation: scale down and fade.
+	  process:
+	  	run function (it has delayin adding posts to state object)
+	  	change class
+	  	wait duration, change class to opposite. 
+
+12. 16. 2022
+@1210 Implemented calendar animations + slowed the change for getPostsPerDate
+
+	  Next feature to implement: clicking on a specific date to pull and display the posts
+	  for that day.
+
+	  The menu button will also be updated to be 'Create Post' when on dayLog
+	  and 'Create Post for xy.xy.xyxy' when viewing a specific date.
+	  Will use the [calendar] state object from the main app to store and send the values
+	  so that the createPost component can send a post to the API with different dates....
+
+12. 15. 2022
+
+@1135 MonthChart forward and backward search now works well. 
+	  Still need to add fix for leapyear tho...
+
+	  Next, add animations for calendar leaving and returning +
+	  		delay timing for when the [cal] state object gets changed
+
+@1110 No, they are aligned. 
+	  However, I may need to add more contingencies for the searches as forwardMonth() 
+	  can't make a search with 12 as the month, which it is currently.
+
+@1048 I believe, for the most part, 
+	  the forward and backward monthLog searches are correct...
+	  but the postedBy_months range isnt aligned with the js dates object month range
+
+@1025 Front end isn't diplaying right amount of days for Feb 2024, 
+		which is probably due to it being a leapyear.....
+
+		Will have to figure out how to add contingency for that
+
+12. 14. 2022
+@1450 Well as of 2pm, I had successfully made the css for the dates a lil more neat, and have added the tallies. The tallies do also draw from the [getPostsPerDate] state object, thus when it is drawn it will update each day's tallies appropriately.
+
+However, I need to discern when best to make that API call for postsPerMonth however 
+
+12. 13. 2022
+@1234 Will now work more on the CSS of the Calendar elements 
+
+@1005 Order of process for the calendar:
+
+Initial draw sources the date info from the cal state object,
+ all values are for present date on initial load.
+
+initial draw() should also call getPostsForDate(), 
+using the data from the array postsPerDate to populate
+the tallies in the dates
+
+Proceeding or Receeding Dates 
+after setting element classes which initiates their transition,
+run getPostsPerDate after discerning what values to query
+  - if cal.sMonth + 1 > 11 (intended search is January, 0)
+  	- if yes, cal.sYear + 1 for search Year
+  - if cal.sMonth - 1 < 0 (intended search is December, 11)
+  	- if yes, cal.sYear - 1 for search Year
+
+then redraw cal happens automatically with the resetting of the cal state var
+There is currently a slight delay between the months switching the the cal redraw.
+the setCal calls need to be delayed until the calendar fully recedes
+
+12. 09. 2022
+
+@0225 Previous issues fixed
+
+@0055 For some reason, the api address that the monthChart is calling has the frontEnd's 
+	  url 3000 instead of the backend's 3333 (i believe this is the domain?)
+	  Unsure why that's occuring
+
+12. 08. 2022
+@2350 Implementing new practice starting today - will be using // for temporary comments, and /**/ for code documentation. 
+	  Mantaining legibility is equally as important as writing clean code
+
+12. 03. 2022
+
+@1205 issue fixed concerning the crash occuring at May 2023! Weird thing, but fixed it
+
+@0915 Have switched the variables within the draw calendar function to the state
+	  	variables, thus making the redraw automatic when i traverse months.
+	  	Will simply have the state change (cal state var) happen else where,
+	  	as the timing needs to occur while the calendar is gone
+
+	  	however, currently encountering issue where project crashes once
+	  	we try to load May 2023... Issue stated is invalid array length...
+
+@0900 Have created the animation classes for the calendar.
+	  Will create a seperate function which manages switching the classes, 
+	  	and inputting the data for the calendar redraw
+
+12. 02. 2022
+@1835 Interesting little  tidbit I would like to add - a new social media app that recently released has been 		in the media abit often recently (in light of the twitter fiasco and such) for reasons such as security 		concerns, some issues like such. I find this amusing, because reading up on it, I'd learned that it 		was truly some pet like project started just this summer by a HS senior or College freshman...
+		It's amazing how things can really take off for you ....
+		but abit of a reminder to myself to focus on the quality of the projects I build, not just their function...
+		So, mental note to address best security practices and methodologies (atleast, generally)
+		I know I've got to add some to my front end log-ins.
+
+		In other note, I would like the calendar animations to be split in 2 - the leave and the return.
+		To ensure that the data is definitely included within the rebuild of the cal for the next month
+
+
+12. 01. 2022
+@2245 Fixed the issue with the timing of when prev or next dissappears to switch strings
+		Also added contingencies for initial values
+
+
+11. 30. 2022
+
+@0225 Set up css a lil for the classes and animations...
+
+@0215 fixed the issue with preceeding to December turning the prev button to Feb...
+		very simple mistake truly...
+
+		Need to adjust the times on the animations now tho, for the the 'next'
+		disappears,
+
+		after that: calendar next and prev animations!
+
+11. 27. 2022
+@0240 animations for Progressing or receeding the months now works as intended
+		progressing changes the next, current and prev
+		and receeding changes the prev, current and next
+
+		however, there's currently some 'error' occurring whenever 
+		I go from Dec, to Jan, then back to Dec. 
+		I believe the num sequence would be 11 to 0 to 11. 
+		from 0 to 11, prev becomes 2 ...
+		Will probably need some console logging in order to see whats going on
+
+		but after I fix this bug, I am then to create the animations for the calendar
+		and plug that into the next and prev functions.
+		so, press prev, call data, calendar animation, redraw with new info, return cal
+
+		actually, the calendar may need more css before the api call becomes necessary...
+
+11. 25. 2022
+@1000 Month progression for calendar header now works correctly.
+	  could . . . add in animation for the year transition as well,
+	  but eh...
+
+	  Next, do the reverse for prevMonth
+	  Then, function to re-render the calender when next or prev prompted
+	  then, animation for calendar going backwards or forwards
+	    - recede animation, scales down moves right fades out
+	      then starts left, fades in scales up moves to center
+	    - proceed animation, scales down moves left fades out
+	      then starts right, fades in scales up moves to center
+
+11. 24. 2022
+
+@1405 Issue - after one click to the next month, the month states dont change...
+
+@1400 Added animations for nextMonth switching between currentMonth
+		Just need to create the reverse for prevMonth in CSS and functions
+
+	  Afterwards, animations for the calendar
+
+11. 23. 2022
+@0930 Notes to be added concerning design intentions for header...
+	  XD file updated to reflect changes
+	  Added rudimentary styling for header elements within calendar
+
+11. 14. 2022
+@2230 Very rudimentary calendar built :D
+	  Next Steps: (In no particular order)
+	  - Header for Current Date, Prev and Next to be added
+	    - Clicking on current Month + Year will bring up modal for user to
+	      select further month + date from list
+
+	  - When monthChart mounts, api call to get amount of posts
+	  	for each day within current month
+	  	- this first api call, in the back end,
+	  		1. gets all the posts from this month,
+	  		2. counts number of posts per day
+	  		3. sends object with populated days as int '0 - 30ish' as key
+	  			and amount of posts as value
+	  		4. on front end, uses this data to populate the amount of bars
+	  			present for each day
+	  		5. on each reRender of the calendar, this data is gotten first then
+	  			 and then utilized for the render
+	  		?6. Should this api call also include all post data from current day?
+
+	  - need to add html + css for bars denoting post activity for each day
+
+	  - further develop CSS for component
+	  	- remove the 'b' for the blank ones
+	  	- transition for the mount and dismount of the MonthChart
+
+	  - api call for when day selected:
+	  	- api call simply returns all post data from that day, however 
+	  		listview below calendar will only display Title, MetaData and Event or Entry
+
+
+11. 13. 2022
+
+@1215 Implemented previous note - now need to make sure each printed row
+		only draws from it's corresponding week for it's days
+
+@1150 Progress made with the calendar.
+	  Current issue is that each row for each week gets all days of the month,
+	  should only get 7.
+	  Can split the squares array into multiple, with each day within each week
+
+	  let daysInWeek = [];
+	  for(i = 0; i =< squares.length; i+7) {
+	  	let start = 0;
+	  	let week = squares.slice(start, i-7);
+	  	start = i - 7;
+	  	daysInWeek.push(week)
+	  }
+
+11. 11. 2022
+@1255 Currently working on MonthChart calendar function
+		Current hurdle is that the calendar must be dynamically
+		changed, need to convert html creation and append functions
+		to jsx friendly format...
+
+11. 03. 2022
+@1535 Added needed vars to the calendar object.
+			The DayMonthToggle switches between the overall DayLog screen to a blank canvas for
+			where the MonthChart will be.
+
+			Before proceeding with building out the MonthChart, I would like to clean up the 
+			responses and log statements on the backend API
+
+
+
+11. 01. 2022
+
+@2025 Created skeleton for button that toggles between the BlogLog and the MonthChart
+			I think I will create local variables for getting the date info that I need, seeing
+			as how the calendar state var only stores the info in strings. 
+
+			But I guess I can add to the calendar object to include the numeral info as well.
+
+			Within the bloglog component I prepared to add the monthchart, so I could create it in there...
+			The switch needs to be removed while the MonthChart is up, for both space and reducing potential 
+			dysfunctionality.  
+
+@1850 Turns out the calendar var actually wasn't over engineered, it is necessary as it presents the
+dates (31st, 22nd and such) properly. The month array was simply missing october ahaha ...
+
+@0000 Made a tweak to the interactions / notification page / list to correctly display info.
+
+
+10. 31. 2022
+@2305 Need to get rid of the whole Calendar state variable and function - that was definitely 
+			overengineered and now the date is currently presenting as 'November 31st', which is incorrect...
+
+10. 19. 2022
+
+@2045 Will run through both front end and back end to ensure all functions are working correctly.
+	    Some things on the front end need cleaning up - perhaps start implementing better organization
+	    But, as of now - a pivotal point in development has been reached!
+
+@1945 Replace !! with ascending vertical lines, like stairs
+
+@1930 SO FOR THE MOST PART -
+			Adding new connections through the use of the connections section + interactions list
+			works. However, MUST implement a check for multiple / repeat additions
+			this can achieved through the front end...
+
+@1930 Have some sort of change after a connection request is made
+
+@1905 Interactions list now able to actually list data from user's notifications
+			yet, for some reason, an empty notif remains at the top of the list...?
+
+10. 18. 2022
+@2305 app making requests for user notifications everytime the interactions list opens OR closes...
+
+10. 16. 2022
+
+@1425 Added the interactions list :D !
+			However, the notif objects are filled with id's D:
+
+			need to adjust ... how notifs are made for connection requests.
+
+@1200 Added functions for requesting connections and removing connections to the connect list.
+			Requesting connections seems to work well on the first try!
+			Now to build the interactions list ...
+
+10. 15. 2022
+@0025 Set up skeleton (html + bare css) for alt menu, allowing users to toggle the 
+			notifications list and logout
+
+10. 08. 2022
+@0000 Not much change. Upon making search within connectList, results now display
+			afterwards. I would like for the results panel to pop up 'after' the search
+			has been made however. Simple fix.
+			Next step, the notifications list!
+
+			After that, the app ***should*** be at the bare functioning minimum of a 
+			social media platform. Which, would definitely be PRETTY cool
+
+10. 04. 2022
+@1008 When making search for users, first search returns empty string - despite server returning results. Second research returns object. So, need to figure that out...
+
+Also, cant have the unfocusing of the search bar remove the results div lol.
+ - will most likely have to connect that state toggle to a button within the results div
+ 	 or a cancel / clear results button next to the search bar
+
+
+10. 01. 2022
+@2334 Upon opening the connections section, successfully gets and displays user connections.
+		  Now need to plug in the search endpoint and function so that when a 
+		  search is made, the results become active and the default list is inactive
+
+		  Also need to edit endpoint on API side so that we can remove users from 
+		  this list as well.
+
+		  ALSO need to eventually go back and fix whatever is wrong with adding friends(?)
+		  I think there was some issue that still needed to be resolved
+
+09. 28. 2022
+@1610 Connected the connectList component to the rest of the App.
+
+09. 26. 2022
+
+@1410 Expanded the skeleton a little, should just be some plug in play...
+
+@1321 Finding it hard to focus. Have something of a skeleton started for the page.
+
+			- connectionSection is whole page section, like post upload
+
+			- where / when to get the users connections list?
+
+@1202 moved state variables for toggling between Social and User to App.JS.
+
+
+@1056 Commencing the build of the 'connections section' 
+
+09. 04. 2022
+@0422 the updatePost functionality works !
+			Need to implement the change concerning tags, however, as upon trying
+			to update the post with the tags in their id form isn't gonna work.
+
+			After that:
+			- Implement changes to userMenu
+				- for now: 
+					when Userside is active: 'create post'
+					when Socialside is active: 'manage connections'
+
+			Question: is removing the userOnline + userKey session storage items enough
+			to sign out the user 🤔??
+			May wish to add 'sign out' option to userMenu side.
+			I don't wish to add userSetting features this early in development
+
+09. 03. 2022
+@2103 fixed issue with post deleting, adding update functionality
+			need to create a state object so that the original content
+			can prepopulate the input values, but so that they can also
+			be editted - as of rn, they can't be
+
+@1622 issue with post deleting - post will only delete after a page refresh
+
+@1554 Remember to have createPost route send boolean so that
+			front end can present a confirmation alert then return
+			to the log
+
+@1533 Fixed some kinks here and there with UI code / css.
+			options to edit or delete post do not show for other user's posts
+
+@0200 Exiting from a social log post returns user to the userlog.
+			May have to dismount each side
+
+@0434 Finished implementing delete functionality!
+			React takes a lil bit of time to remove the post from the bloglog,
+			however adding in the animations may add room / time for that 
+			removal to happen beforehand? (bloglog should remount before it's visible,
+			so user doesn't see old post disappear)
+
+			Next, implement update :D!
+
+			Then, next big milestone - adding search for other users!
+
+			But beforehand, Edit UserMenu to include
+			- Direction for uploading post
+			- Direction for Switching to Social Side
+
+				When on social side, menu should show social options (use of states)
+				- direction for returning to userSide
+				- direction for managing connections 
+
+@0231 Both the Edit and Delete buttons need to send the post ID (and the body, for Edit)
+		  to the userMenu in order to further operate on those posts...
+
+		  Now noticing that I had not created any layouts for a delete or update page.
+		  Live and learn . . . 
+		  Will use barebones options for now...
+
+		  Also, will eventually remove 'Update' and 'Delete' options from userMenu
+
+09. 01. 2022
+@0046 fixed the issue with making blog posts. 
+			conversion of the time stamp still needs work, I made most recent post
+			at 12am, it's saying 4am
+
+			- Post details CSS and such adequate for now. 
+				- Gotta plug stuffs, remake the createPost component
+					for the update component, inputs prefilled
+				- a double check for when user selects to delete post
+
+			- reminder to implement change for tags over on API side
+
+@0036 Was finishing up the toggle for post info, edit and delete, buttons, but the date changed and content dissappeared. Now, we find out, there's some issue with submitting new posts (._.
+
+08. 31. 2022
+@1115 in future update, add to blogpost function to discern user's timezone, and then
+			add the abbreviation to the end
+
+@1534 Added in the blogpost functionality :D Got alot of clean up to do on that . . .
+post from the update that didn't get pushed:
+
+Initial Skeleton complete for blogpost page
+	    - need to properly get date and timezone data 
+
+	    - Routes already exist for edit and delete 
+	    	- edit takes user back to original menu for creating post
+	    	  with data prefilled
+	    	  - prompts user if theyre sure about update before sending request
+	    	  - goes back to bloglog after response recieved (should have loading indicator)
+	    	- modal appears, background grayed out, confirming whether user wishes to delete
+	    	  post. 
+	    	  - waits until response recieved, then returns to bloglog
+
+	    - convert tags to send object on back end,
+	      then configure properly here
+	    - (tagging users is some further future edition)
+
+08. 29. 2022
+@2336 fixed the menu thing
+
+@2331 Toggling between User Log and Social Log now successfully implemented!
+			Gonna play around with the transition, as it currently looks abit choppy
+			also, the menu button at the botton of the page dissappears upon switching to
+			Social Log. Naze desu?
+
+@2224 So the blogpost component was made on the desktop and I neglected, or forgot, to sync
+			the github repos. So, I'll have to manually copy that code over :P
+
+@1244 Implemented new component for switching between User and Social logs
+			Next steps:
+			- upon toggle, useEffect to set log styles then setTimeout it's active variable
+
+
+@0954 redesigning the element responsible for switching between logs.
+			Two buttons, the default in the middle, the next at the respective
+			side that the section it toggles slides in from.
+			Upon pressing one button,
+			both have their classes changed so that the toggled button
+			comes into the center, and the other moves to the side.
+
+08. 27. 2022
+@0115 added set up notes for what to do next
+
+@0048	New plan is to simply implement button on sidebar in order to switch between
+			User and Social logs. 
+			For code concerning transitions:
+			onClick must:
+				- add animation class via state
+				- unmount component via state
+				- mount new component via state
+					- mounting the next component with it's entry animation class
+
+08. 22. 2022
+@1506 current working idea is to add the slider code to both User and Social log
+componenets, and have the div element be the target element that slides. 
+would then just implement react logic where necessary to make the changes,
+such as unmounting the current log and mounting the next after a slide
+
+08. 20. 2022
+@1512 for my the slider, the li's are passed as the highest level
+		  parameter, and for the actual movements, those are done on
+		  the image.
+		  an equivalent for this project would be 'userlog' & 'socialLog' as
+		  the top level array, and the sidebars as the first element
+		  gotten and used.
+		  However, the issue is that moving sidebar doesnt also move it's
+		  respective log, wrapper element.
+
+		  idea: move the loaded subelement, daylog or whatev
+		  when sidebar is moved?
+
+		  running low on enery now (._. )
+
+@1246 I dont feel like it was Wednesday that I made my previous update...
+			But maybe...?
+
+			Anyways, gonna have to set the daylog to scroll within it's container,
+			similar to the albums list in the portfolio site
+
+08. 17. 2022
+@0718 sucks a lil that my last addition to this project was close to a month ago,
+			but within BlogLog, i've created container divs for User and Social logs,
+			wrapping their own variations of the DayLog, WeekList and MonthChart.
+
+			to implement the slider, will need those wrapped
+			- not sure if it does currently work as is, will confirm as a proceed
+
+07. 27. 2022
+@1430 social log endpoint is functional on API. Just need to adjust code slightly (create a new state variable for the social log for the component to draw from)
+also include user name above post title
+
+@1217 In array for tags, make check to remove any empty strings
+
+Currently Working On:
+components/UserMenu
+components/MenuToggle
+
+07. 18. 2022
+@1836 Barebones CSS added for the menuButton, userMenu and createPost page
+			
+			Next, page for independant posts.
+			- Have post edit and delete options within page
+			(should start reading up on React Router)
+
+			Update and Delete Routes for API
+
+07. 17. 2022
+@1245 おめでとうございます !!!
+			Combined the log and updateLog function into an object, moved to the App.js file
+			for central access.
+			The createForm in the userMenu successfully submits posts to the api
+			and updates the log. Thanks to react magic, the daylog is automatically updated 
+			when user makes a post.
+
+			Amazing development and progress.
+
+			For the createPost menu,
+			include UI functions where fields become faded / unusable during submission,
+			and clear upon successful submission 
+			(full UI animations will have the menu dissappear once user confirms upload anyways)
+
+			Next -
+			implement initial CSS stylings.
+			Update and Delete API routes,
+			editContent List for Updating and Deleting posts...
+
+07. 16. 2022
+
+@1145 code for spans added :D 
+
+@1130 bodyParse now works p e r f e c t l y . . .
+			gotta add css for the spans with the data attr's
+
+@1043 Two roadbloacks:
+			React seems to 'escape' text, therefore turning the embedded tags from bodyParse into regular text (._. )
+			Also, undefined is STILL showing up
+			Aaand, the i, b and u tags actually need closing tags :,D
+
+@0951 Have been working on the bodyParse function externally on Codepen. Importing code now
+
+07. 13. 2022
+@1053 Using 
+			let italics = text.replace(/\((.*?)\)/g, (_, match) => `<${match}>`);
+			will work for bolding, italics and underline.
+
+			However, need different implementation for colors and nl
+
+@1005 Currently working on developing bodyParser function.
+			Initial implementation checks for:
+			(i) italics
+			(b) bold
+			(u) underline
+			(nl) new line
+			(color) colors text
+
+07. 12. 2022
+@2053 Barebones structure now works as intended!
+@2043 Fixed previous issue - now form for createPost is only reading the tags :/
+
+@2031 Begun building skeletons for menuButton and userMenu
+			for some reason, some functions are being intepreted as strings within userMenu :/
+
+@1153 No Posts Today H1 still loads before blog posts do. Hmm, would like to fix
+
+@1104 Plan for UserMenu
+
+UserMenu is an overarching component that (will) include(s):
+- Buttons for switching site sections (myLog, theirLog, user settings and tags)
+- Buttons for managing posts (create, update, delete)
+- Forms for Entries and Events
+	(perhaps actual forms will be seperate 'pages' done with Router. For now, within UserMenu)
+
+MenuButton
+- Toggles the UserMenu to open
+- Should be interesting to figure out / learn how to have the text shift from 'Menu' to X
+
+Will need to begin implementing some CSS styling for these two components
+
+
+Currently Working On:
+components/BlogLog/Daylog
+
+07. 12. 2022
+@1100 blog posts now load in correct fashion
+			- As of now, plan to build out initial version of Daylog complete. Very barebones, as with everything else
+
+@1029 fixed the issue with No Posts Today h1. It (should) now be working correctly
+
+@0946 Just noticed that posts are loading oldest first - we need newest first. Should be fun to right whatever script I need to change that.
+
+
+07. 11. 2022
+@1656 Posts now display correctly and conditionally renders No Posts Today h1
+		  - need to find way to post add header with date between posts
+
+@1521 Working on getting posts to be displayed now ...
+
+07. 10. 2022
+@1532 data from api call is now displaying correctly upon login. React really is a different beast . . .
+
+07. 09. 2022
+@2050 Currently, during dev mode, useEffect runs twice. Well, this isn't exactly use effect,
+but the console.log within DayLog runs twice. on first run, it's empty. Second run, elements appear.
+Well, I can access the data within Daylog, so well consider this a success...
+
+@2020 the loadlog function is now working as intended (the user auth token wasn't being passed correctly this whole time). However, data isn't showing up within state variable (._. )
+Probably has something to do with the async of it all T- T
+
+07. 07. 2022
+@1018 Initial set up for BlogLog. 
+			Now testing API endpoint, but is currently not working
+
+07. 06. 2022
+@1209 Added new fields to posts model. need to write psuedocode sequence for getting posts within specific month and year range.
+Will need to know how to pass variables into url for api requests.
+
+@1130 using .createdAt isnt sufficient. Will have to create new 'postedOn' fields to posts
+	  that are automatically created for each entry. 
+	  boolean for 'usePostedByDate' for entries and events being posted in the present
+	  so that 'postedOn' fields get created and filled out 
+
+@1102 have to design the API controller for returning all posts from a specific month.
+	  As of now, posts automatically have a creation date stamp, we'll start with that.
+
+07. 05. 2022
+Gonna work on parts of certain components first so that we can pull together a cohesive 
+project / product 'sooner'
+
+Main component: BlogLog
+SubComponents:
+- DayLog
+- WeekList
+- Month Chart
+- Toggle Button (switch between states)
+
+Main component gets all posts from/with API and stores them in object (current month's posts)
+- Daylog displays all posts chronologically, most recent to least. 
+  - Will need to implement logic to add header with date above all posts with corresponding date.
+    - If current date is July 5th, but most recent post was June 25th, header with June 25th, 2022 appears above all posts with that date. Continues
+- For current implementation of Daylog, simply build component as long list. Will attend to swiping functionality and css later
+
+After:
+component for displaying full post (may need to start using Router around this point)
+LogCRUD for creating new posts.
+
+First part of LogCRUD - create:
+Make menu button which toggles LogCRUD menu, 
+"Create" being first section developed. 
+(especially as creating entries and events has series of steps T- T)
+
+
+
+
+Current Project:
+components/userEntry
+components/header
+
+07. 04. 2022
+@1028 Header date functionality is workinggg. 
+	  State variable for date info also implemented
+
+07. 03. 2022
+@1144 Made some headway in getting date info into state variables.
+	  Would be redundant to have to make individual hooks for each T- T Will see
+	  if I can add them all into on state object....
+
+@1110 Current objective is to create a state object with the current Date info
+	 and updateable currently view Date info.
+	 When user logs in and is active - current Month, Day, Year is logged, displayed.
+	 once scrolling through older posts, currentlyViewed Month, Day and Year is displayed
+
+	 unsure how to implement this currently, 
+	 react wont take functions as element child (as variable for innerHTML)
+
+@0833 User now stays loggedIn upon successful log in 
+
+07. 01. 2022
+@1205 App not remaining within home upon refresh. useEffect within App.js will run the
+	console.log function if the dependency has a value, but not the setState functions.
+	may have something to do with those functions inherently being asynchronous?
+
+@1107 App running useEffect ... twice ... due to sessionStorage. a success, i suppose
+		Could look up already working methods of keeping track of a loggedIn user online
+
+@1011 Need use of sessionStorage in order to keep user signed in (especially during dev)
+
+@0958 Fixed that issue with a prevent default with the switching button
+
+@0921 Switching from login to signup causes the form to be submitted and make an API call.
+	  I've currently no idea why and it seems like a potential security concern :/
+
+06. 30. 2022
+@1045 the sequence after a successful signup FINALLY works
+	  Not even sure what I was doing incorrectly beforehand, regarding
+	  useEffect. However, having both the dependancy variable for the 
+	  function and another for an if variable to be dependant on was 
+	  necessary for it to work correctly.
+
+	  As of now, returning a clearTimeout doesnt seem to be necessary +
+	  causes the script to then work incorrectly
+
+	  Next steps:
+	  - have button underneath submit that allows user to switch to
+	  	other component section (userSignUp has switch for userLogIn) ✔️ (07.01.2022) 
+	  - disable text fields and submit button while awaiting API feedback
+	  - fix functionality for header, to properly display days n such ✔️ (07.04.2022)
+
+	  - then, CSS !
+
+06. 27. 2022
+@1739 having trouble within setTimeout and the pattern that runs after successful
+	  user signup.
+	  should the different timeouts be seperated?
+
+06. 20. 2022
+@0900 logic for checking when isLoggedIn becomes filled
+	  and to switch to home works!
+
+	  need to put functions for creating the dated header
+	  outside of the header/home component
+
+	  next, when user is successfully created using userSignUp,
+	  userSignUp should go false, then userSignIn opens
+	  also, disable submit button and inputs during submit
+
+@0842 userLogin part of userEntry works :D !
+	  once isLoggedIn becomes set, within app.js,
+	  to unmount userEntry and switch to home
+
+06. 19. 2022
+@1522 Added some more things x'D
+	  Further develop userEntry....
+
+06.18.2022
+@1100 Wrote out initial skeleton for the forms, and not much else.
+	  Will write out header component next.
+	  Can connect app to API while its running on my phone.
+	  Ensure userEntry component works as intended:
+	    - user sign up should return user to user log in
+	    - successful user login should take user to 'home'
+	    	- for now, header will change to signify successful entry
+
+	  After all this is done - then, css :D

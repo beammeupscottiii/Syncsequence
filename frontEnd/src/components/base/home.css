@@ -1,0 +1,1689 @@
+
+/***
+ * 
+ * For all components that comprise the HOME page
+ * HEADER
+ * CAROUSEL NAV
+ * BUTTON BAR
+ */
+
+
+section#HOME {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
+}
+
+	section#HOME::before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: white;
+		opacity: 0;
+		transition: all ease-in-out 1s;
+		z-index: 0;
+	}
+
+	section#HOME._enter::before {
+		transition: all ease-in-out 0.1s;
+		z-index: 20;
+		opacity: 1;
+	}
+
+
+section#HOME.recede {
+	animation: recede 0.5s ease-in-out forwards;
+}
+
+section#HOME.return {
+	animation: return 0.5s ease-in-out forwards;
+}
+
+
+
+/* * * H e a d e r * * */
+	header {
+		display: flex;
+		justify-content: space-between;
+		width: 95%;
+		position: fixed;
+		top: 4px;
+		left: 50%;
+		transform: translateX(-50%);
+		
+		font-family: 'Raleway';
+
+/*		border-bottom: 2px solid rgba(0, 0, 0, 0.1);*/
+		padding: 4px 0 16px;
+		background-color: transparent;
+		z-index: 10;
+	}
+
+	/*header div#thePresent {
+		position: relative;
+		top: 4px;
+	}*/
+
+	header div#location {
+		position: relative;
+		top: 8px;
+	}
+
+	/*header div#thePresent h1 {
+		font-weight: 600;
+		font-size: 2.75em;
+		letter-spacing: 12px;
+		color: var(--greyscale-elements);
+
+		margin: 0;
+		position: absolute;
+	}*/
+
+	header div#location h1 {
+		font-weight: 600;
+		font-size: 1.5em;
+		letter-spacing: 6px;
+/*		color: var(--greyscale-elements);*/
+		color: black;
+
+		margin: 0;
+		position: absolute;
+		top: 8px;
+		left: 4px;
+		text-transform: uppercase;
+	}
+
+	header div#thePresent span {
+		font-size: 1.25em;
+		letter-spacing: 1px;
+		color: var(--greyscale-text);
+
+		margin: 0px 3px;
+		position: relative;
+		top: 16px;
+	}
+
+
+
+	header button#interactionsToggle {
+		border: none;
+		background: transparent;
+		margin-top: -8px;
+	/*	position: absolute;*/
+	}
+
+	header button#interactionsToggle p {
+		font-weight: 600;
+		font-size: 4.75em;
+		color: var(--greyscale-elements);
+
+		margin: 4px 0;
+		position: absolute;
+		margin-left: -8px;
+	}
+
+	header button#interactionsToggle span {
+		display: block;
+		margin: 8px 0;
+/*		border: 1.5px solid var(--greyscale-details);*/
+		border: 2px solid black;
+	}
+
+		header button#interactionsToggle span:nth-child(2) {
+			width: 16px;
+			margin-left: 32px;
+			margin-top: 24px;
+		}
+		header button#interactionsToggle span:nth-child(3) {
+			width: 32px;
+			margin-left: 16px;
+		}
+		header button#interactionsToggle span:last-child {
+			width: 48px;
+		}
+
+
+	
+
+
+
+/* * * 
+	C a r o u s e l  N a v 
+* * */
+	nav {
+		width: 100%;
+		position: fixed;
+		margin-top: 70px;
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+		justify-content: center;
+		overflow: hidden;
+	} 
+
+		/*nav::before {
+			content: "";
+			display: block;
+			width: 80px;
+			height: 102%;
+			background-color: transparent;
+
+			position: absolute;
+			left: -7%;
+			z-index: 7;
+		}
+		nav::after {
+			content: "";
+			display: block;
+			width: 80px;
+			height: 102%;
+			background-color: transparent;
+
+			position: absolute;
+			right: -7%;
+			z-index: 7;
+		}*/
+
+	nav ul {
+		position: relative;
+		margin: 20px 0;
+		padding: 0;
+		list-style-type: none;
+		display: flex;
+		align-items: center;
+		z-index: 4;
+		transition: all 0.25s ease;
+/*		overflow: hidden;*/
+	}
+
+	nav ul li {
+	/*	width: 100px;*/
+		text-align: center;
+
+		font-family: "Raleway";
+		font-weight: 400;
+		letter-spacing: 2px;
+
+		padding: 0 10px;
+		transition: all 0.25s ease;
+		text-transform: uppercase;
+	}
+
+	/* for GROUPS */
+	/*nav ul li:first-child {
+		display: none;
+	}*/
+
+	/* for HOME */
+	/*nav ul li:last-child {
+		display: none;
+	}*/
+
+		nav ul li.active {
+			font-size: 1.9em;
+			padding: 0 16px;
+			color: var(--greyscale-elements);
+		}
+
+		nav ul li.not {
+			font-size: 0.85em;
+			letter-spacing: 4px;
+			color: var(--greyscale-details);
+		}
+
+	/*nav button#leftToggle {
+		position: absolute;
+		display: block;
+		height: 90%;
+		left: 0%;
+		width: 146px;
+		z-index: 6;
+		background-color: transparent;
+		border: none;
+	}
+
+	/*nav button#rightToggle {
+		position: absolute;
+		display: block;
+		width: 146px;
+		height: 90%;
+		right: 0%;
+		z-index: 6;
+
+		background-color: transparent;
+		border: none;
+	}*/
+
+nav ul li button.navButton {
+	padding: 0;
+}
+
+nav ul li button.navButton:hover {
+	color: inherit;
+	background-color: inherit;
+}
+
+nav ul li.active button {
+	font-size: 1em;
+	color: var(--greyscale-elements);
+	padding: 4px 12px;
+	transition: all ease-in-out 0.25s;
+	border-radius: 4px;
+}
+
+nav ul li#home.active button {
+	font-size: 1em;
+	color: black;
+}
+
+nav ul li#home.active.customizer button {
+	color: white;
+	background-color: var(--greyscale-elements);
+}
+
+nav ul li.not button {
+
+}
+
+/* * * 
+	B u t t o n  B a r 
+* * */
+
+div#buttonBar {
+	width: 100%;
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 0;
+/*	background-color: var(--greyscale-background);*/
+	background-color: white;
+	z-index: 10;
+/*	border-top: 2.5px solid rgba(0, 0, 0, 0.5);*/
+}
+
+	div#buttonBar button#main {
+		height: 100%;
+		position: relative;
+		left: 48%;
+		transform: translateX(-50%);
+
+		font-family: "Raleway";
+		font-weight: 400;
+		font-size: 1.25em;
+		text-transform: uppercase;
+		letter-spacing: 3px;
+
+		background-color: transparent;
+		border: none;
+		outline: none;
+
+/*		padding: 28px 0;*/
+		margin: 16px auto;
+		padding: 12px 8px;
+/*		border: 1px solid black;*/
+		border-radius: 8px;
+		z-index: 10;
+		transition: all 0.2s ease-in-out;
+	}
+
+	div#buttonBar button#main:hover {
+		background-color: var(--greyscale-backdrop);
+		color: var(--greyscale-icons);
+/*		color: white;*/
+	}
+
+
+div#buttonBar button#monthChartToggle {
+    position: absolute;
+    right: 1%;
+    bottom: 8%;
+    box-sizing: content-box;
+    padding: 10px 5px;
+    background-color: transparent;
+    border: none;
+
+    font-size: 1em;
+    letter-spacing: 2px;
+}
+
+div#buttonBar button#monthChartToggle p {
+    margin: 0 0 5px 0;
+    
+}
+
+div#buttonBar button#monthChartToggle span {
+    margin: 0;
+}
+
+
+
+div#buttonBar button#mapToggle {
+	position: absolute;
+    left: 2%;
+    bottom: 8%;
+    letter-spacing: 1px;
+}
+
+div#buttonBar button#mapToggle p {
+	font-size: 0.85em;
+	margin: 0 auto;
+}
+
+div#buttonBar button#mapToggle p:first-child {
+	border-bottom: 1px solid black;
+	padding-bottom: 6px;
+	margin-bottom: 6px;
+}
+
+
+
+
+
+
+
+
+
+/* * *
+	U s e r  
+	  S e t t i n g s 
+* * */
+
+div#userSettings {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 22;
+    transition: all 0.2s ease-in-out;
+    animation: 0.2s ease-in-out forwards _enter
+}
+
+	div#userSettings._exit {
+		animation: 0.2s ease-in-out forwards _leave
+	}
+
+
+
+div#userSettings h2#mainHeader {
+	font-family: 'Raleway';
+	font-size: 2.5em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--greyscale-accent);
+	
+	margin: 24px 0 0 16px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+
+
+div#userSettings ul#mainMenu {
+	width: calc(100% - 32px);
+	max-height: 80%;
+	overflow-y: scroll;
+    list-style-type: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    margin-left: 16px;
+    padding: 0;
+    -webkit-perspective: 10000;
+}
+
+div#userSettings ul#mainMenu li {
+	width: 100%;
+    margin: 28px 0;
+    transition: all ease-in-out 0.2s;
+    overflow-y: hidden;
+}
+
+	div#userSettings ul#mainMenu li.open {
+		height: auto;
+	}
+
+	div#userSettings ul#mainMenu li.close {
+		height: 36px;
+	}
+
+div#userSettings ul#mainMenu li button {
+    font-size: 1.5em;
+    text-transform: capitalize;
+    letter-spacing: 2px;
+}
+
+div#userSettings ul#mainMenu li button svg {
+	display: inline-block;
+	transform: rotate(180deg);
+	width: 44px;
+	margin-left: 12px;
+	position: relative;
+	top: 28px;
+}
+
+div#userSettings ul#mainMenu li button#aboutProject {
+	margin: -24px 0 -32px;
+	display: flex;
+}
+
+
+
+
+
+div#userSettings ul#mainMenu li#profile ul {
+	margin-left: 24px;
+	margin-bottom: -24px;
+	padding: 0;
+}
+
+div#userSettings ul#mainMenu li#profile ul li {}
+
+div#userSettings ul#mainMenu li#profile ul li button {
+	font-size: 1.25em;
+}
+
+div#userSettings ul#mainMenu li#profile ul li.open {
+	height: auto;
+}
+div#userSettings ul#mainMenu li#profile ul li.close {
+	height: 30px;
+}
+
+
+div#userSettings ul#mainMenu li#profile ul li#profilePhoto {
+	position: relative;
+
+}
+
+div#userSettings ul#mainMenu li#profile ul li#profilePhoto fieldset {
+	border: none;
+}
+
+
+
+
+div#userSettings ul#mainMenu li#profile ul li#profilePhoto fieldset div#photo {
+	position: relative;
+	border: 2px solid var(--greyscale-accent);
+	border-radius: 6px;
+	width: 80%;
+	margin: 24px auto;
+	box-sizing: border-box;
+	padding: 6px;
+/*	height: calc(width);*/
+/*	aspect-ratio: 1;*/
+}
+
+div#userSettings ul#mainMenu li#profile ul li#profilePhoto fieldset div#photo img {
+	width: 100%;
+	opacity: 0.5;
+	border-radius: 6px;
+}
+
+div#userSettings ul#mainMenu li#profile ul li#profilePhoto fieldset label {
+	display: block;
+	text-align: center;
+	width: 100%;
+	position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+/*    z-index: 20;*/
+
+	font-family: 'Raleway';
+	font-weight: 400;
+	letter-spacing: 4px;
+	font-size: 1em;
+}
+
+div#userSettings ul#mainMenu li#profile ul li#profilePhoto fieldset button#submitProfilePhoto {
+	width: 100%;
+	margin: 24px auto 12px;
+}
+
+
+
+
+
+
+
+div#userSettings ul#mainMenu li#profile ul li#username {}
+
+div#userSettings ul#mainMenu li#profile ul li#username fieldset {
+	border: none;
+	margin: 12px auto 0;
+}
+
+div#userSettings ul#mainMenu li#profile ul li#username fieldset input {
+
+}
+
+div#userSettings ul#mainMenu li#profile ul li#username fieldset button {
+	display: block;
+	margin: 12px auto;
+}
+
+
+
+
+
+
+
+div#userSettings ul#mainMenu li#profile ul li#biography {}
+
+div#userSettings ul#mainMenu li#profile ul li#biography fieldset {
+	border: none;
+	margin: 12px auto 0;
+}
+
+div#userSettings ul#mainMenu li#profile ul li#biography fieldset textarea {
+	
+}
+
+div#userSettings ul#mainMenu li#profile ul li#biography fieldset button {
+	display: block;
+	margin: 12px auto;
+}
+
+
+
+
+
+
+
+div#userSettings ul#mainMenu li#profile ul li#changePassword {}
+
+div#userSettings ul#mainMenu li#profile ul li#changePassword fieldset {
+	border: none;
+	margin: 12px auto 0;
+}
+
+div#userSettings ul#mainMenu li#profile ul li#changePassword fieldset input {
+	margin-bottom: 24px;
+}
+
+div#userSettings ul#mainMenu li#profile ul li#changePassword fieldset button {
+	display: block;
+	margin: 36px auto 0px;
+}
+
+
+
+
+
+
+
+
+
+div#userSettings ul#mainMenu li#privacy {}
+
+
+div#userSettings ul#mainMenu li#privacy div#optionsWrapper {
+	margin: 36px auto 0;
+}
+
+div#userSettings ul#mainMenu li#privacy div#optionsWrapper ul#options {
+	display: flex;
+	width: 90%;
+	flex-direction: row;
+	padding: 0;
+	margin: 0 auto;
+}
+
+div#userSettings ul#mainMenu li#privacy div#optionsWrapper ul#options li {
+	margin: 12px 0;
+}
+
+div#userSettings ul#mainMenu li#privacy div#optionsWrapper ul#options li button {
+	text-align: center;
+	width: 100%;
+}
+
+div#userSettings ul#mainMenu li#privacy div#optionsWrapper p {
+	font-family: 'Raleway';
+	text-align: center;
+	line-height: 28px;
+	white-space: pre-line;
+	color: var(--greyscale-text);
+	max-width: 90%;
+	margin: 16px auto;
+}
+
+div#userSettings ul#mainMenu li#privacy div#optionsWrapper p span {
+	color: black;
+	font-weight: 600;
+}
+
+
+
+
+
+
+
+
+
+div#userSettings ul#mainMenu li#invites {}
+
+
+div#userSettings ul#mainMenu li#invites div#mainWrapper {
+	margin: 24px auto 0;
+	margin-left: 24px;
+}
+
+div#userSettings ul#mainMenu li#invites div#mainWrapper h3 {
+	font-family: 'Raleway';
+	font-weight: 600;
+}
+
+div#userSettings ul#mainMenu li#invites div#mainWrapper h3 {}
+
+div#userSettings ul#mainMenu li#invites div#mainWrapper h3#inviteCount {
+	margin-left: 12px;
+	position: relative;
+	font-size: 1.5em;
+	color: var(--greyscale-text);
+}
+div#userSettings ul#mainMenu li#invites div#mainWrapper h3#inviteCount span {
+	position: absolute;
+	top: -18px;
+	left: -24px;
+	font-size: 2em;
+	color: var(--greyscale-accent);
+}
+
+div#userSettings ul#mainMenu li#invites div#mainWrapper h3#referralHeader {
+	font-size: 1.25em;
+}
+
+div#userSettings ul#mainMenu li#invites div#mainWrapper button#referralLink {
+	display: block;
+	font-size: 1em;
+/*	text-transform: lowercase;*/
+	width: 90%;
+	padding: 12px;
+	margin: 0 auto;
+
+	font-family: 'Raleway';
+	font-weight: 600;
+	color: var(--greyscale-accent);
+	border: 2px solid var(--greyscale-accent);
+	border-radius: 4px;
+
+}
+
+
+
+
+div#userSettings button#closeSettings {
+	font-weight: 600;
+	position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+
+
+
+
+
+
+
+
+ div#logoutModal {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 22;
+    transition: all 0.2s ease-in-out;
+    animation: 0.2s ease-in-out forwards _enter
+}
+
+ div#logoutModal div#wrapper {
+	/*position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);*/
+}
+
+ div#logoutModal div#wrapper span#exclaimation {
+	font-size: 3em;
+	font-weight: 500;
+	color: var(--greyscale-accent);
+
+	width: fit-content;
+	display: block;
+	margin: 0 auto;
+
+	border: 4px solid var(--greyscale-accent);
+	border-radius: 100%;
+	padding: 4px 30px;
+}
+
+
+ div#logoutModal div#wrapper h2 {
+	font-family: 'Raleway';
+	font-size: 2.5em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--greyscale-accent);
+    text-align: center;
+}
+
+ div#logoutModal div#wrapper div#options {
+	width: fit-content;
+	margin: 0 auto;
+}
+
+ div#logoutModal div#wrapper div#options button {
+	margin: 0 16px;
+}
+
+
+
+
+
+
+
+
+
+div#FullList {
+	position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 22;
+    transition: all 0.2s ease-in-out;
+    animation: 0.2s ease-in-out forwards _enter;
+    overflow-y: scroll;
+}
+
+	div#FullList.leave {
+		animation: _leave ease-in-out forwards 0.1s;
+	}
+
+div#FullList h2#title {
+	position: fixed;
+	width: 100%;
+	background-color: white;
+	z-index: 26;
+	color: var(--greyscale-accent);
+	font-size: 2.5em;
+/*	margin-left: 12px;*/
+/*	margin-top: 8px;*/
+	margin-top: 0px;
+	padding: 16px 0 24px 12px;
+}
+
+
+div#FullList h2 span {
+	display: block;
+	font-size: 0.6em;
+	margin-top: 0px;
+}
+
+
+div#FullList ul#dataList {
+	margin-top: 96px;
+	height: calc(100% - 300px);
+	overflow-y: scroll;
+	list-style-type: none;
+	padding: 0;
+}
+
+div#FullList ul#dataList li {
+	position: relative;
+	margin: 0px 0;
+/*	margin-left: 8px;*/
+	padding: 20px 0;
+}
+
+div#FullList ul#dataList li.selected {
+	background-color: rgba(112, 112, 112, 0.1);
+}
+
+div#FullList ul#dataList li button {
+	background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+div#FullList ul#dataList li button span.bullet {
+	position: relative;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 2px solid var(--greyscale-accent);
+	border-radius: 6px;
+	top: 4px;
+	margin-left: 8px;
+}
+
+div#FullList ul#dataList li button span.bullet.media {
+/*	margin-left: -36px;*/
+	margin-right: 6px;
+	display: block;
+	margin-bottom: -20px;
+}
+
+div#FullList ul#dataList li button span.bullet.selected::before {
+	position: relative;
+	content: '';
+	display: block;
+	width: 12px;
+	height: 12px;
+	left: 4px;
+	top: 4px;
+	background-color: var(--greyscale-accent);
+	border-radius: 3px;
+}
+
+div#FullList ul#dataList li button p {
+	display: inline-block;
+	margin-left: 12px;
+	margin-top: 0;
+	margin-bottom: 0;
+
+	font-family: 'Raleway';
+	font-size: 1.5em;
+	color: var(--greyscale-element);
+}
+
+div#FullList ul#dataList li button img {
+	width: 80%;
+	margin-left: 8px;
+	border-radius: 4px;
+}
+
+
+div#FullList ul#dataList li.view {
+	width: 90%;
+	margin: 16px auto;
+	padding: 8px 12px;
+	border-radius: 8px;
+	transition: all ease-in-out 0.2s;
+}
+
+div#FullList ul#dataList li.view:hover {
+	background-color: var(--greyscale-backdrop);
+}
+
+div#FullList ul#dataList li.view h3 {
+	font-size: 1.5em;
+	margin: 4px auto 12px;
+}
+
+div#FullList ul#dataList li.view p {
+	margin: 12px auto 12px;
+}
+
+
+
+
+div#FullList ul.optionsMenu {
+	width: 100%;
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    list-style-type: none;
+    margin: 0 0;
+    padding: 24px 0 16px;
+}
+
+div#FullList ul.optionsMenu li {
+	margin-left: 12px;
+	margin-bottom: 24px;
+}
+
+div#FullList ul.optionsMenu li button {
+	font-size: 1.4em;
+}
+
+div#FullList div#exitWrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background-color: white;
+	z-index: 26;
+}
+
+div#FullList div#exitWrapper button {
+	margin: 24px 0;
+}
+
+
+
+
+div#FullList div.log {
+	position: relative;
+	overflow-y: scroll;
+	z-index: 24;
+	height: calc(100vh - 180px);
+	margin: 108px auto 0;
+	width: 96%;
+}
+
+
+
+div#FullList ul#connections {
+	margin: 96px auto 0;
+    height: calc(100% - 300px);
+    overflow-y: scroll;
+    list-style-type: none;
+    padding: 0;
+    width: 96%;
+}
+
+div#FullList ul#connections li {
+	position: relative;
+    display: flex;
+	display: block;
+	flex-direction: row;
+    width: 100%;
+    margin: 16px 0;
+}
+
+div#FullList ul#connections img {
+	width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    opacity: 0.5;
+    display: inline-block;
+    margin: 0px 8px;
+}
+
+div#FullList ul#connections li div.text {
+	display: inline-block;
+}
+
+div#FullList ul#connections li div.text h4 {
+	font-family: "Raleway";
+    font-size: 1.5em;
+    margin: 16px 0 8px;
+}
+
+div#FullList ul#connections li div.text span {
+	display: block;
+    color: var(--greyscale-text);
+    margin-top: 4px;
+}
+
+
+div#FullList ul#connections li div#svgWrapper {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	margin-right: 8px;
+}
+
+div#FullList ul#connections li div#svgWrapper.subscription {
+	transform: rotate(180deg);
+}
+
+div#svgWrapper svg {
+	transform: scale(1.2);
+}
+
+div#svgWrapper svg g line.cls-1 {
+	fill: none;
+    stroke: rgba(0,0,0,0.4);
+    stroke-width: 2px;
+}
+
+
+
+
+
+/* * *
+	U s e r  
+	  P r o f i l e 
+* * */
+
+section#USERPROFILE {
+	display: block;
+	position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    transition: all 0.2s ease-in-out;
+    animation: 0.5s ease-in-out forwards _enter;
+    font-family: 'Raleway';
+    overflow: hidden;
+}
+
+div#main {
+	position: relative;
+	margin-top: 80px;
+	height: calc(100vh - 150px);
+	overflow-y: scroll;
+}
+
+div#main div#profilePhotoWrapper {
+	display: block;
+	width: 44%;
+/*	height: 180px;*/
+/*	margin: 96px 0 36px;*/
+/*	margin-left: 16px;*/
+	margin: 48px auto 36px;
+	border-radius: 16px;
+}
+
+div#main img#userPhoto {
+	width: 100%;
+/*	height: auto;*/
+	object-fit: cover;
+	border-radius: 16px;
+	max-height: 180px;
+	/*display: block;
+	width: 44%;
+	max-height: 180px;
+/*	margin: 96px 0 36px;*/
+/*	margin-left: 16px;*/
+/*	margin: 48px auto 36px;*/
+/*	border-radius: 16px;*/
+}
+
+div#main div#title {
+	width: 90%;
+	margin: auto;
+	font-family: 'Raleway';
+	text-align: center;
+}
+
+div#main div#title h2 {
+	font-size: 1.5em;
+	letter-spacing: 2px;
+	color: var(--greyscale-text);
+	margin-bottom: 8px;
+}
+
+div#main div#title h3 {
+	width: fit-content;
+	font-size: 1em;
+	letter-spacing: 2px;
+	color: var(--greyscale-accent);
+	border-top: 1.5px solid  var(--greyscale-accent);
+	padding-top: 8px;
+	margin: 12px auto auto;
+}
+
+div#main div#bio {
+	position: relative;
+	width: fit-content;
+	max-width: 75%;
+	margin: 64px auto 36px;
+	font-family: 'Raleway';
+	color: var(--greyscale-text);
+}
+
+div#main div#bio p {
+	font-size: 1.25em;
+	letter-spacing: 1px;
+	line-height: 28px;
+}
+
+div#main div#bio svg {
+	width: 32px;
+	position: absolute;
+	transform: scale(0.75);
+	margin: -20px 0;
+}
+
+div#main div#bio svg g path {
+	fill: var(--greyscale-elements);
+}
+
+div#main div#bio svg:first-child {
+	right: 100%;
+}
+
+div#main div#bio svg:last-child {
+	left: 100%;
+}
+
+
+div#main div#stats {
+	display: flex;
+	position: relative;
+	flex-direction: row;
+	justify-content: space-around;
+	margin-top: -16px;
+}
+
+div#main div#stats p, 
+div#main div#stats button {
+	display: inline-block;
+	font-size: 48px;
+	font-weight: 600;
+	text-align: center;
+	color: var(--greyscale-elements);
+}
+
+
+div#main div#stats p span,
+div#main div#stats button span {
+	display: block;
+	top: 0px;
+	position: relative;
+	font-weight: 400;
+	font-size: 20px;
+	letter-spacing: 2px;
+	color: var(--greyscale-text);
+}
+
+div#main div#stats button span {
+	color: black;
+	margin-top: 8px;
+}
+
+div#main div#stats p span {
+	margin-top: 8px;
+	text-transform: uppercase;
+}
+
+
+
+
+div#main div#pinnedMedia,
+div#main div#pinnedPosts,
+div#main div#collections {
+	text-align: right;
+}
+
+div#main div#pinnedMedia h2,
+div#main div#pinnedPosts h2,
+div#main div#collections h2 {
+	font-size: 2.5em;
+	margin-right: 16px;
+	letter-spacing: 2px;
+	color: var(--greyscale-accent);
+}
+
+div#main div#pinnedMedia h2.none,
+div#main div#pinnedPosts h2.none,
+div#main div#collections h2.none {
+	text-align: center;
+	margin: 48px 16px 64px;
+	color: var(--greyscale-elements);
+}
+
+
+
+div#main div#pinnedMedia {}
+div#main div#pinnedPosts {}
+
+
+
+div#main div#pinnedMedia ul {
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+/*	display: block;*/
+	margin: 36px auto 64px;
+	overflow-x: scroll;
+	white-space: nowrap;
+	scrollbar-width: none;
+	padding-left: 8px;
+}
+
+div#main div#pinnedMedia ul li {
+	display: inline-block;
+	width: 128px;
+	height: 128px;
+	margin: 0px 12px;
+}
+
+div#main div#pinnedMedia ul li img {
+	width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 4px;
+    opacity: 0.75;
+}
+
+
+
+
+
+div#main div#pinnedPosts {
+	margin-bottom: 64px;
+}
+
+div#main div#pinnedPosts ul,
+div#main div#collections ul {
+	margin: 24px 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+div#main div#pinnedPosts ul li,
+div#main div#collections ul li {
+	text-align: left;
+	margin-left: 24px;
+	margin-bottom: 36px;
+}
+
+div#main div#pinnedPosts ul li h3,
+div#main div#collections ul li h3 {
+	font-size: 1.5em;
+	font-weight: 400;
+	margin: 8px 0;
+}
+
+div#main div#pinnedPosts ul li span {
+	margin: 0 16px 0 0;
+}
+
+div#main div#pinnedPosts ul li span#date {}
+
+div#main div#pinnedPosts ul li span#details {}
+
+
+
+
+
+section#USERPROFILE div#menuBar {
+	position: fixed;
+    bottom: 0px;
+    width: 100%;
+}
+
+section#USERPROFILE div#menuBar button {
+	height: 100%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 24px 0;
+}
+
+section#USERPROFILE ul#profileOptions {
+	width: 100%;
+	background-color: white;
+	position: absolute;
+	bottom: 0;
+
+	list-style-type: none;
+	margin: 0 0;
+	padding: 12px 0;
+	animation: _enter ease-in-out forwards 0.1s;
+}
+
+	section#USERPROFILE ul#profileOptions.leave {
+		animation: _leave ease-in-out forwards 0.1s;
+	}
+
+section#USERPROFILE ul#profileOptions li {
+	width: 100%;
+}
+
+section#USERPROFILE ul#profileOptions li#close button {
+	font-family: 'Open Sans';
+	font-size: 2em;
+}
+
+section#USERPROFILE ul#profileOptions li button {
+	position: relative;
+	display: block;
+	margin: 24px auto;
+}
+
+section#USERPROFILE div#dragSlider {
+	position: absolute;
+}
+
+
+
+
+
+/****
+	A B O U T  P A G E
+****/
+section#ABOUT {
+	display: block;
+	width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    transition: all 0.2s ease-in-out;
+    animation: 0.5s ease-in-out forwards _enter;
+}
+
+	section#ABOUT._exit {
+		animation: 0.2s ease-in-out forwards _leave
+	}
+
+section#ABOUT header,
+section#CHANGELOG header {
+	display: flex;
+    justify-content: space-between;
+    width: 95%;
+    position: fixed;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Raleway';
+    padding: 12px 0 20px;
+    background-color: white;
+    z-index: 10;
+}
+
+section#ABOUT header h1,
+section#CHANGELOG header h1 {
+	font-weight: 600;
+    font-size: 1.5em;
+    letter-spacing: 6px;
+    color: black;
+    margin: 12px 0 0 8px;
+    top: 8px;
+    left: 4px;
+    text-transform: uppercase;
+}
+
+section#ABOUT header h1 span,
+section#CHANGELOG header h1 span {
+	font-weight: 300;
+	color: var(--greyscale-text);
+	text-transform: capitalize;
+}
+
+
+section#ABOUT div#mainBody {
+	width: 90%;
+	margin: 0 auto 200px;
+}
+
+
+section#ABOUT ul#stats {
+	width: 100%;
+    list-style-type: none;
+    margin: 100px 0 12px 0;
+    padding: 24px 0 16px;
+}
+
+section#ABOUT ul#stats li {
+	position: relative;
+    display: block;
+    font-family: "Raleway";
+    font-weight: 600;
+    font-size: 4em;
+    letter-spacing: 2px;
+    color: var(--greyscale-elements);
+    margin: 8px 0;
+}
+
+section#ABOUT ul#stats li p {
+	margin: -36px 0 0;
+}
+
+section#ABOUT ul#stats li p span {
+	display: block;
+    position: relative;
+    font-weight: 400;
+    font-size: 0.5em;
+    left: 8px;
+    top: -42px;
+    color: var(--greyscale-text);
+}
+
+
+
+
+
+section#ABOUT div#rhetoric {
+	margin-top: -48px;
+}
+
+section#ABOUT div#rhetoric h2 {
+	font-family: "Raleway";
+    font-weight: 600;
+    font-size: 3em;
+    letter-spacing: 2px;
+    color: black;
+}
+
+section#ABOUT div#rhetoric h3 {
+	font-family: "Raleway";
+    font-weight: 600;
+    font-size: 1.25em;
+    letter-spacing: 2px;
+    line-height: 32px;
+    color: black;
+
+    width: 90%;
+    margin-bottom: 32px;
+}
+
+section#ABOUT div#rhetoric button#readMore {
+	display: block;
+	margin: 48px auto;
+}
+
+/*section#ABOUT div#rhetoric div#text {
+	margin-top: px;
+}
+*/
+
+section#ABOUT div#rhetoric div#text p:first-child {
+/*	margin-top: 200px;*/
+	padding-top: 128px;
+}
+section#ABOUT div#rhetoric p {
+	font-family: "Open Sans";
+    font-weight: 300;
+    font-size: 1em;
+    color: black;
+/*/*    width: 90%;*/
+    margin: 16px auto 0;
+    line-height: 32px;
+}
+
+section#ABOUT div#rhetoric p.credit {
+	font-weight: 400;
+	font-size: 1.25em;
+}
+
+
+
+
+section#ABOUT ul#options {
+	width: 100%;
+    position: fixed;
+    bottom: 0;
+    list-style-type: none;
+    margin: 0 0 0;
+    padding: 24px 0 16px;
+    z-index: 100;
+    background-color: white;
+}
+
+section#ABOUT ul#options li {
+	margin-left: 12px;
+    margin-bottom: 16px;
+}
+
+section#ABOUT ul#options div#switch {
+	position: absolute;
+	right: 100px;
+	z-index: 22;
+}
+
+section#ABOUT ul#options div#switch svg {
+	width: 40px;
+	border: 3px solid var(--greyscale-elements);
+	border-radius: 50px;
+	padding: 20px 10px;
+	transform: rotate(-90deg);
+	transition: all 0.5s ease-in-out;
+}
+
+section#ABOUT ul#options div#switch svg.flipped {
+	transform: rotate(90deg);
+}
+
+
+
+
+
+
+
+
+
+section#CHANGELOG {
+	position: fixed;
+	top: 0;
+	display: block;
+	width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    transition: all 0.2s ease-in-out;
+    animation: 0.5s ease-in-out forwards _enter;
+    background-color: var(--greyscale-backdrop);
+    z-index: 24;
+}
+
+	section#CHANGELOG._exit {
+		animation: 0.2s ease-in-out forwards _leave
+	}
+
+section#CHANGELOG header {
+	width: 100%;
+}
+
+section#CHANGELOG header h1 {
+	margin-left: 16px;
+}
+
+
+section#CHANGELOG ul#changes {
+	margin: 128px 0 0 8px;
+	padding: 0;
+	padding-left: 12px;
+	list-style-type: none;
+	font-family: 'Open Sans';
+	font-weight: 300;
+}
+
+	section#CHANGELOG ul#changes li.change {
+
+	}
+
+	section#CHANGELOG ul#changes li.change h3 {
+		font-family: 'Open Sans';
+		font-weight: 300;
+		letter-spacing: 2px;
+
+		margin-bottom: -16px;
+	}
+	section#CHANGELOG ul#changes li.change h3 span {
+		font-weight: 600;
+	}
+
+	section#CHANGELOG ul#changes li.change h2 {
+		font-family: 'Open Sans';
+		font-weight: 400;
+		letter-spacing: 1px;
+	}
+
+section#CHANGELOG ul.details {
+	margin-left: 4px;
+	padding: 0;
+	padding-left: 16px;
+	list-style-type: disc;
+	width: 90%;
+	line-height: 28px;
+	color: var(--greyscale-text);
+}
+
+section#CHANGELOG ul.details ul {
+	margin: 8px 0 0 8px;
+	padding: 0;
+	padding-left: 16px;
+	list-style-type: circle;
+}
+
+
+
+section#CHANGELOG div#menuBar {
+	position: fixed;
+    bottom: 0px;
+    width: 100%;
+    background-color: white;
+/*    z-index: 28;*/
+}
+
+section#CHANGELOG div#menuBar button {
+	height: 100%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 24px 0;
+
+}
+
+
+
+
+
+div#dragSlider {
+	width: 101%;
+	position: relative;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	height: 101vh;
+	background-color: var(--greyscale-text);
+	z-index: 30;
+	animation: _scaleFadeIn ease-in-out forwards 0.3s;
+}
+
+
+	div#dragSlider._leave {
+		animation: _scaleFadeOut ease-in-out forwards 0.3s;
+	}
+
+div#dragSlider div#buttonWrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: var(--greyscale-text);
+	padding: 12px 0;
+}
+
+div#dragSlider div#buttonWrapper button {
+/*	height: 100%;*/
+    position: relative;
+    padding: 28px 0;
+    color: white;
+    width: 20%;
+    padding: 12px 8px;
+}

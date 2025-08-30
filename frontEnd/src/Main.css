@@ -1,0 +1,258 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;500;600&display=swap');
+
+
+body {
+	margin: 0;
+	padding: 0;
+	/*overflow-y: scroll;
+	overflow-x: hidden;*/
+	overflow: hidden;
+	width: 100%;
+	height: 100lvh;
+	position: relative;
+	background-color: white;
+}
+
+section#BASE {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	margin: 0 auto;
+	width: 100%;
+	height: 100dvh;
+	overflow: hidden;
+/*	background-color: var(--greyscale-background);*/
+	background-color: white;
+}
+
+
+
+:root {
+  --site-gray-lightest: rgba(112, 112, 112, 0.1);
+  --site-gray-lite: rgba(112, 112, 112, 0.25);
+  --site-gray-mid: rgba(112, 112, 112, 0.6);
+  --site-gray-middle: rgba(112, 112, 112, 0.5);
+  --initial-color: royalblue;
+
+  /** Greyscale Theme **/
+  --greyscale-background: rgba(236, 236, 236, 1);
+  --greyscale-background-2: rgba(236, 236, 236, 1);
+/*  --greyscale-text: rgba(0, 0, 0, 0.5);*/
+  --greyscale-accent: rgba(0, 0, 0, 0.2);
+  --greyscale-elements: rgba(31, 31, 31, 0.1);
+  
+  --greyscale-error: rgba(226, 60, 93, 0.6);
+
+  /** UPDATED Greyscale Theme **/
+  --greyscale-backdrop: rgba(112, 112, 112, 0.05);
+  --greyscale-elements: rgba(31, 31, 31, 0.1);
+  --greyscale-accent: rgba(0, 0, 0, 0.2);
+  --greyscale-details: rgba(0, 0, 0, 1);
+  --greyscale-text: rgba(0, 0, 0, 0.5);
+  --greyscale-icons: rgba(112, 112, 112, 0.25);
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 3px;
+  }
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #c2c9d2;
+}
+
+/* * * *
+		F o r  S V G   I C O N s 
+* * * */
+
+svg#return {
+	width: 50px;
+	position: relative;
+	top: 4px;
+	transition: all 0.3s ease-in-out;
+	margin-right: -240px;
+}
+
+svg#return polyline {
+	fill: rgba(255, 255, 255, 0);
+	stroke-width: 8px;
+}
+
+svg#return polyline#top {
+    stroke: rgba(0, 0, 0, 1);
+}
+
+svg#return polyline#bottom {
+	stroke: rgba(0, 0, 0, 0.1);
+}
+
+	svg#return.leave {
+		animation: leave 0.5s ease-in-out forwards;
+	}
+
+	@keyframes leave {
+		0% {
+			right: 0%;
+		}
+		100% {
+			right: 50px;
+		}
+	}
+
+
+
+
+
+/* * * *
+		C O M M O N  S T Y L E S 
+* * * */
+
+button.buttonDefault {
+	font-family: "Raleway";
+	font-weight: 400;
+	font-size: 1.25em;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+
+	transition: all ease-in-out 0.25s;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	padding: 6px 8px;
+}
+
+button.buttonDefault:hover {
+		background-color: var(--greyscale-backdrop);
+		color: var(--greyscale-icons);
+/*		color: white;*/
+}
+
+button.buttonDefault._inactive {
+	color: var(--greyscale-accent);
+}
+
+button.buttonDefault._inactive:active {
+	color: black;
+}
+
+
+input.inputDefault,
+textarea.inputDefault {
+	  width: 100%;
+    display: block;
+    margin: 16px 0;
+    border: none;
+    border-bottom: 2px solid var(--greyscale-elements);
+    padding: 8px 2px;
+    background-color: transparent;
+    font-family: 'Raleway';
+    font-weight: 400;
+    font-size: 0.9em;
+    color: var(--greyscale-text);
+    letter-spacing: 2px;
+    line-height: 22px;
+}
+
+input.inputDefault:focus,
+textarea.inputDefault:focus {
+	  outline: none;
+    border-bottom-color: var(--greyscale-text);
+}
+
+
+div.log {
+	overflow-y: scroll;
+}
+
+
+
+@keyframes _enter {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+
+@keyframes _leave {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+
+@keyframes _recede {
+		0% {
+			opacity: 1;
+			transform: scale(1);
+		}
+		100% {
+			opacity: 0;
+			transform: scale(0.6);
+		}
+	}
+
+@keyframes _return {
+		0% {
+			opacity: 0;
+			transform: scale(0.6);
+		}
+		100% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+
+@keyframes _scaleFadeOut {
+		0% {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1);
+		}
+		100% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(0.6);
+		}
+}
+
+@keyframes _scaleFadeIn {
+		0% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(0.6);
+		}
+		100% {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1);
+		}
+}
+
+@keyframes _scaleFadeOut_offset {
+		0% {
+			opacity: 1;
+			transform: translateX(-50%) scale(1);
+		}
+		100% {
+			opacity: 0;
+			transform: translateX(-50%) scale(0.6);
+		}
+}
+
+@keyframes _scaleFadeIn_offset {
+		0% {
+			opacity: 0;
+			transform: translateX(-50%) scale(0.6);
+		}
+		100% {
+			opacity: 1;
+			transform: translateX(-50%) scale(1);
+		}
+}
