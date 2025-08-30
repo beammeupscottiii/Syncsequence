@@ -4,6 +4,10 @@
 ----------------------------------------------------------------------------------------
 
 ### 08. 30. 2025
+
+@1430 Just making this update, as the global git settings were set to scottiiiOnTheSide
+rather than beammeupscottiii. I was unable to see within the folders on github.com. I've changed the global settings, hopefully that fixes the issue
+
 @1310 It's been about 6 months since I've touched this code . . .
 My Current Goals:
 - Reorganizing folder structure so the git backup is within a singular folder
