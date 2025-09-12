@@ -90,13 +90,12 @@ section#entry div#logoWrapper h1 {
 section#entry div#loginOrSignup {
 	width: 100%;
 	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 0;
+	top: 50%;
+	transform: translateY(-50%);
+/*	bottom: 0;*/
 	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-
+	flex-direction: column;
+/*	justify-content: space-between;*/
 	transition: all 0.5s ease-out;
 }
 
@@ -107,15 +106,20 @@ section#entry div#loginOrSignup {
 
 section#entry div#loginOrSignup button {
 	font-family: 'Raleway';
-	font-size: 1em;
+	font-size: 1.25em;
 	color: black;
+	font-weight: 500;
 	letter-spacing: 2px;
 	text-transform: uppercase;
+	text-align: left;
 
-	width: 50%;
-	padding: 20px 0;
 	border: none;
 	background-color: white;
+
+/*	width: 50%;*/
+	padding: 20px 0;
+	padding-left: 16px;
+	margin-bottom: 24px;
 }
 
 section#entry button#forSignupProcess {
@@ -286,6 +290,7 @@ section#entry form#signin button#signin {
 	margin: 24px 0 20px;
 	font-size: 1.75em;
 	transition: all 0.5s ease-out;
+	padding-left: 0px;
 }
 
 	section#entry form#login button#login.canUse,
@@ -301,6 +306,7 @@ section#entry form#signin button#signin {
 
 section#entry form button#switch {
 	font-size: 0.75em;
+	padding-left: 0px;
 }
 
 
@@ -495,6 +501,7 @@ section#entry div#referralPanel {
 	opacity: 1;
 	transition: all ease-in-out 0.3s;
 	animation: 0.3s ease-in-out forwards _scaleFadeIn;
+	background-color: white;
 }
 
 section#entry div#referralPanel._leave {

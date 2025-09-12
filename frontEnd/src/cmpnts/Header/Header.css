@@ -1,0 +1,52 @@
+header {
+	display: flex;
+	justify-content: space-between;
+	width: 95%;
+	position: fixed;
+/*	top: 4px;*/
+	left: 50%;
+	transform: translateX(-50%);
+		
+	font-family: 'Raleway';
+
+/*	border-bottom: 2px solid rgba(0, 0, 0, 0.1);*/
+/*	padding: 4px 0 16px;*/
+	background-color: transparent;
+	z-index: 10;
+}
+
+header svg#logo {
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+	margin: 12px 0;
+}
+
+header button#notifToggle {
+	position: relative;
+	right: 0;
+	margin-right: 4px;
+	margin-top: 4px;
+}
+
+header button#notifToggle div#countWrapper {
+	display: flex;
+	flex-direction: row;
+}
+
+header button#notifToggle p {
+/*	margin: 0 4px;*/
+	margin: 0;
+	position: relative;
+	top: 2px;
+	font-family: 'Open Sans';
+	font-weight: 600;
+	font-size: 1.25rem;
+}
+
+header button#notifToggle hr {
+	border: none;
+	border-left: 2px solid black;
+	margin: 0 8px;
+	
+}

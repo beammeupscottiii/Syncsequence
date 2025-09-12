@@ -8,7 +8,7 @@ div#sectionsWrapper {
 	display: flex;
 	position: fixed;
 	width: 100%;
-	top: 148px;
+	top: 120px;
 	overflow-y: scroll;
 }
 

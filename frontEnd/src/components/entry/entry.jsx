@@ -876,11 +876,11 @@ export default function Entry({useAuth, setUserID, userDocumentSettings, setUser
 						e.preventDefault(); 
 						setRefPanel();
 
-						// let initialChoiceElement = initialChoice.current;
-						// initialChoiceElement.style.opacity = 0;
-						// let delay = setTimeout(()=> {
-						// 	initialChoiceElement.style.display = 'none';
-						// }, 550)
+						let initialChoiceElement = initialChoice.current;
+						initialChoiceElement.style.opacity = 0;
+						let delay = setTimeout(()=> {
+							initialChoiceElement.style.display = 'none';
+						}, 550)
 					}}>Sign Up</button>
 
 					<button onClick={(e)=>{

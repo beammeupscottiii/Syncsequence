@@ -2,8 +2,184 @@
 ## S y n c S e q . x y z
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
+### 09. 12. 2025
+@1215 Styling for <Navmenu> pretty much done. Need to add in closing and opening functionality
+Perhaps write func for switching sections
+
+
+### 09. 11. 2025
+@1355 Header + Nav height is 115px. But im planning to do something else with it
+
+@0215 alertsButton style updated.
+This is pretty much it for the header, other than the logo button functionality
+
+@0140 12px inner padding for body
+
+### 09. 09. 2025
+@1420 To Do Next: Design the notifButton. 
+Perhaps I can figure out where to place the state var for the alerts and messages. They're
+currently in topmost level element in Base.jsx
+
+@1415 I have to add a border-box ( i think it's called ) padding to the body,
+so that I dont have to guess how to reduce the size of every element
+
+@1255 Remember to modify the back button in the header to distinguish between pages
+and sections (interactions would have a back button despite being a section)
+
+@1200 
+The Game Plan...
+- Redo the header (logo button + notifList button) ✔️
+- then the navBar + navMenu (both within the nav folder)
+- Redo the homefeed
+- Then the sectionOptions button
+- After, the CreatePost overlay	
+
+Functionality Updates
+- Add borderbox padding to body, 12px 12px
+- Back button in header to distinguish between pages and sections
+- alerts&messages button switching to exit button when clicked and switching to notifsList
+
+
+Then, we should have enough setup to re-engineer the popupNotifs, creating a clearer
+structure for it's process.
+
+
+### 09. 07. 2025
+@1025 Will keep moving the update annoations to the most recent entry point in the notes
+
+U P D A T E 
+A N N O T A T I O N
+
+Will 'annotate' my actions as I take them to keep track of what I've done during
+this transition. The overall goal is migration to new organization.
+
+- 'Main' is now 'Base'. Original main still exists.
+- copied Main.jsx to Base.jsx in it's entirity. This may or may not be the case for the
+	other components
+- replaced Main with Base in index.js
+- Cleaned up Index.css and Base.css
+	- index is for styles not concerning specific elements, so fonts and colors saved to
+		root.
+	- Base will be for common styles and animations
+- Nav.jsx to include <navMenu> and <navBar>
+- 21 folders made for all components
+  - Post, AboutProject, UserProfile are technically different pages... I may organize
+  	by 'Section', 'Pages', and 'Overlays' - but it's not important to decide that now
+
+ - 09.09.2025 @ 1420 - Added the Syncsequence Logo
+ - 09.11.2025 @ 0220 - Header styling updated. Just need to do logo button functionality
+ 												in future
+ 							@ 1355 - Nav Button style updated
+
+
+
+### 09. 05. 2025
+@0930 I'd completely forgotten about React Router when I was redesigning the app.
+Post, Macrospage, and User can and should remain 'external' pages.
+All three pages have back buttons
+
+@0900 Seems I neglected to finish the previous thought ...
+
+@0120 I may reconsolidate all the accepted
+@0930 I remember now, I'd wished to reconsolidate all the accepted/preffered mockup pages into a new project again 
+
+### 09. 05. 2025
+@1935 
+First, we're gonna copy all the changes made on the Windows Side to Linux ✔️
+Then, I'll consult the notes I made concerning the new component organization
+and begin 'migrating' to the new organization and design
+
+### 09. 04. 2025
+@1140 Currently working on elimating the space between the <Nav> and the <SectionWrapper> or the log (fixed 1 minute after xD)
+
+issue with calendar once again, Sept 2025 begins on Monday. Calenday says 1st is Sunday,
+even though previous month ended on Sunday
+
+Also, even though I plan to remove it, the button bar at the bottom dissappears
+when <Map> or <Cal> is open.
+
+Even though I am removing them, Social and Macros button's text size seems to small
+
+@1455 Current plan is to resize all of the current elements on within <Home> as to have
+an idea for what the best sizing is and how things should look.
+
+Also, keep all files which are being editted on windows side OPEN
+so we can just copyAll and replace on Linux side
+
+
+@1225 Made changes to the <Entry> loginOrSignup element with the two buttons.
+I should simply be able to copy the entirity of the doc on windows,
+and then replace the linux side with that copy
+
+It seems like the earlier issue concerning the 'cannot get /' when using the
+external address for the project was due to the backend running on 3000 alongside
+the frontend project . . .
+Yet if that's truly the case, I don't know how the frontEnd ever launched in the first
+place? I usually start the front then the back, so perhaps that had something to do
+with it?
+
+Anyhow - element & font sizing on mobile is quite the mess. The project is designed
+for a full screen view, yet the address and settings bar in a browser decrease
+and affect the intended space.
+
+Overwhelming,
+but we take it step by step, bit by bit...
+
+<LoginOrSignup> design and location on Entry page has been tweaked and can be accessed
+on mobile.
+
+### 09. 03. 2025
+@1630 I should probably make those changes in the webpackDevServer here on the linux
+side of the project as well...
+
+### 09. 02. 2025
+@1800 Within the file "node_modules/react-scripts/config/webpackDevServer.config.js"
+on the front end, I had to adjust historyApiFallback, index to '/' from it's original value. that is an object. I also had to change the "static" object's publicPath value to '/' as well. This is allowing me to once again view the project over the external ip address which can be accessed on the wifi network.
+Lordie I had to do alot of running around to fix this T- T
+
+### 08. 31. 2025
+To Do Next
+  - remove sensitive info from .git
+  - Begin reorganizing folder / component structure to new one
+  	- Move all instant notification message processes to their respective components
+  	  - must discern which state objects need to be within the UIC, it may just be all
+
+@2335 Port needs to be 3000 for Windows side. it's 3333 for Linux, but im not sure why 
+I couldn't change it via the code...
+I can change the port to listen to on the backend within app.js with app.listen
+I suppose theres another way to change it for the frontEnd
+
+@1550 Local Hosting works! can view project from my phone :D Some CSS issues to fix off rip, unfortunately, as I cant sign in on my phone. cant see the buttons.
+
+gotta change sharp to 0.32.6 on linux side as thats the version working on Windows..
+it is currently 0.33.4
+
+also, websocket randomly not connecting keeps happening... but doesnt seem to be the
+case after log in. So maybe something causes the disconnect
+However, i dont see the confirmation connection message...
+
+@1510 Next steps would be to reorganize component structure and then to move
+all instant notification processes internal to their respective components.
+
+There would need to be some more global states as to make sure the <popUpNotif> can
+run certain functions (like accepting requests)
+
+@0320 Set up syncing the project from Ubuntu with Windows. Will test running the project
+and accessing it with my phone in the morning / tomorrow.
+
+In concerns to the earlier issue with not being able to see the folders on the github
+site, the solution was use 'git rm --cached "folderName" ' to remove the versions of the
+folders that still had the .git folder in them, then to reAdd them with 'git add "folderName" '
+
+
+To Do Next
+  - remove sensitive info from .git
+  - make sure local hosting is working utilizing Windows, project viewable from phone ✔️
+
 
 ### 08. 30. 2025
+@1500 Finally fixed it :D !
+Now to local hosting...
 
 @1430 Just making this update, as the global git settings were set to scottiiiOnTheSide
 rather than beammeupscottiii. I was unable to see within the folders on github.com. I've changed the global settings, hopefully that fixes the issue
@@ -14,13 +190,9 @@ but I still can't access the folders on the site
 
 @1310 It's been about 6 months since I've touched this code . . .
 My Current Goals:
-- Reorganizing folder structure so the git backup is within a singular folder
-- this Notes.md now kept in top level folder
-- Creating an easy method, or rediscovering method, for hosting project locally
-
-
-
-
+- Reorganizing folder structure so the git backup is within a singular folder ✔️
+- this Notes.md now kept in top level folder ✔️
+- Creating an easy method, or rediscovering method, for hosting project locally ✔️
 
 
 

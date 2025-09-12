@@ -1,0 +1,71 @@
+nav {
+	width: 100%;
+    position: fixed;
+    margin-top: 68px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+nav button#navButton {
+	padding: 12px 16px;
+	color: black;
+}
+
+
+
+
+
+div#navmenu {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	width: 100%;
+	height: 100vh;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: white;
+	z-index: 12;
+}
+
+div#navmenu ul {
+	display: flex;
+	flex-direction: column;
+	height: fit-content;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;	
+}
+
+div#navmenu ul li {
+	text-align: center;
+	margin: 12px 0;
+}
+
+div#navmenu ul li button {
+	
+}
+
+	div#navmenu ul li:last-child button {
+		margin-top: 20px;
+		font-size: 0.75em;
+	}
+
+div#navmenu ul li button svg#globe {}
+
+	svg#globe .cls-1, .cls-3 {
+	    fill: none;
+	}
+
+	svg#globe .cls-1 {
+		stroke: #707070;
+	    stroke-width: 1.5px;
+	}
+
+	svg#globe .cls-2 {
+		stroke: none;
+	}
