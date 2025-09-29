@@ -1,0 +1,67 @@
+div#sectionWrapper {
+	display: flex;
+	position: relative;
+    width: 100%;
+    height: 98vh;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    padding-top: 116px;
+}
+
+
+/* * * 
+        T h e  F i v e
+        M a i n  S e c t i o n s 
+* * */
+
+div#profile,
+div#socialLog,
+div#userLog,
+div#macros,
+div#settings {
+    width: 98%;
+    height: 100%; /*needs to be fixed for animation */
+    margin: 0 auto;
+    opacity: 0;
+    transition: all 0.5s linear;
+    transform: scale(0.6);
+}
+
+div#profile.enter,
+div#userLog.enter,
+div#socialLog.enter,
+div#macros.enter,
+div#settings.enter {
+    animation: 0.5s ease-in-out forwards _return;
+}
+
+div#profile.leave,
+div#userLog.leave,
+div#socialLog.leave,
+div#macros.leave,
+div#settings.leave {
+    animation: 0.5s ease-in-out forwards _recede;
+}
+
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);    
+    }
+}
+
+@keyframes disappear {
+    0% {
+        opacity: 1;
+        transform: scale(1);    
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}

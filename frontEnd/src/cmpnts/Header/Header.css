@@ -1,9 +1,11 @@
 header {
+	/*display: flex;
+	justify-content: space-between;*/
 	display: flex;
-	justify-content: space-between;
-	width: 95%;
+	flex-direction: column;
+	width: 98%;
 	position: fixed;
-/*	top: 4px;*/
+	top: 0px;
 	left: 50%;
 	transform: translateX(-50%);
 		
@@ -11,8 +13,23 @@ header {
 
 /*	border-bottom: 2px solid rgba(0, 0, 0, 0.1);*/
 /*	padding: 4px 0 16px;*/
-	background-color: transparent;
+	background-color: white;
 	z-index: 10;
+	transition: 0.2s all ease-in-out;
+}
+
+	header.return {
+		top: 0px;
+	}
+
+	header.retreat {
+		top: -62px;
+	}
+
+div#headerWrapper {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
 }
 
 header svg#logo {
@@ -25,7 +42,7 @@ header svg#logo {
 header button#notifToggle {
 	position: relative;
 	right: 0;
-	margin-right: 4px;
+	margin-right: 8px;
 	margin-top: 4px;
 }
 

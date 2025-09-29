@@ -2,6 +2,170 @@
 ## S y n c S e q . x y z
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
+### 09. 29. 2025
+@1755 <Profile> now contains pinnedPosts combined with all posts, using the <Log> component
+
+Must remember to remove the profile header in posts in <Log> once im done redesigning...
+Correct values for post stats also
+
+Would like to do 'editProfile' next, but I ought to add <Settings> section first,
+then develop the base functionality for <sectionOptions>, such as switching out the options
+per each section and the animation.
+(whats the best way to have each sections options available? should all the section
+options exist within the button?)
+
+Recreating the <CreatePost> ought to be fun :D D:
+
+To Do Next:
+- Add Settings Section
+- Then the sectionOptions button
+- After, the CreatePost overlay
+- Redoing PopupNotifs / Instants process
+
+
+### 09. 28. 2025
+@0400 For posts and pinnedPosts, add pinnedPosts to post's array, but add pinnedPosts value
+to each post object. Have conditional header for 'pinned' tag within the post's div...
+
+should I create a new log within <Profile> then??
+Looking over the code for log, I think it'd be best to copy the returnPostItem code over to
+<Profile> and then add the conditional for the 'pinned' header, as otherwise adding it to the
+<Log> component may cause it to fail when posts objects in a log dont have that value
+
+### 09. 27. 2025
+@1630 Added pinnedMedia and pinnedPosts to <Profile>
+I redesigned pinned posts - a user's full list of posts is now below pinnedMedia, and 
+pinned posts are at the top
+Need to redesign some things now for that...
+
+@0225 Progress made on <Profile>. Coming along nicely
+
+### 09. 25. 2025
+@1625 Base, necessary component code written for <Profile> & <Settings> and added to Base.jsx
+
+@0800 The reason why I cannot go to my own profile from the Home feed is because post schema
+used to group user.id and profilePhoto into an object. a post made in 2024 follows this 
+pattern, yet post from 2025 does not.
+
+The route for updating profilePhotos does not have the destination as an doc.object.value,
+just doc.object, so we'll continue with profilePhotos being it's own value within the 
+main doc.
+
+Will have to change the code within <Log> however.
+
+
+Currently working to Add 'Profile' and 'Settings' to Homepage
+
+
+@1215 SectionWrapper.css has some styling for the sections themselves. Ubiquitous styling
+across them all, or multiple, so it may be adequate to leave them there
+
+!! Going to profile by clicking username on a post not working (possibly only for self)
+
+
+### 09. 24. 2025
+@1620 Home feed redesigned! 
+Need to add conditionals to the details to only appear once there's a quantity
+Not completely sure how I feel about it rn tho....
+
+
+### 09. 23. 2025
+@1625 Working on <Log> rn, editting the posts within the feed. 
+Need to export the svgs from XD, add them to the li's and then a span element for the count
+
+### 09. 21. 2025
+@2045 Header now moves up and down as user scrolls, respectively based on scroll direction.
+			It's beautiful :D
+
+To Do Next:
+- Redo the homefeed ✔️
+- Create and Add other sections.
+	- Redesign profile...
+- Then the sectionOptions button
+- After, the CreatePost overlay
+- Redoing PopupNotifs / Instants process
+
+### 09. 20. 2025
+@2025 Made external function for <SectionWrapper>
+following instructions from Gemini, gotta add some more code to <BASE>
+also need to place <navbar> within <header> then add the css for animating it
+
+@0815 made section#BASE overflow hidden to fix the double scrollbar issue
+
+@0715 Fix scrollbar issue with <Macros>, then header moving up on scroll. Scroll amount
+	needed to trigger should be amount of px necessary for logo and notifs button to be hidden
+
+### 09. 19. 2025
+@0505 Need to fix the nesting with <Macros> There are 2 scrollbars, there only needs to be one
+
+@0910 fixed issues with navmenu, section change transitions
+
+@1255 within changeSection function, will most likely need to use conditionals to determine
+			which eventlistener function to run after the initial sectionClass change.
+			currently, homeRef.current is hardcoded
+
+Also,
+macros.jsx is missing it's CSS ✔️
+navbar button needs to have it's name changed upon switching sections ✔️
+find way to have navmenu closing after section change to be smoother ✔️
+
+### 09. 18. 2025
+@2330 section#BASE given the box-sizing:border box as automatically limit element width
+div#sections extended to entirity of body, also has box-sizing border box and 100px or so
+padding on top for space for header + navbar
+
+should be able to finish navmenu functionality now
+
+To Do Next:
+- finish navmenu functionality
+- header moving up on scroll, scroll amount should exceed height of header
+- redesign <Home> feed
+
+See 09.09.2025 for current gameplan
+
+@1515 fixed the issue with the state value not appearing in <UserLog>
+
+@1220 Currently having trouble passing sectionClass down to <Userlog>
+
+@1205 in order for scale animation to work as intended, <Userlog> would need to be limited
+			in height to fit screen. 
+
+Could have sections width extend to the very top of screen, make space using an empty element
+for where the header initial is 
+
+
+### 09. 17. 2025
+@0315 Current goal is to make switching between sections via navmenu functional
+<Userlog> has <log> nested within. ideally, should only be <Log>
+
+### 09. 16. 2025
+@2030 userlog now showing up within new div.sections
+
+@1315 Working on having the sections present within section.base , previously home, without
+<sectionsWrapper> working on div.sections and in <navmenu>
+
+@1155 Before adding the functionality for moving the header on scroll,
+first we shall redo the section functionality
+
+### 09. 13. 2025
+@1230 Open and Close functionality for navmenu added ✔️
+Utilized the 'animationend' eventlistener and it worked like a charm, in having the
+function toggle the current.state and removing the <navmenu> component
+
+Up next is redesigning the homefeed,
+but before, I would like to figure out and implement the header moving up and down
+while scrolling. 
+A sectionswrapper can continue to be utilized, and we could rely on bubbling to capture
+the event through the section element. it would be tedious to track every section that
+could be present
+
+
+@1140 Would like to have the header move up outta view whenever the section body is scrolled
+down on, and it reappears when scrolling up.
+
+For now, we'll add appearance and disappearance functionality to the <navmenu>
+
+
 ### 09. 12. 2025
 @1215 Styling for <Navmenu> pretty much done. Need to add in closing and opening functionality
 Perhaps write func for switching sections
@@ -29,13 +193,13 @@ and sections (interactions would have a back button despite being a section)
 @1200 
 The Game Plan...
 - Redo the header (logo button + notifList button) ✔️
-- then the navBar + navMenu (both within the nav folder)
+- then the navBar + navMenu (both within the nav folder) ✔️
 - Redo the homefeed
 - Then the sectionOptions button
 - After, the CreatePost overlay	
 
 Functionality Updates
-- Add borderbox padding to body, 12px 12px
+- Add borderbox padding to body, 12px 12px ✔️
 - Back button in header to distinguish between pages and sections
 - alerts&messages button switching to exit button when clicked and switching to notifsList
 

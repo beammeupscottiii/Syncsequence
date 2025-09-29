@@ -2,8 +2,8 @@
 import * as React from 'react';
 import APIaccess from '../../apiaccess';
 import Log from '../blog/log';
-import './sections.css';
-import './userLog.css';
+// import './sections.css';
+// import './userLog.css';
 import FullList from '../../components/base/fullList';
 
 let accessAPI = APIaccess();
@@ -1107,23 +1107,11 @@ export function CreatePost({setCurrent, current, socketMessage, setSocketMessage
 	)
 }
 
+export default function UserLog({active, setCurrent, current, log, setLog, sectionClass, refe}) {
 
-
-export default function UserLog({active, setCurrent, current, log, setLog}) {
-
-	let [place, setPlace] = React.useState(active == 1 || active == null ? '' : 'not');
+	// let [place, setPlace] = React.useState(active == 1 || active == null ? '' : 'not');
 	let userID = sessionStorage.getItem('userID');
 	let [isModal, openModal] = React.useReducer(state => !state, false);
-
-	/**
-	 * For now, get userLog on mount
-	 * log.jsx exports component and necessary functions
-	 * function to open independant post within log.jsx
-	 */
-	// let updateLog = async() => {
-	// 	let data = await accessAPI.pullUserLog();
-	// 	setLog(data);
-	// }
 
 	let updateLog = async() => {
 
@@ -1145,22 +1133,22 @@ export default function UserLog({active, setCurrent, current, log, setLog}) {
 
 
 	/* change userLog class based on state from Home component in Main.jsx */
-	React.useEffect(()=> {
+	// React.useEffect(()=> {
 
-		if (active == undefined) {
-			console.log(active);
-			return;
-		}
-		if(active !== 1 || active == 'x') {
-			setPlace('not');
-			console.log(active);
-		}
-	}, [active])
+	// 	if (active == undefined) {
+	// 		console.log(active);
+	// 		return;
+	// 	}
+	// 	if(active !== 1 || active == 'x') {
+	// 		setPlace('not');
+	// 		console.log(active);
+	// 	}
+	// }, [active])
 
 	let noHeading = false;
 
 	return (
-		<div id="userLog" className={place}>
+		<div id="userLog" className={ `${sectionClass.home}` } ref={refe}>
 			<Log data={log} 
 				 section={"user"} 
 				 noHeading={noHeading} 

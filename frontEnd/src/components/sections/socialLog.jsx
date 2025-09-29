@@ -4,22 +4,13 @@ import {useNavigate} from 'react-router-dom';
 import APIaccess from '../../apiaccess';
 
 import Log from '../blog/log';
-import './sections.css';
+// import './sections.css';
 import './socialLog.css';
 
 let accessAPI = APIaccess();
 
 let twoWaySVG = 
 <svg xmlns="http://www.w3.org/2000/svg" width="30.124" height="21.732" viewBox="0 0 30.124 21.732">
-  {/*<defs>
-    <style>
-      .cls-1 {
-        fill: none;
-        stroke: rgba(0,0,0,0.4);
-        stroke-width: 2px;
-      }
-    </style>
-  </defs>*/}
   <g id="Group_369" data-name="Group 369" transform="translate(-320.376 -352.134)">
     <g id="Group_367" data-name="Group 367" transform="translate(0 -31.5)">
       <g id="Group_224" data-name="Group 224" transform="translate(298.376 358)">
@@ -36,15 +27,6 @@ let twoWaySVG =
 
 let oneWaySVG = 
 <svg xmlns="http://www.w3.org/2000/svg" width="25.624" height="7.866" viewBox="0 0 25.624 7.866">
-  <defs>
-    {/*<style>
-      .cls-1 {
-        fill: none;
-        stroke: rgba(0,0,0,0.5);
-        stroke-width: 2px;
-      }
-    </style>*/}
-  </defs>
   <g id="Group_224" data-name="Group 224" transform="translate(-22 -25.634)">
     <line id="Line_146" data-name="Line 146" class="cls-1" x2="25" transform="translate(22.624 32.5)"/>
     <line id="Line_148" data-name="Line 148" class="cls-1" x2="12" transform="translate(22.5 32.5) rotate(-30)"/>
@@ -374,7 +356,15 @@ export function ManageConnections({setCurrent, current, setSocketMessage}) {
 	)
 }
 
-export default function SocialLog({active, current, setCurrent, log, setLog }) {
+export default function SocialLog({
+	active, 
+	current, 
+	setCurrent, 
+	log, 
+	setLog, 
+	sectionClass,
+	refe
+}) {
 
 	// let [log, setLog] = React.useState([]);
 	let userID = sessionStorage.getItem('userID');
@@ -388,10 +378,10 @@ export default function SocialLog({active, current, setCurrent, log, setLog }) {
 
 	React.useEffect(()=> {
 		updateLog();
-		setCurrent({
-			...current,
-			social: true
-		})
+		// setCurrent({
+		// 	...current,
+		// 	social: true
+		// })
 	}, [])
 
 	React.useEffect(()=> {
@@ -401,7 +391,7 @@ export default function SocialLog({active, current, setCurrent, log, setLog }) {
 	let noHeading = false;
 
 	return (
-		<div id="socialLog" className={isActive == 0 ? 'active' : 'not'}>
+		<div id="socialLog" className={`${sectionClass.social}`} ref={refe}>
 
 			<Log data={log}
 				 section={"social"} 

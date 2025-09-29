@@ -3,23 +3,6 @@ import * as React from 'react';
 import './Nav.css';
 
 
-
-
-export function Navbar({}) {
-
-	/*	
-		09. 11. 2025
-		For now will use 'current' state var in Main.jsx for button labels
-		unsure whether i'll move it to UIC 
-	*/
-
-	return (
-		<nav>
-			<button class={'buttonDefault'} id="navButton">Home</button>
-		</nav>
-	)
-}
-
 let GlobeIcon = () => (
 	<svg 
 		xmlns="http://www.w3.org/2000/svg" 
@@ -58,7 +41,41 @@ let GlobeIcon = () => (
 	</svg>
 )
 
-export function Navmenu({}) {
+export function Navbar({current, setCurrent}) {
+
+	/*	
+		09. 11. 2025
+		For now will use 'current' state var in Main.jsx for button labels
+		unsure whether i'll move it to UIC 
+	*/
+
+	let navmenuToggle = () => {
+		setCurrent({
+			...current,
+			navmenu: true
+		})
+	}
+
+	return (
+		<nav>
+			<button class={'buttonDefault'} 
+					id="navButton"
+					onClick={navmenuToggle}>{current.section}</button>
+		</nav>
+	)
+}
+
+export function Navmenu({
+	current, 
+	setCurrent, 
+	sectionClass, 
+	setSectionClass,
+	homeRef,
+	macrosRef,
+	socialRef,
+	profileRef,
+	settingsRef
+}) {
 
 	/* 
 		09. 12. 2025
@@ -69,10 +86,158 @@ export function Navmenu({}) {
 		This state var would possibly include ALL sections,
 		so have these main at the top so we can cut off the loop at 5 values
 	*/
+	let navmenu = React.useRef();
 
+	const [sections, setSections] = React.useState(['profile', 'social', 'home', 'macros', 'settings']);
+	const [navmenuClass, setNavmenuClass] = React.useState("");
+
+	let navmenuToggle = () => {
+
+		// navmenu.current.classList.add('leave')
+		setNavmenuClass('leave');
+		navmenu.current.addEventListener("animationend", ()=> {
+			setCurrent({
+				...current,
+				navmenu: false
+			})
+		})
+	}
+
+	let changeSection = (sectionName)=> {
+
+		/*
+			on button click, 
+			change current.section to section name of clicked button
+
+			get element with id equal to current.section
+			change it's class
+			use animationend to switch current.section to name to button name 
+		*/
+
+		/*
+			current active section needs classChange to 'leave'
+			at animationend, change current.section to selected section
+		*/
+		let sectionToChange = current.section;
+		setSectionClass({
+			...sectionClass,
+			[current.section]: 'leave' 
+		});
+		
+		if(current.section == 'profile') {
+			profileRef.current.addEventListener('animationend', ()=> {
+				setCurrent({
+					...current,
+					section: sectionName,
+				})
+			})
+
+			setSectionClass({
+				...sectionClass,
+				[sectionToChange]: 'enter'
+			})
+
+			setNavmenuClass('leave');
+			navmenu.current.addEventListener("animationend", ()=> {
+				setCurrent({
+					...current,
+					navmenu: false,
+					section: sectionName
+				})
+			})
+		}
+		else if(current.section == 'home') {
+			homeRef.current.addEventListener('animationend', ()=> {
+				setCurrent({
+					...current,
+					section: sectionName,
+				})
+			})
+
+			setSectionClass({
+				...sectionClass,
+				[sectionToChange]: 'enter'
+			})
+
+			setNavmenuClass('leave');
+			navmenu.current.addEventListener("animationend", ()=> {
+				setCurrent({
+					...current,
+					navmenu: false,
+					section: sectionName
+				})
+			})
+		}
+		else if(current.section == 'macros') {
+			macrosRef.current.addEventListener('animationend', ()=> {
+				setCurrent({
+					...current,
+					section: sectionName,
+				})
+			})
+
+			setSectionClass({
+				...sectionClass,
+				[sectionToChange]: 'enter'
+			})
+
+			setNavmenuClass('leave');
+			navmenu.current.addEventListener("animationend", ()=> {
+				setCurrent({
+					...current,
+					navmenu: false,
+					section: sectionName
+				})
+			})
+		}
+		else if(current.section == 'social') {
+			socialRef.current.addEventListener('animationend', ()=> {
+				setCurrent({
+					...current,
+					section: sectionName,
+				})
+			})
+
+			setSectionClass({
+				...sectionClass,
+				[sectionToChange]: 'enter'
+			})
+
+			setNavmenuClass('leave');
+			navmenu.current.addEventListener("animationend", ()=> {
+				setCurrent({
+					...current,
+					navmenu: false,
+					section: sectionName
+				})
+			})
+		}
+		else if(current.section == 'settings') {
+			settingsRef.current.addEventListener('animationend', ()=> {
+				setCurrent({
+					...current,
+					section: sectionName,
+				})
+			})
+
+			setSectionClass({
+				...sectionClass,
+				[sectionToChange]: 'enter'
+			})
+
+			setNavmenuClass('leave');
+			navmenu.current.addEventListener("animationend", ()=> {
+				setCurrent({
+					...current,
+					navmenu: false,
+					section: sectionName
+				})
+			})
+		}
+	}
 
 	return (
-		<div id="navmenu">
+		<div id="navmenu" className={`${navmenuClass}`} ref={navmenu}>
 			
 			<ul>
 				<li>
@@ -81,24 +246,18 @@ export function Navmenu({}) {
 					</button>
 				</li>
 
-				<li>
-					<button className={"buttonDefault"}>Profile</button>
-				</li>
+				{sections.filter(section => section !== current.section).map(section => (
+					<li key={section}>
+						<button className={"buttonDefault"} 
+								onClick={()=> changeSection(section)}>
+							{section}
+						</button>
+					</li>
+				))}
 
 				<li>
-					<button className={"buttonDefault"}>Social</button>
-				</li>
-
-				<li>
-					<button className={"buttonDefault"}>Macros</button>
-				</li>
-
-				<li>
-					<button className={"buttonDefault"}>Settings</button>
-				</li>
-
-				<li>
-					<button className={"buttonDefault"}>Close</button>
+					<button className={"buttonDefault"}
+							onClick={navmenuToggle}>Close</button>
 				</li>
 			</ul>
 

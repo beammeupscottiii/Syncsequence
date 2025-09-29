@@ -121,36 +121,46 @@ function LogoButton ({}) {
 	)
 }
 
-export default function Header ({ isReturnable, setNotifList, unreadCount, siteLocation}) {
+export default function Header ({ 
+	isReturnable, 
+	setNotifList, 
+	unreadCount, 
+	siteLocation,
+	isVisible,
+	children
+}) {
 
 	let [returnable, setReturnable] = React.useState(isReturnable);
 	let [isNotifList, setIsNotifList] = React.useState(false);
 
 	return (
-		<header>
+		<header className={`${isVisible ? 'return' : 'retreat'}`}>
+		{/*<header>*/}
 
-			{returnable &&
-				<ReturnElement />
-			}
-			
-			<LogoButton />
-
-			<button id="notifToggle" onClick={setNotifList}>
-				{!isNotifList &&
-					<div id="countWrapper">
-						<p>{unreadCount}</p> 
-						<hr width="0" size="36" />
-						<p>0</p>
-					</div>
+			<div id="headerWrapper">
+				{returnable &&
+					<ReturnElement />
 				}
 				
+				<LogoButton />
 
-				{isNotifList &&
-					<div id="exitWrapper"></div>
-				}
-				
-			</button>
+				<button id="notifToggle" onClick={setNotifList}>
+					{!isNotifList &&
+						<div id="countWrapper">
+							<p>{unreadCount}</p> 
+							<hr width="0" size="36" />
+							<p>0</p>
+						</div>
+					}
+					
 
+					{isNotifList &&
+						<div id="exitWrapper"></div>
+					}
+					
+				</button>
+			</div>
+			{children}
 		</header>
 	)
 }

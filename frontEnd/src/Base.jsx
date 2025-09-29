@@ -22,6 +22,7 @@ import Entry from './components/entry/entry';
 import Header from './cmpnts/Header/Header';
 import NotificationList from './components/notifs/notifsList';
 import { Navbar, Navmenu } from './cmpnts/Nav/Nav';
+import SectionWrapper from './cmpnts/SectionWrapper/SectionWrapper';
 import ButtonBar from './components/base/buttonBar';
 import SectionsWrapper from './components/sections/sectionsWrapper';
 import Macrospage from './components/macrospage/macrospage';
@@ -30,6 +31,18 @@ import Instant from './components/notifs/instant';
 import UserSettings from './components/base/userSettings';
 import UserProfile from './components/base/userProfile';
 import AboutPage from './components/base/aboutPage';
+
+
+/*
+  09. 16. 2025
+  These will technically be temporary
+*/
+/* import UserLog from './components/sections/userLog'; */
+import Profile from './cmpnts/Profile/Profile';
+import SocialLog from './components/sections/socialLog';
+import UserLog from './cmpnts/Home/Home';
+import Macros from './components/sections//macros';
+import Settings from './cmpnts/Settings/Settings';
 
 /*** Sub Sections ***/
 import { CreatePost } from './components/sections/userLog';
@@ -87,7 +100,9 @@ function Home({
   tags,
   setTags,
   userTopics,
-  setUserTopics
+  setUserTopics,
+  sectionClass,
+  setSectionClass
 }) {
 
   const navigate = useNavigate();
@@ -122,34 +137,92 @@ function Home({
       document.title = 'Syncseq.xyz/home'
   }, [])
 
+  /* 
+    09. 16. 2025
+    Temporarily placed within BASE as it's necessary for home feed
+  */
+  let updateLog = async() => {
 
-  /* for MAIN section transition */
-  // const [animState, setAnimState] = React.useState('');
-  // React.useEffect(()=> {
-  //   if(!current.home && current.transition) {
-  //     setAnimState('recede');
-  //   }
-  //   else if(current.home && current.transition) {
-  //     setAnimState('return')
-  //   }
-  // }, [current])
-  // console.log(userDocumentSettings);
+    let posts = await accessAPI.pullUserLog({type: 'customLog', logNumber: current.log})
+    setLog(posts);
+  } 
+
+  React.useEffect(()=> {
+    updateLog()
+    document.title = 'Syncseq.xyz/home'
+  }, [])
+
+  React.useEffect(()=> {
+    updateLog()
+  }, [current.modal, current.customizer])
+
+  /*
+      09. 19. 2025
+      section refs should also be within UIC
+      temporary placement
+  */
+  let homeRef = React.useRef();
+  let macrosRef = React.useRef();
+  let socialRef = React.useRef();
+  let profileRef = React.useRef();
+  let settingsRef = React.useRef();
+
+
+
+  /* 
+    09. 20. 2025
+    For Scroll Tracking on div#sections
+  */ 
+  const [headerVisible, setHeaderVisible] = React.useState(true);
+  const scrollAccumulator = React.useRef(0);
+  const scrollThreshold = 60;
+  const handleScroll = (deltaY) => {
+
+    scrollAccumulator.current += deltaY;
+
+    if(scrollAccumulator.current > scrollThreshold && headerVisible) {
+      setHeaderVisible(false);
+    }
+
+    if(deltaY < 0) {
+      if(!headerVisible) {
+        setHeaderVisible(true);
+      }
+
+      scrollAccumulator.current = 0;
+    }
+
+    if(scrollAccumulator.current < 0) {
+      scrollAccumulator.current = 0;
+    }
+  }
+
 
   return (
-    <section id="HOME" ref={el} className={`${enter == true ? '_enter' : ''}`}>  
+    <section id="BASE" ref={el} className={`${enter == true ? '_enter' : ''}`}>  
         <Header 
           cal={cal} 
           isPost={isPost} 
           setNotifList={setNotifList} 
           unreadCount={unreadCount}
-        />
+          isVisible={headerVisible}> 
+      
+          <Navbar current={current} 
+                  setCurrent={setCurrent}/>
+        </Header>
 
-        <Navbar current={current} 
-                setCurrent={setCurrent}
-                navOptions={navOptions}
-                setNavOptions={setNavOptions}/>
-
-        <Navmenu />
+        
+        {current.navmenu &&
+          <Navmenu current={current}
+                   setCurrent={setCurrent}
+                   sectionClass={sectionClass}
+                   setSectionClass={setSectionClass}
+                   homeRef={homeRef}
+                   macrosRef={macrosRef}
+                   socialRef={socialRef}
+                   profileRef={profileRef}
+                   settingsRef={settingsRef}/>
+        }
 
         {notifList &&
           <NotificationList 
@@ -163,14 +236,58 @@ function Home({
             setUserSettings={setUserSettings}/>
         }
 
-        <SectionsWrapper current={current} 
-                         setCurrent={setCurrent} 
-                         log={log} 
-                         setLog={setLog}
-                         tags={tags}
-                         setTags={setTags}
-                         userTopics={userTopics}
-                         setUserTopics={setUserTopics} />
+        <SectionWrapper onScrollDelta={handleScroll}>
+
+          {current.section == 'profile' &&
+            <Profile
+                  current={current}
+                  setCurrent={setCurrent}
+                  sectionClass={sectionClass}
+                  refe={profileRef}
+                  accessID={accessID}
+                  setAccessID={setAccessID}
+                  log={log}
+                  setLog={setLog}/>
+          }
+
+          {current.section == 'social' &&
+            <SocialLog
+                  current={current}
+                  setCurrent={setCurrent} 
+                  log={log}
+                  setLog={setLog}
+                  sectionClass={sectionClass}
+                  refe={socialRef}/>
+          }
+          {current.section == 'home' &&
+            <UserLog  
+                current={current} 
+                setCurrent={setCurrent} 
+                log={log}
+                setLog={setLog}
+                sectionClass={sectionClass}
+                refe={homeRef}/>
+          }
+          {current.section == 'macros' &&
+            <Macros  
+                current={current} 
+                setCurrent={setCurrent}
+                tags={tags}
+                setTags={setTags} 
+                userTopics={userTopics}
+                setUserTopics={setUserTopics}
+                sectionClass={sectionClass}
+                refe={macrosRef}/>
+          }
+          {current.section == 'settings' &&
+            <Settings 
+                current={current}
+                setCurrent={setCurrent}
+                sectionClass={sectionClass}
+                refe={settingsRef}/>
+
+          }
+        </SectionWrapper>
 
         {(!current.map &&( current.modal && current.section == 1)) &&
           <CreatePost setCurrent={setCurrent}
@@ -192,23 +309,15 @@ function Home({
                         setSocketMessage={setSocketMessage}/>
         }
 
-        <ButtonBar cal={cal} 
-                   current={current} 
-                   setCurrent={setCurrent}
-                   dateInView={dateInView}
-                   set_dateInView={set_dateInView}
-                   current={current}
-                   setCurrent={setCurrent}
-                   selectedDate={selectedDate}
-                   setSelectedDate={setSelectedDate}
-                   mapData={mapData}
-                   setMapData={setMapData}/>
+        {/*
+          09. 18. 2025
+          Temporary placement for sectionOptions button
+        */}
+        <button id="sectionOptions"></button>
 
         {current.gallery.length > 0 &&
           <DragSlider current={current} setCurrent={setCurrent} siteLocation={'home'}/>
         }
-        {/*<DragSlider current={current} setCurrent={setCurrent} />*/}
-
 
         {current.calendar &&
           <Calendar 
@@ -472,9 +581,16 @@ export default function Main() {
   })
 
   
-  const cal = CalInfo();
+  const [sectionClass, setSectionClass] = React.useState({
+      profile: 'enter',
+      social: 'enter',
+      home: 'enter',
+      macros: 'enter',
+      settings: 'enter'
+  })
+  
   const [current, setCurrent] = React.useState({
-    section: null, //0, 1, 2, 3, 4
+    section: 'home', //0, 1, 2, 3, 4
     social: false, //true, false or social
     calendar: false, //true or false
     map: false,
@@ -484,8 +600,12 @@ export default function Main() {
     customizer: false,
     transition: false, //for components mounted dependant on this stateVar, indicates before unmount
     gallery: [], //for dragslider. should be an array of links
-    log: 0
+    log: 0,
+    navmenu: false
   });
+
+  const cal = CalInfo();
+
   const hajime = new Date(),
       kyou = hajime.getDate(),
       kongetsu = hajime.getMonth(),
@@ -495,6 +615,8 @@ export default function Main() {
     month: null,
     year: null
   })
+
+
 
   const [mapData, setMapData] = React.useState({
     currentCity: 'NY',
@@ -507,7 +629,7 @@ export default function Main() {
 
     setCurrent({
         ...current,
-        section: 1
+        section: 'home'
     })
     setInitialLogin(false);
   }
@@ -544,15 +666,6 @@ export default function Main() {
   */
   const [userTopics, setUserTopics] = React.useState([]);
 
-  /*
-      State array for keeping track of current section in carousel nav
-      top level, so it's maintained across pages
-  */
-  const [navOptions, setNavOptions] = React.useState([
-    {name: "Social", active: false, key: 1},
-    {name: "User", active: true, key: 2}, //middle is default
-    {name: "Macros", active: false, key: 3},
-  ]);
   
 
   const routerObject = createBrowserRouter([
@@ -600,8 +713,8 @@ export default function Main() {
                   userTopics={userTopics}
                   setUserTopics={setUserTopics}
 
-                  navOptions={navOptions}
-                  setNavOptions={setNavOptions}
+                  sectionClass={sectionClass}
+                  setSectionClass={setSectionClass}
           />
         </HomeOrEntry>
       ,
@@ -642,8 +755,8 @@ export default function Main() {
                   userTopics={userTopics}
                   setUserTopics={setUserTopics}
 
-                  navOptions={navOptions}
-                  setNavOptions={setNavOptions}
+                  sectionClass={sectionClass}
+                  setSectionClass={setSectionClass}
             />
         </HomeOrEntry>
     },

@@ -82,6 +82,7 @@ const UserSchema = new mongoose.Schema({
     },
     isAvailable: Boolean,
     profilePhoto: String,
+    profileHeader: String,
     bio: String,
     pinnedPosts: [String],
     pinnedMedia: [mongoose.Schema.Types.Mixed],
@@ -90,7 +91,8 @@ const UserSchema = new mongoose.Schema({
       topics: [String],
       preferredLocation: {
         lonLat: [Number],
-        city: String //
+        city: String,
+        state: String
       }
     },
     notifications: [{

@@ -76,8 +76,9 @@ export default function Log({data, section, noHeading, current, setCurrent, isUn
 				{dateMatch == false  &&
 					<span className="postDate">{month + 1} . {day} . {year}</span>
 				}
+				
 				<div className={`entry ${rightAlign == true ? 'right' : ''}`} id={id} key={post._id}>
-					{(userID != post.owner) &&  
+					{/*{(userID != post.owner) &&  
 						<button className={`toProfile`} onClick={()=> {
 							let UID = post.owner._id;
 							console.log(UID)
@@ -86,7 +87,18 @@ export default function Log({data, section, noHeading, current, setCurrent, isUn
 							<img src={post.profilePhoto}/>
 							<span>&#64;{post.author}</span>
 						</button>
-					}	
+					}*/}
+
+					<button className={`toProfile`} onClick={()=> {
+							// Below is for older posts which have _id and profile photo in
+							// an object
+							let UID = post.owner._id;
+							console.log(UID)
+							goToProfile(UID)
+						}}>
+							<img src={post.profilePhoto}/>
+							<span>&#64;{post.author}</span>
+					</button>	
 
 					<div className="textWrapper" onClick={(e)=> {
 						e.preventDefault();

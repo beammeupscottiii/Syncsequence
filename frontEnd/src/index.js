@@ -12,12 +12,7 @@ const body = document.getElementsByTagName('body')[0]
 const root = ReactDOM.createRoot(body);
 root.render(
   <React.StrictMode>
-
-    {/*<Router> 
-      <UIContextProvider>
-        <Main />
-      </UIContextProvider> 
-    </Router>*/}
+  
     <Main />
 
   </React.StrictMode>

@@ -2,48 +2,49 @@
 	M A C R O S   S E C T I O N 
 * * */
 
-section#HOME div#macros {
+section#BASE div#macros {
 	width: 100%;
+	height: 100%;
 /*	overflow-y: scroll;*/
-	padding-bottom: 80px;
+/*	padding-bottom: 80px;*/
 }
 
-section#HOME div#macros div#userTags, 
-section#HOME div#macros div#privatePosts,
-section#HOME div#macros div#collections {
+section#BASE div#macros div#userTags, 
+section#BASE div#macros div#privatePosts,
+section#BASE div#macros div#collections {
 	width: 96%;
 	max-height: 400px;
 	margin: 16px auto;
 	transition: height ease-in-out 0.2s;
 }
 
-section#HOME div#macros div#collections {
+section#BASE div#macros div#collections {
 	padding-bottom: 32px;
 /*	padding-bottom: 24px;*/
 /*	margin-top: -24px;*/
 }
 
 
-section#HOME div#macros div#userTags {
+section#BASE div#macros div#userTags {
 	margin-top: 8px;
 /*	margin-bottom: -24px;*/
 }
 
-section#HOME div#macros div#userTags.open, 
-section#HOME div#macros div#privatePosts.open,
-section#HOME div#macros div#collections.open {
+section#BASE div#macros div#userTags.open, 
+section#BASE div#macros div#privatePosts.open,
+section#BASE div#macros div#collections.open {
 	overflow-y: auto;
 	max-height: fit-content;
 }
 
-section#HOME div#macros div#userTags.close, 
-section#HOME div#macros div#privatePosts.close,
-section#HOME div#macros div#collections.close {
+section#BASE div#macros div#userTags.close, 
+section#BASE div#macros div#privatePosts.close,
+section#BASE div#macros div#collections.close {
 	overflow-y: hidden;
 	max-height: 380px;
 }
 
-section#HOME div#macros div div.headerWrapper {
+section#BASE div#macros div div.headerWrapper {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -51,7 +52,7 @@ section#HOME div#macros div div.headerWrapper {
 }
 
 
-section#HOME div#macros div div.headerWrapper h2 {
+section#BASE div#macros div div.headerWrapper h2 {
 	font-family: "Raleway";
 	font-weight: 600;
 	font-size: 3em;
@@ -60,23 +61,23 @@ section#HOME div#macros div div.headerWrapper h2 {
 	margin-bottom: 8px;
 }
 
-	section#HOME div#macros div div.headerWrapper h2:first-child {
+	section#BASE div#macros div div.headerWrapper h2:first-child {
 		margin-top: 16px;
 	}
 
-	section#HOME div#macros div#collections div.headerWrapper h2 {
+	section#BASE div#macros div#collections div.headerWrapper h2 {
 		margin-top: 20px;
 	}
 
 
-section#HOME div#macros div div.headerWrapper button {
+section#BASE div#macros div div.headerWrapper button {
 	font-size: 3.5em;
 	font-weight: 100;
 	margin-bottom: -16px;
 	padding: 0;
 }
 
-section#HOME div#macros div div.headerWrapper button:hover {
+section#BASE div#macros div div.headerWrapper button:hover {
 	color: black;
 }
 
@@ -84,7 +85,7 @@ section#HOME div#macros div div.headerWrapper button:hover {
 
 
 
-section#HOME div#macros div#userTags ul.tagsWrapper {
+section#BASE div#macros div#userTags ul.tagsWrapper {
 	display: flex;
 	flex-wrap: wrap;
 	list-style-type: none;
@@ -94,7 +95,7 @@ section#HOME div#macros div#userTags ul.tagsWrapper {
 	margin-bottom: 0;
 }
 
-section#HOME div#macros div#userTags ul.tagsWrapper li {
+section#BASE div#macros div#userTags ul.tagsWrapper li {
 	display: block;
     position: relative;
     /* top: 7px; */
@@ -102,7 +103,7 @@ section#HOME div#macros div#userTags ul.tagsWrapper li {
     margin-top: 10px;
 }
 
-section#HOME div#macros div#userTags ul.tagsWrapper li button {
+section#BASE div#macros div#userTags ul.tagsWrapper li button {
 	border: 2.5px solid var(--greyscale-details);
     border-radius: 12px;
     padding: 8px 10px;
@@ -116,18 +117,18 @@ section#HOME div#macros div#userTags ul.tagsWrapper li button {
     transition: all ease-in-out 0.3s;
 }
 
-section#HOME div#macros div#userTags ul.tagsWrapper li button:hover {
+section#BASE div#macros div#userTags ul.tagsWrapper li button:hover {
 	background-color: var(--greyscale-icons);
     transform: scale(1.2);
     margin: 0 4px;
 }
 
-section#HOME div#macros div#userTags ul.tagsWrapper li button.topic {
+section#BASE div#macros div#userTags ul.tagsWrapper li button.topic {
 	border: none;
 	background-color: transparent;
 }
 
-section#HOME div#macros div#userTags ul.tagsWrapper li button.private {
+section#BASE div#macros div#userTags ul.tagsWrapper li button.private {
 	/*slightly faded appearance	*/
 }
 
@@ -135,7 +136,7 @@ section#HOME div#macros div#userTags ul.tagsWrapper li button.private {
 
 
 
-section#HOME div#macros div#privatePosts ul.postsWrapper {
+section#BASE div#macros div#privatePosts ul.postsWrapper {
 	display: flex;
 	flex-direction: column;
 	list-style-type: none;
@@ -143,11 +144,11 @@ section#HOME div#macros div#privatePosts ul.postsWrapper {
 	padding: 0;
 }
 
-section#HOME div#macros div#privatePosts ul.postsWrapper li {
+section#BASE div#macros div#privatePosts ul.postsWrapper li {
 	margin: 16px 0 16px 16px;
 }
 
-section#HOME div#macros div#privatePosts ul.postsWrapper li h4 {
+section#BASE div#macros div#privatePosts ul.postsWrapper li h4 {
 	margin: 0;
 	font-family: 'Raleway';
 	font-weight: 300;
@@ -155,7 +156,7 @@ section#HOME div#macros div#privatePosts ul.postsWrapper li h4 {
 	letter-spacing: 1px;
 }
 
-section#HOME div#macros div#privatePosts ul.postsWrapper li h3 {
+section#BASE div#macros div#privatePosts ul.postsWrapper li h3 {
 	margin-top: 4px;
 	margin-bottom: 4px;
 	font-family: 'Raleway';
@@ -165,7 +166,7 @@ section#HOME div#macros div#privatePosts ul.postsWrapper li h3 {
 	color: var(--greyscale-details);
 }
 
-section#HOME div#macros div#privatePosts ul.postsWrapper li ul.deets {
+section#BASE div#macros div#privatePosts ul.postsWrapper li ul.deets {
 	display: flex;
     flex-direction: row;
     list-style-type: none;
@@ -173,7 +174,7 @@ section#HOME div#macros div#privatePosts ul.postsWrapper li ul.deets {
     padding: 0;
 }
 
-section#HOME div#macros div#privatePosts ul.postsWrapper li ul.deets li {
+section#BASE div#macros div#privatePosts ul.postsWrapper li ul.deets li {
 	font-size: 0.9em;
     letter-spacing: 1px;
     margin: 0 8px;
@@ -182,14 +183,14 @@ section#HOME div#macros div#privatePosts ul.postsWrapper li ul.deets li {
 
 
 
-section#HOME div#macros div#collections ul.collectionsWrapper {
+section#BASE div#macros div#collections ul.collectionsWrapper {
 	list-style-type: none;
 /*	margin: 20px 0px 20px 16px;*/
 	margin-left: 16px;
 	padding: 0;
 }
 
-section#HOME div#macros div#collections ul.collectionsWrapper li {
+section#BASE div#macros div#collections ul.collectionsWrapper li {
 	font-family: 'Raleway';
 	font-weight: 400;
 	font-size: 1.25em;
@@ -208,7 +209,7 @@ section#HOME div#macros div#collections ul.collectionsWrapper li {
 	M A C R O S   S E C T I O N 
 * * */
 
-section#HOME div#ManageMacros {
+section#BASE div#ManageMacros {
 	position: absolute;
 	top: 0;
 	width: 100%;
@@ -219,7 +220,7 @@ section#HOME div#ManageMacros {
 	background-color: white;
 }
 
-section#HOME div#ManageMacros::after {
+section#BASE div#ManageMacros::after {
 		content: '';
 		display: block;
 		width: 100%;
@@ -234,14 +235,14 @@ section#HOME div#ManageMacros::after {
 		z-index: -1;
 	}
 
-	section#HOME div#ManageMacros._enter::after {
+	section#BASE div#ManageMacros._enter::after {
 		transition: all ease-in-out 0.2s;
 		z-index: 20;
 		opacity: 1;
 	}
 
 
-section#HOME div#ManageMacros h2 {
+section#BASE div#ManageMacros h2 {
 	font-family: "Raleway";
 	font-size: 2.5em;
     font-weight: 600;
@@ -251,7 +252,7 @@ section#HOME div#ManageMacros h2 {
     margin-left: 16px;
 }
 
-section#HOME div#ManageMacros button#exit {
+section#BASE div#ManageMacros button#exit {
 	position: absolute;
 	left: 50%;
 	bottom: 30px;
@@ -262,7 +263,7 @@ section#HOME div#ManageMacros button#exit {
 	outline: none;
 }
 
-section#HOME div#ManageMacros ul#mainMenu {
+section#BASE div#ManageMacros ul#mainMenu {
 	width: calc(100% - 32px);
 	list-style-type: none;
 	position: absolute;
@@ -273,24 +274,24 @@ section#HOME div#ManageMacros ul#mainMenu {
 	padding: 0;
 }
 
-section#HOME div#ManageMacros ul#mainMenu li {
+section#BASE div#ManageMacros ul#mainMenu li {
 	width: 100%;
 	margin: 24px 0;
 	transition: all ease-in-out 0.2s;
 	overflow-y: hidden;
 }
 
-	section#HOME div#ManageMacros ul#mainMenu li.open {
+	section#BASE div#ManageMacros ul#mainMenu li.open {
 /*		height: fit-content;*/
 		height: auto;
 	}
 
-	section#HOME div#ManageMacros ul#mainMenu li.close {
+	section#BASE div#ManageMacros ul#mainMenu li.close {
 		height: 30px;
 	}
 
 
-section#HOME div#ManageMacros ul#mainMenu li button {
+section#BASE div#ManageMacros ul#mainMenu li button {
 	font-size: 1.5em;
 	text-transform: capitalize;
 	letter-spacing: 2px;
@@ -300,12 +301,12 @@ section#HOME div#ManageMacros ul#mainMenu li button {
 /* 
 	Create New Tag 
 */
-section#HOME div#ManageMacros ul#mainMenu li.option div.newTagWrapper {
+section#BASE div#ManageMacros ul#mainMenu li.option div.newTagWrapper {
 	width: 96%;
 	margin: 32px auto 16px;
 }
 
-section#HOME div#ManageMacros ul#mainMenu li.option div.newTagWrapper input {
+section#BASE div#ManageMacros ul#mainMenu li.option div.newTagWrapper input {
 	width: 100%;
     display: block;
     margin: 16px 0;
@@ -321,18 +322,18 @@ section#HOME div#ManageMacros ul#mainMenu li.option div.newTagWrapper input {
     line-height: 22px;
 }
 
-section#HOME div#ManageMacros ul#mainMenu li.option div.newTagWrapper input:focus {
+section#BASE div#ManageMacros ul#mainMenu li.option div.newTagWrapper input:focus {
 	outline: none;
 	border-bottom-color: var(--greyscale-text);
 }
 
-section#HOME div#ManageMacros ul#mainMenu li.option div.newTagWrapper div.buttonWrapper {
+section#BASE div#ManageMacros ul#mainMenu li.option div.newTagWrapper div.buttonWrapper {
 	display: flex;
 	flex-direction: row;
 	margin: 16px 0;
 }
 
-section#HOME div#ManageMacros ul#mainMenu li.option div.newTagWrapper div.buttonWrapper button {
+section#BASE div#ManageMacros ul#mainMenu li.option div.newTagWrapper div.buttonWrapper button {
 	font-size: 1.25em;
 	text-transform: uppercase;
 	width: 50%;
@@ -343,7 +344,7 @@ section#HOME div#ManageMacros ul#mainMenu li.option div.newTagWrapper div.button
 /* 
 	Delete Tags 
 */
-section#HOME div#ManageMacros ul#deleteTags {
+section#BASE div#ManageMacros ul#deleteTags {
 /*	width: calc(100% - 32px);*/
 	width: 96%;
 	list-style-type: none;
@@ -358,7 +359,7 @@ section#HOME div#ManageMacros ul#deleteTags {
 	overflow-y: scroll;
 }
 
-section#HOME div#ManageMacros ul#deleteTags li {
+section#BASE div#ManageMacros ul#deleteTags li {
 	width: 100%;
 	position: relative;
 	margin: 8px 0;
@@ -368,7 +369,7 @@ section#HOME div#ManageMacros ul#deleteTags li {
 	margin: 0;
 }
 
-section#HOME div#ManageMacros ul#deleteTags li button {
+section#BASE div#ManageMacros ul#deleteTags li button {
 	border: none;
 	cursor: pointer;
 	background-color: transparent;
@@ -383,7 +384,7 @@ section#HOME div#ManageMacros ul#deleteTags li button {
     z-index: 20;
 }
 
-section#HOME div#ManageMacros ul#deleteTags li div.confirmation {
+section#BASE div#ManageMacros ul#deleteTags li div.confirmation {
 	width: 100%;
 	display: flex;
 	flex-direction: row;
@@ -398,22 +399,22 @@ section#HOME div#ManageMacros ul#deleteTags li div.confirmation {
 	z-index: 0;
 }
 
-section#HOME div#ManageMacros ul#deleteTags li.selected div.confirmation {
+section#BASE div#ManageMacros ul#deleteTags li.selected div.confirmation {
 	opacity: 1;
 	z-index: 21;
 }
 
-section#HOME div#ManageMacros ul#deleteTags li div.confirmation p {
+section#BASE div#ManageMacros ul#deleteTags li div.confirmation p {
 	margin: 0;
 	margin-left: 8px;
 }
 
-section#HOME div#ManageMacros ul#deleteTags li div.confirmation div.buttonWrapper {
+section#BASE div#ManageMacros ul#deleteTags li div.confirmation div.buttonWrapper {
 	z-index: 21;
 	margin-right: 8px;
 }
 
-section#HOME div#ManageMacros ul#deleteTags li div.confirmation button {
+section#BASE div#ManageMacros ul#deleteTags li div.confirmation button {
 	position: relative;
 	font-size: 1em;
 }
@@ -424,12 +425,12 @@ section#HOME div#ManageMacros ul#deleteTags li div.confirmation button {
 /*
 	Create Collection 
 */
-section#HOME div#ManageMacros form#newCollection {
+section#BASE div#ManageMacros form#newCollection {
 
 }
 
-section#HOME div#ManageMacros form#newCollection input,
-section#HOME div#ManageMacros form#newCollection textarea {
+section#BASE div#ManageMacros form#newCollection input,
+section#BASE div#ManageMacros form#newCollection textarea {
 	width: 98%;
     display: block;
     margin: 24px 0;
@@ -445,28 +446,28 @@ section#HOME div#ManageMacros form#newCollection textarea {
     line-height: 22px;
 }
 
-section#HOME div#ManageMacros form#newCollection input::placeholder,
-section#HOME div#ManageMacros form#newCollection textarea::placeholder {
+section#BASE div#ManageMacros form#newCollection input::placeholder,
+section#BASE div#ManageMacros form#newCollection textarea::placeholder {
 	color: var(--greyscale-accent);
 }
 
-section#HOME div#ManageMacros form#newCollection input:focus,
-section#HOME div#ManageMacros form#newCollection textarea:focus {
+section#BASE div#ManageMacros form#newCollection input:focus,
+section#BASE div#ManageMacros form#newCollection textarea:focus {
 	outline: none;
 	border-bottom-color: var(--greyscale-text);
 }
 
-section#HOME div#ManageMacros form#newCollection textarea {
+section#BASE div#ManageMacros form#newCollection textarea {
 
 }
 
-section#HOME div#ManageMacros form#newCollection div#buttonWrapper {
+section#BASE div#ManageMacros form#newCollection div#buttonWrapper {
 	display: flex;
 	flex-direction: row;
 	margin: 16px 0;
 }
 
-section#HOME div#ManageMacros form#newCollection div#buttonWrapper button {
+section#BASE div#ManageMacros form#newCollection div#buttonWrapper button {
 	font-size: 1.25em;
 	text-transform: uppercase;
 	width: 50%;
@@ -478,7 +479,7 @@ section#HOME div#ManageMacros form#newCollection div#buttonWrapper button {
 /*
 	Manage Collections
 */
-section#HOME div#ManageMacros ul#collections {
+section#BASE div#ManageMacros ul#collections {
 	width: 96%;
 	list-style-type: none;
 	margin: 0;
@@ -489,7 +490,7 @@ section#HOME div#ManageMacros ul#collections {
 	overflow-y: scroll;
 }
 
-section#HOME div#ManageMacros ul#collections li {
+section#BASE div#ManageMacros ul#collections li {
 	width: 100%;
 	position: relative;
 	margin: 8px 0;
@@ -499,7 +500,7 @@ section#HOME div#ManageMacros ul#collections li {
 	margin: 0;
 }
 
-section#HOME div#ManageMacros ul#collections li > p {
+section#BASE div#ManageMacros ul#collections li > p {
 	font-family: 'Raleway';
     font-weight: 400;
 	font-size: 1.25em;
@@ -507,12 +508,12 @@ section#HOME div#ManageMacros ul#collections li > p {
 	margin: 16px 0;
 }
 
-section#HOME div#ManageMacros ul#collections li div.options {
+section#BASE div#ManageMacros ul#collections li div.options {
 	height: 0;
 }
 
 
-section#HOME div#ManageMacros ul#collections li div.options div.initialChoiceWrapper {
+section#BASE div#ManageMacros ul#collections li div.options div.initialChoiceWrapper {
 	width: 100%;
 	display: flex;
 	flex-direction: row;
@@ -528,12 +529,12 @@ section#HOME div#ManageMacros ul#collections li div.options div.initialChoiceWra
 	z-index: -10;
 }
 
-section#HOME div#ManageMacros ul#collections li div.options div.initialChoiceWrapper > button {
+section#BASE div#ManageMacros ul#collections li div.options div.initialChoiceWrapper > button {
 	font-size: 1.25em;
 	margin: 0 12px;
 }
 
-section#HOME div#ManageMacros ul#collections li div.options div.confirm {
+section#BASE div#ManageMacros ul#collections li div.options div.confirm {
 	width: 100%;
 	display: flex;
 	flex-direction: row;
@@ -548,16 +549,16 @@ section#HOME div#ManageMacros ul#collections li div.options div.confirm {
 	opacity: 0;
 }
 
-section#HOME div#ManageMacros ul#collections li div.options div.confirm p {
+section#BASE div#ManageMacros ul#collections li div.options div.confirm p {
 	margin: 0;
 	margin-left: 16px;
 }
 
-section#HOME div#ManageMacros ul#collections li div.options div.confirm div.choiceWrapper {
+section#BASE div#ManageMacros ul#collections li div.options div.confirm div.choiceWrapper {
 	margin-right: 8px;
 }
 
-section#HOME div#ManageMacros ul#collections li div.options div.confirm div.choiceWrapper button {
+section#BASE div#ManageMacros ul#collections li div.options div.confirm div.choiceWrapper button {
 	position: relative;
 	margin: 0 8px;
 	font-size: 1em;
@@ -565,7 +566,7 @@ section#HOME div#ManageMacros ul#collections li div.options div.confirm div.choi
 
 
 
-section#HOME div#ManageMacros ul#collections li div.options form {
+section#BASE div#ManageMacros ul#collections li div.options form {
 	width: 100%;
 	position: absolute;
 	top: 50%;
@@ -576,7 +577,7 @@ section#HOME div#ManageMacros ul#collections li div.options form {
 	opacity: 0;
 }
 
-section#HOME div#ManageMacros ul#collections li div.options form input {
+section#BASE div#ManageMacros ul#collections li div.options form input {
 	width: 98%;
     display: block;
     margin: 16px 0;
@@ -592,57 +593,57 @@ section#HOME div#ManageMacros ul#collections li div.options form input {
     line-height: 22px;
 }
 
-section#HOME div#ManageMacros ul#collections li div.options form input:focus {
+section#BASE div#ManageMacros ul#collections li div.options form input:focus {
 	outline: none;
 	border-bottom-color: var(--greyscale-text);
 }
 
-section#HOME div#ManageMacros ul#collections li div.options form div.buttonWrapper {
+section#BASE div#ManageMacros ul#collections li div.options form div.buttonWrapper {
 	display: flex;
 	flex-direction: row;
 	margin: 16px 0;
 }
 
-section#HOME div#ManageMacros ul#collections li div.options form div.wrapper button {
+section#BASE div#ManageMacros ul#collections li div.options form div.wrapper button {
 	font-size: 1.25em;
 	text-transform: uppercase;
 	width: 50%;
 }
 
 /*
-section#HOME div#ManageMacros ul#collections li.selected {
+section#BASE div#ManageMacros ul#collections li.selected {
 	z-index: 0;
 }*/
 
-section#HOME div#ManageMacros ul#collections li.selected._rename div.options div.initialChoiceWrapper,
-section#HOME div#ManageMacros ul#collections li.selected._confirm div.options div.initialChoiceWrapper{
+section#BASE div#ManageMacros ul#collections li.selected._rename div.options div.initialChoiceWrapper,
+section#BASE div#ManageMacros ul#collections li.selected._confirm div.options div.initialChoiceWrapper{
 	opacity: 0;
 	z-index: 0;
 }
 
-section#HOME div#ManageMacros ul#collections li.selected div.options div.initialChoiceWrapper {
+section#BASE div#ManageMacros ul#collections li.selected div.options div.initialChoiceWrapper {
 	opacity: 1;
 	z-index: 21;
 }
 
-section#HOME div#ManageMacros ul#collections li._confirm {
+section#BASE div#ManageMacros ul#collections li._confirm {
 
 }
 
-section#HOME div#ManageMacros ul#collections li._confirm div.options div.confirm {
+section#BASE div#ManageMacros ul#collections li._confirm div.options div.confirm {
 	opacity: 1;
 	z-index: 22;
 }
 
-section#HOME div#ManageMacros ul#collections li._confirm div.options div.confirm div.choiceWrapper button{
+section#BASE div#ManageMacros ul#collections li._confirm div.options div.confirm div.choiceWrapper button{
 	z-index: 23;
 }
 
-section#HOME div#ManageMacros ul#collections li._rename div.options form {
+section#BASE div#ManageMacros ul#collections li._rename div.options form {
 	opacity: 1;
 	z-index: 23;
 }
 
-section#HOME div#ManageMacros ul#collections li._rename div.options form input {
+section#BASE div#ManageMacros ul#collections li._rename div.options form input {
 	z-index: 24;
 }

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="19.319" height="18.766" viewBox="0 0 19.319 18.766">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #707070;
+      }
+
+      .cls-1 {
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+  <g id="Group_540" data-name="Group 540" transform="translate(-3760.379 -882.706)">
+    <g id="Group_355" data-name="Group 355" transform="translate(3760.879 883.089)">
+      <path id="Path_2" data-name="Path 2" class="cls-1" d="M8.465,3.8S1.189,3.119-.208,5.264a9.3,9.3,0,0,0,0,8.58c1.4,2.145,5.591,1.37,5.591,1.37" transform="translate(1.257 -0.567)"/>
+      <line id="Line_215" data-name="Line 215" class="cls-2" x2="5.005" transform="translate(6.039 0) rotate(40)"/>
+      <line id="Line_216" data-name="Line 216" class="cls-2" x2="5.005" transform="translate(6.039 6.435) rotate(-40)"/>
+    </g>
+    <g id="Group_356" data-name="Group 356" transform="translate(3769.222 886.354)">
+      <path id="Path_3" data-name="Path 3" class="cls-1" d="M9.555.215S2.446-.747,1.048,1.4a9.3,9.3,0,0,0,0,8.58c1.4,2.145,5.591,1.37,5.591,1.37" transform="translate(9.976 11.484) rotate(-180)"/>
+      <line id="Line_217" data-name="Line 217" class="cls-2" x2="5.005" transform="translate(3.834 8.3) rotate(140)"/>
+      <line id="Line_218" data-name="Line 218" class="cls-2" x2="5.005" transform="translate(4.669 14.735) rotate(-140)"/>
+    </g>
+  </g>
+</svg>

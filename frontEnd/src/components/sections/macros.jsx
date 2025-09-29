@@ -1,7 +1,7 @@
 import * as React from 'react';
 import APIaccess from '../../apiaccess';
 import {useNavigate} from 'react-router-dom';
-import './macrosSection.css';
+import './macros.css';
 
 let accessAPI = APIaccess();
 
@@ -596,7 +596,17 @@ export function ManageMacros({current, setCurrent, setSocketMessage, socketMessa
 }
 
 
-export default function Macros({active, current, setCurrent, tags, setTags, userTopics, setUserTopics }) {
+export default function Macros({
+	active, 
+	current, 
+	setCurrent, 
+	tags, 
+	setTags, 
+	userTopics, 
+	setUserTopics, 
+	sectionClass,
+	refe 
+}) {
 
 	const userID = sessionStorage.getItem('userID');
 	const navigate = useNavigate();
@@ -653,7 +663,7 @@ export default function Macros({active, current, setCurrent, tags, setTags, user
 	// 03. 15. 2024 @ 2225 - use individual useReducer toggles for section toggles
 
 	return (
-		<div id="macros" className={`${isActive == 2 ? 'active' : 'not'}`}>
+		<div id="macros" className={`${sectionClass.macros}`} ref={refe}>
 			
 			<div id="userTags" className={`${tagsSection == true ? 'open' : 'close'}`}>
 				<div className={`headerWrapper`}>

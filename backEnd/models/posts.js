@@ -49,7 +49,6 @@ const CommentSchema = new mongoose.Schema({
   postedOn_year: Number
 }, {timestamps: true});
 
-// CommentSchema.add({ replies: [CommentSchema]});
 
 const PostsSchema = new mongoose.Schema({
   type: {
@@ -121,9 +120,6 @@ const PostsSchema = new mongoose.Schema({
   comments: [CommentSchema],
   commentCount: {
     type: Number
-  },
-  isPinned: {
-    type: Boolean
   },
   tags: [{
     name: String,

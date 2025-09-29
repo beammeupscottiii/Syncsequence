@@ -4,31 +4,35 @@
 		M a i n  S e c t i o n s 
 * * */
 
-div#sectionsWrapper {
-	display: flex;
-	position: fixed;
-	width: 100%;
-	top: 120px;
-	overflow-y: scroll;
-}
-
 div#userLog,
 div#socialLog,
 div#groupsList,
-div#macrosList,
+div#macros,
 div#homeLog {
-	width: 96%;
+	width: 98%;
 	height: 100%; /*needs to be fixed for animation */
 	margin: 0 auto;
 	opacity: 0;
 	transition: all 0.5s linear;
-	transform: scale(0.9);
+	transform: scale(0.6);
 }
 
 
 /* As userLog is currently the default, it will have 'already present' styling */
 div#userLog {
-	animation: 0.2s ease-in-out forwards appear;
+	animation: 0.5s ease-in-out forwards appear;
+}
+
+div#userLog.enter,
+div#socialLog.enter,
+div#macros.enter {
+	animation: 0.5s ease-in-out forwards _return;
+}
+
+div#userLog.leave,
+div#socialLog.leave,
+div#macros.leave {
+	animation: 0.5s ease-in-out forwards _recede;
 }
 
 
@@ -70,7 +74,7 @@ div#userLog {
 		animation: 0.2s ease-in-out forwards disappear;
 	}
 
-
+/*
 div#socialLog div.log h2.noPostsToday,
 div.log div.entry span.postDate {
 	text-align: left;
@@ -82,7 +86,7 @@ div#userLog div.log span.postDate{
 
 
 div#socialLog div.log div.entry h2 {
-/*	text-align: right;*/
+	text-align: right;
 	margin: 0px 0 10px;
 }
 
@@ -90,4 +94,4 @@ div#socialLog div.log div.entry span#username {
 
 	font-size: 0.75em;
 	margin: 10px 0 0;
-}
+}*/
