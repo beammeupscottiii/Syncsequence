@@ -1,0 +1,105 @@
+div#optionsButtonWrapper {
+	position: absolute;
+	bottom: 32px;
+	right: 16px;
+}
+
+div#optionsButtonWrapper button#main {
+	position: relative;
+	display: block;
+	margin-left: auto;
+	width: 54px;
+	height: 54px;
+	border: 3px solid var(--greyscale-elements);
+	border-radius: 8px;
+
+	background-color: white;
+	z-index: 20;
+}
+
+div#optionsButtonWrapper ul#options {
+	position: relative;
+	margin: 0;
+	margin-bottom: -48px;
+	padding: 0;
+	list-style-type: none;
+	display: flex;
+	flex-direction: column-reverse;
+	width: 250px;
+	z-index: 20;
+}
+
+div#optionsButtonWrapper ul#options li {
+	text-align: right;
+	margin: 8px 0;
+
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	transition: 0.2s all ease-in-out;
+	opacity: 0;
+	transition-delay: 0.1s;
+}
+
+	div#optionsButtonWrapper ul#options li.active1 {
+		opacity: 1;
+		bottom: 60px;
+		transition-delay: 0.1s;
+	}
+
+	div#optionsButtonWrapper ul#options li.active2 {
+		opacity: 1;
+		bottom: 112px;
+/*		transition-delay: 0.15s;*/
+	}
+
+	div#optionsButtonWrapper ul#options li.active3 {
+		opacity: 1;
+		bottom: 164px;
+/*		transition-delay: 0.2s;*/
+	}
+
+	div#optionsButtonWrapper ul#options li.active4 {
+		opacity: 1;
+		bottom: 216px;
+/*		transition-delay: 0.25s;*/
+	}
+
+	div#optionsButtonWrapper ul#options li.active5 {
+		opacity: 1;
+		bottom: 268px;
+/*		transition-delay: 0.3s;*/
+	}
+
+	div#optionsButtonWrapper ul#options li.active6 {
+		opacity: 1;
+		bottom: 320px;
+/*		transition-delay: 0.35s;*/
+	}
+
+	div#optionsButtonWrapper ul#options li.active7 {
+		opacity: 1;
+		bottom: 372px;
+/*		transition-delay: 0.4s;*/
+	}
+
+	div#optionsButtonWrapper ul#options li.active8 {
+		opacity: 1;
+		bottom: 424px;
+/*		transition-delay: 0.45s;*/
+	}
+
+
+
+
+
+div#optionsButtonWrapper ul#options li button {
+	font-size: 0.85em;
+	font-weight: 600;
+	text-align: right;
+	color: var(--greyscale-text);
+	border: 2.5px solid var(--greyscale-elements);
+	border-radius: 4px;
+	background-color: white;
+	padding: 8px 10px;
+}

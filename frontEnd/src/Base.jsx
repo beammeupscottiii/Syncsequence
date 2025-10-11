@@ -23,7 +23,7 @@ import Header from './cmpnts/Header/Header';
 import NotificationList from './components/notifs/notifsList';
 import { Navbar, Navmenu } from './cmpnts/Nav/Nav';
 import SectionWrapper from './cmpnts/SectionWrapper/SectionWrapper';
-import ButtonBar from './components/base/buttonBar';
+import OptionsButton from './cmpnts/OptionsButton/OptionsButton';
 import SectionsWrapper from './components/sections/sectionsWrapper';
 import Macrospage from './components/macrospage/macrospage';
 import Post from './components/blog/post';
@@ -49,8 +49,8 @@ import { CreatePost } from './components/sections/userLog';
 import { ManageConnections } from './components/sections/socialLog';
 import { ManageMacros } from './components/sections/macros';
 import Calendar from './components/calendar/calendar';
-import MapComponent from './components/map/map';
-import { MapPage } from './components/map/map';
+import Mapp from './cmpnts/Map/Map';
+// import { MapPage } from './components/map/map';
 import DragSlider from './components/base/dragSlider';
 import './components/sections/sections.css';
 import CustomLogEditor from './components/base/customLogEditor/customLogEditor';
@@ -200,6 +200,8 @@ function Home({
 
   return (
     <section id="BASE" ref={el} className={`${enter == true ? '_enter' : ''}`}>  
+
+        {/* H E A D E R  &  N A V B A R */}
         <Header 
           cal={cal} 
           isPost={isPost} 
@@ -211,7 +213,7 @@ function Home({
                   setCurrent={setCurrent}/>
         </Header>
 
-        
+        {/*N A V I G A T I O N  M E N U*/}
         {current.navmenu &&
           <Navmenu current={current}
                    setCurrent={setCurrent}
@@ -224,6 +226,7 @@ function Home({
                    settingsRef={settingsRef}/>
         }
 
+        {/*N O T I F I C A T I O N S  L I S T*/}
         {notifList &&
           <NotificationList 
             setNotifList={setNotifList} 
@@ -236,8 +239,12 @@ function Home({
             setUserSettings={setUserSettings}/>
         }
 
-        <SectionWrapper onScrollDelta={handleScroll}>
 
+
+        {/*
+            M A I N   S E C T I O N   W R A P P E R
+        */}
+        <SectionWrapper onScrollDelta={handleScroll}>
           {current.section == 'profile' &&
             <Profile
                   current={current}
@@ -284,25 +291,33 @@ function Home({
                 current={current}
                 setCurrent={setCurrent}
                 sectionClass={sectionClass}
-                refe={settingsRef}/>
+                refe={settingsRef}
+                accessID={accessID}
+                setAccessID={setAccessID}
+                socketMessage={socketMessage}
+                setSocketMessage={setSocketMessage}
+                isLogout={isLogout}
+                setLogout={setLogout}/>
 
           }
         </SectionWrapper>
 
-        {(!current.map &&( current.modal && current.section == 1)) &&
+
+        {(!current.map &&( current.modal && current.section == 'social')) &&
+          <ManageConnections current={current} 
+                             setCurrent={setCurrent} 
+                             setSocketMessage={setSocketMessage}/>
+        }
+
+        {(!current.map &&( current.modal && current.section == 'home')) &&
           <CreatePost setCurrent={setCurrent}
                       current={current} 
                       socketMessage={socketMessage}
                       setSocketMessage={setSocketMessage} 
                       selectedDate={selectedDate}/>
         }
-        {(!current.map &&( current.modal && current.section == 0)) &&
-          <ManageConnections current={current} 
-                             setCurrent={setCurrent} 
-                             setSocketMessage={setSocketMessage}/>
-        }
 
-        {(!current.map &&( current.modal && current.section == 2)) &&
+        {(!current.map &&( current.modal && current.section == 'macros')) &&
           <ManageMacros current={current} 
                         setCurrent={setCurrent} 
                         socketMessage={socketMessage}
@@ -313,7 +328,16 @@ function Home({
           09. 18. 2025
           Temporary placement for sectionOptions button
         */}
-        <button id="sectionOptions"></button>
+        <OptionsButton 
+            current={current} 
+            setCurrent={setCurrent}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            setSectionClass={setSectionClass}
+            sectionClass={sectionClass}
+        />
+
+
 
         {current.gallery.length > 0 &&
           <DragSlider current={current} setCurrent={setCurrent} siteLocation={'home'}/>
@@ -329,16 +353,16 @@ function Home({
             setSelectedDate={setSelectedDate}/>
         }
         {current.map && 
-          <MapComponent 
+          <Mapp 
             setCurrent={setCurrent}
             current={current}
             log={log}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             cal={cal}
-            setSocketMessage={setSocketMessage}
-            userDocumentSettings={userDocumentSettings}
-            setUserDocumentSettings={setUserDocumentSettings}/>
+            sectionClass={sectionClass}
+            setSectionClass={setSectionClass}
+            setSocketMessage={setSocketMessage}/>
         }
         {current.customizer &&
           <CustomLogEditor
@@ -349,16 +373,36 @@ function Home({
           />
         }
 
-          <Instant 
-            socketMessage={socketMessage} 
-            setSocketMessage={setSocketMessage}
-            sendMessage={sendMessage}
-            isActive={isActive}
-            setActive={setActive}
-            accessID={accessID}
-            setAccessID={setAccessID}
-            getUnreadCount={getUnreadCount}
-          />
+        {isLogout &&
+            <div id="logoutModal" className={``}>
+              
+              <div id="wrapper">
+                <span id="exclaimation">!</span>
+                <h2>Are you sure you wish to log out?</h2>
+
+                <div id="options">
+                  <button className={`buttonDefault`} onClick={setLogout}>Cancel</button>
+                  <button className={`buttonDefault`} onClick={async()=> {
+                    await logout().then(()=> {
+                      navigate('/entry');
+                    })
+                  }}>Log Out</button>
+                </div>
+                </div>
+            </div>
+          }
+
+
+        <Instant 
+          socketMessage={socketMessage} 
+          setSocketMessage={setSocketMessage}
+          sendMessage={sendMessage}
+          isActive={isActive}
+          setActive={setActive}
+          accessID={accessID}
+          setAccessID={setAccessID}
+          getUnreadCount={getUnreadCount}
+        />
         
     </section>
   )
@@ -404,7 +448,7 @@ export default function Main() {
    */
   React.useEffect(()=> {
     if(authed == true) {
-      setSocketURL(`ws://172.20.22.241:3333/?${userID}`);
+      setSocketURL(`ws://172.30.32.142:3333/?${userID}`);
       getUnreadCount();
     }
   }, [authed])
@@ -586,7 +630,8 @@ export default function Main() {
       social: 'enter',
       home: 'enter',
       macros: 'enter',
-      settings: 'enter'
+      settings: 'enter',
+      map: '',
   })
   
   const [current, setCurrent] = React.useState({

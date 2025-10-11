@@ -618,6 +618,7 @@ export default function UserSettings({
 						</svg>
 					</button>
 				</li>
+				
 				<li>
 					<button className={`buttonDefault`} onClick={setLogout}>Log Out</button>
 				</li>

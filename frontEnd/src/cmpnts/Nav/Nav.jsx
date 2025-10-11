@@ -10,22 +10,6 @@ let GlobeIcon = () => (
 		height="32" 
 		viewBox="0 0 32 32"
 		id="globe">
-	  <defs>
-	    {/*<style>
-	      .cls-1, .cls-3 {
-	        fill: none;
-	      }
-
-	      .cls-1 {
-	        stroke: #707070;
-	        stroke-width: 1.5px;
-	      }
-
-	      .cls-2 {
-	        stroke: none;
-	      }
-	    </style>*/}
-	  </defs>
 	  <g id="Group_537" data-name="Group 537" transform="translate(-15.739 -23)">
 	    <g id="Ellipse_37" data-name="Ellipse 37" class="cls-1" transform="translate(15.739 23)">
 	      <circle class="cls-2" cx="16" cy="16" r="16"/>
@@ -246,10 +230,19 @@ export function Navmenu({
 					</button>
 				</li>
 
-				{sections.filter(section => section !== current.section).map(section => (
+				{/*{sections.filter(section => section !== current.section).map(section => (
 					<li key={section}>
 						<button className={"buttonDefault"} 
 								onClick={()=> changeSection(section)}>
+							{section}
+						</button>
+					</li>
+				))}*/}
+
+				{sections.map(section => (
+					<li key={section}>
+						<button className={`${current.section == section ? 'nonActive' : ''} buttonDefault`} 
+								onClick={()=> {if(current.section != section) changeSection(section)}}>
 							{section}
 						</button>
 					</li>

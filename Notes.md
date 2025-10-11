@@ -2,23 +2,107 @@
 ## S y n c S e q . x y z
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
+### 10. 10. 2025
+@0900 Fixed issue by using sectionClass state var to change <Mapp> element's class to
+'leave' instead
+
+@0235 printing the 'current' state while the <Mapp> is open shows an older version
+	of it where current.map is false. trying to change current.transition alone causes
+	current.map value to change, and it closes.
+Really not sure what's causing this behavior. May just have to leave the abrupt closing for now...
+Will see if earlier version of project had smoother transition
+
+
+### 10. 09. 2025
+@1700 Added options for <Mapp> in <optionsButton>. <Mapp> doesnt have 'leave' class added
+	before being dismounted via 'close' button in <optionsButton>
+
+@0845 current adjustment seems to work...
+
+Currently Doing...
+	Redesign <Mapp>
+		<OptionsButton> should be visible over it
+	Re Add <Calendar>
+		- redesign?
+then,
+	<CreatePost> redesign
+
+
+@0830 Adding <Mapp> back to the project, need to come up with solution for positioning
+it as it needs to be slightly off center Vertically, y axis, so that header is still 
+visible
+
+### 10. 07. 2025
+@1545 animation for options in <OptionsButton> added
+
+to do next:
+add functionality for home section options
+!! redesign createPost
+!! redo PopUp notifs process, starting with Home / Create Post
+Redo <Post>
+PopUp notifs for <Post> (comments)
+
+### 10. 06. 2025
+@1445 Initial skeleton work done for the <OptionsButton>
+Need to write option to:
+select optionsGroup based on activeGroup value within array
+(optionsGroup array may need to be a state array)
+reverse the order of the objects 
+and then add active class with number to each object
+
+### 10. 04. 2025
+@1930 Process for <OptionsButton> animation:
+onClick, select array from optionsGroup array based on activeGroup state which changes
+everytime current.section does.
+for each object within the array, change the class value to 'appear1, appear2, etc'
+each 'appear' class added to each object in order
+might have to reverse the order of the objects in the array as li's are made top down
+could reverse the ul with flexbox, maybe... 
+
+### 10. 03. 2025
+@0730 Id forgotten that <Macros> section options was a whole other page. Will need to 
+	redesign.
+Thinking of having each option be it's own full page popUp...
+Rather, there is a full page modal for the options, but only the selected option shows up.
+The options were previously collapsible, will have them stay open.
+A max height, and place 'exit' button closer to the options
+
+
+@0715 Current idea for <OptionsButton> is to create array of objects housing each sections's 
+options and their function. Ought to map out each section's options first to assess 
+plausibility / how much routing may be involved
+
+
+@0615 Change navMenu so active section's button isn't clickable, yet still present
+
+@1245 <Settings> section has been added.
+Need to add a rule to <sectionOptions> so that it disappears when <Settings> is up
+'Edit Profile' option to go to <EditProfile> section.
+	Upon saving, it then goes to <Profile> section
+
+
+### 10. 02. 2025
+@1535 Utilize Profile section from old userSettings component to help in making <EditProfile>
+Removing the fields from the new <Settings> section component
+
+
 ### 09. 29. 2025
 @1755 <Profile> now contains pinnedPosts combined with all posts, using the <Log> component
 
-Must remember to remove the profile header in posts in <Log> once im done redesigning...
+Must remember to remove the profile header that includes the current user in posts in <Log> once im done redesigning...
 Correct values for post stats also
 
 Would like to do 'editProfile' next, but I ought to add <Settings> section first,
 then develop the base functionality for <sectionOptions>, such as switching out the options
 per each section and the animation.
 (whats the best way to have each sections options available? should all the section
-options exist within the button?)
+options exist within the button component?)
 
 Recreating the <CreatePost> ought to be fun :D D:
 
 To Do Next:
-- Add Settings Section
-- Then the sectionOptions button
+- Add Settings Section ✔️
+- Then the sectionOptions button ✔️
 - After, the CreatePost overlay
 - Redoing PopupNotifs / Instants process
 

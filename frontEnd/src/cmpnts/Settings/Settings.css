@@ -1,3 +1,206 @@
 div#settings {
 	
 }
+
+div#settings ul#mainMenu {
+	width: calc(100% - 32px);
+/*	max-height: 80%;*/
+/*	overflow-y: scroll;*/
+    list-style-type: none;
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    transform: translateY(-50%);*/
+    margin: 0;
+    margin-top: 128px;
+    margin-left: 16px;
+    padding: 0;
+    -webkit-perspective: 10000;
+}
+
+div#settings ul#mainMenu li {
+	width: 100%;
+    margin: 28px 0;
+    transition: all ease-in-out 0.2s;
+    overflow-y: hidden;
+}
+
+	div#settings ul#mainMenu li.open {
+		height: auto;
+	}
+
+	div#settings ul#mainMenu li.close {
+		height: 36px;
+	}
+
+div#settings ul#mainMenu li button {
+    font-size: 1.5em;
+    text-transform: capitalize;
+    letter-spacing: 2px;
+}
+
+div#settings ul#mainMenu li button svg {
+	display: inline-block;
+	transform: rotate(180deg);
+	width: 44px;
+	margin-left: 12px;
+	position: relative;
+	top: 28px;
+}
+
+div#settings ul#mainMenu li button#aboutProject {
+	margin: -24px 0 -32px;
+	display: flex;
+}
+
+
+
+
+div#settings ul#mainMenu li#privacy {}
+
+
+div#settings ul#mainMenu li#privacy div#optionsWrapper {
+	margin: 36px auto 0;
+}
+
+div#settings ul#mainMenu li#privacy div#optionsWrapper ul#options {
+	display: flex;
+	width: 90%;
+	flex-direction: row;
+	padding: 0;
+	margin: 0 auto;
+}
+
+div#settings ul#mainMenu li#privacy div#optionsWrapper ul#options li {
+	margin: 12px 0;
+}
+
+div#settings ul#mainMenu li#privacy div#optionsWrapper ul#options li button {
+	text-align: center;
+	width: 100%;
+}
+
+div#settings ul#mainMenu li#privacy div#optionsWrapper p {
+	font-family: 'Raleway';
+	text-align: center;
+	line-height: 28px;
+	white-space: pre-line;
+	color: var(--greyscale-text);
+	max-width: 90%;
+	margin: 16px auto;
+}
+
+div#settings ul#mainMenu li#privacy div#optionsWrapper p span {
+	color: black;
+	font-weight: 600;
+}
+
+
+
+
+div#settings ul#mainMenu li#invites {}
+
+
+div#settings ul#mainMenu li#invites div#mainWrapper {
+	margin: 24px auto 0;
+	margin-left: 24px;
+}
+
+div#settings ul#mainMenu li#invites div#mainWrapper h3 {
+	font-family: 'Raleway';
+	font-weight: 600;
+}
+
+div#settings ul#mainMenu li#invites div#mainWrapper h3 {}
+
+div#settings ul#mainMenu li#invites div#mainWrapper h3#inviteCount {
+	margin-left: 12px;
+	position: relative;
+	font-size: 1.5em;
+	color: var(--greyscale-text);
+}
+div#settings ul#mainMenu li#invites div#mainWrapper h3#inviteCount span {
+	position: absolute;
+	top: -18px;
+	left: -24px;
+	font-size: 2em;
+	color: var(--greyscale-accent);
+}
+
+div#settings ul#mainMenu li#invites div#mainWrapper h3#referralHeader {
+	font-size: 1.25em;
+}
+
+div#settings ul#mainMenu li#invites div#mainWrapper button#referralLink {
+	display: block;
+	font-size: 1em;
+/*	text-transform: lowercase;*/
+	width: 90%;
+	padding: 12px;
+	margin: 0 auto;
+
+	font-family: 'Raleway';
+	font-weight: 600;
+	color: var(--greyscale-accent);
+	border: 2px solid var(--greyscale-accent);
+	border-radius: 4px;
+
+}
+
+
+
+
+
+ div#logoutModal {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 22;
+    transition: all 0.2s ease-in-out;
+    animation: 0.2s ease-in-out forwards _enter
+}
+
+ div#logoutModal div#wrapper {
+	/*position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);*/
+}
+
+ div#logoutModal div#wrapper span#exclaimation {
+	font-size: 3em;
+	font-weight: 500;
+	color: var(--greyscale-accent);
+
+	width: fit-content;
+	display: block;
+	margin: 0 auto;
+
+	border: 4px solid var(--greyscale-accent);
+	border-radius: 100%;
+	padding: 4px 30px;
+}
+
+
+ div#logoutModal div#wrapper h2 {
+	font-family: 'Raleway';
+	font-size: 2.5em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--greyscale-accent);
+    text-align: center;
+}
+
+ div#logoutModal div#wrapper div#options {
+	width: fit-content;
+	margin: 0 auto;
+}
+
+ div#logoutModal div#wrapper div#options button {
+	margin: 0 16px;
+}
