@@ -1,4 +1,4 @@
-
+/* * * V I T A L S * * */
 import * as React from 'react';
 import APIaccess from '../../apiaccess';
 import Log from '../blog/log';

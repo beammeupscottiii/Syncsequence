@@ -28,11 +28,11 @@ export default function NotificationList({setNotifList, unreadCount, setUnreadCo
 	            count++;
 	        }
 	      }
-	    if(count < 10) {
-	      count = '0' + count;
-	    } else if (count > 99) {
-	      count = '99';
-	    }
+	    // if(count < 10) {
+	    //   count = '0' + count;
+	    // } else if (count > 99) {
+	    //   count = '99';
+	    // }
 	    setUnreadCount(count);
 		setNotifs(data);
 	}

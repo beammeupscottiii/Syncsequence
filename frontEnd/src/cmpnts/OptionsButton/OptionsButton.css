@@ -15,6 +15,7 @@ div#optionsButtonWrapper button#main {
 
 	background-color: white;
 	z-index: 20;
+	box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 div#optionsButtonWrapper ul#options {

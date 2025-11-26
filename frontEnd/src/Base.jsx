@@ -46,9 +46,10 @@ import Settings from './cmpnts/Settings/Settings';
 
 /*** Sub Sections ***/
 import { CreatePost } from './components/sections/userLog';
+import CreatePostt from "./cmpnts/CreatePost/CreatePost";
 import { ManageConnections } from './components/sections/socialLog';
 import { ManageMacros } from './components/sections/macros';
-import Calendar from './components/calendar/calendar';
+import Calendar from './cmpnts/Calendar/Calendar';
 import Mapp from './cmpnts/Map/Map';
 // import { MapPage } from './components/map/map';
 import DragSlider from './components/base/dragSlider';
@@ -166,7 +167,7 @@ function Home({
   let socialRef = React.useRef();
   let profileRef = React.useRef();
   let settingsRef = React.useRef();
-
+  const [createPostToggle, setCreatePostToggle] = React.useReducer(state => !state, false);
 
 
   /* 
@@ -266,6 +267,7 @@ function Home({
                   sectionClass={sectionClass}
                   refe={socialRef}/>
           }
+
           {current.section == 'home' &&
             <UserLog  
                 current={current} 
@@ -275,6 +277,7 @@ function Home({
                 sectionClass={sectionClass}
                 refe={homeRef}/>
           }
+
           {current.section == 'macros' &&
             <Macros  
                 current={current} 
@@ -286,6 +289,7 @@ function Home({
                 sectionClass={sectionClass}
                 refe={macrosRef}/>
           }
+
           {current.section == 'settings' &&
             <Settings 
                 current={current}
@@ -309,12 +313,25 @@ function Home({
                              setSocketMessage={setSocketMessage}/>
         }
 
-        {(!current.map &&( current.modal && current.section == 'home')) &&
+        {/*{createPostToggle &&
           <CreatePost setCurrent={setCurrent}
                       current={current} 
                       socketMessage={socketMessage}
                       setSocketMessage={setSocketMessage} 
-                      selectedDate={selectedDate}/>
+                      selectedDate={selectedDate}
+                      createPostToggle={createPostToggle}
+                      setCreatePostToggle={setCreatePostToggle}/>
+        }*/}
+
+        {createPostToggle &&
+          <CreatePostt setCurrent={setCurrent}
+                      current={current} 
+                      socketMessage={socketMessage}
+                      setSocketMessage={setSocketMessage} 
+                      selectedDate={selectedDate}
+                      createPostToggle={createPostToggle}
+                      setCreatePostToggle={setCreatePostToggle} 
+                      sectionClass={sectionClass}/>
         }
 
         {(!current.map &&( current.modal && current.section == 'macros')) &&
@@ -324,9 +341,9 @@ function Home({
                         setSocketMessage={setSocketMessage}/>
         }
 
-        {/*
-          09. 18. 2025
-          Temporary placement for sectionOptions button
+
+         {/*
+            O P T I O N S  B U T T O N
         */}
         <OptionsButton 
             current={current} 
@@ -335,6 +352,9 @@ function Home({
             setSelectedDate={setSelectedDate}
             setSectionClass={setSectionClass}
             sectionClass={sectionClass}
+
+            createPostToggle={createPostToggle}
+            setCreatePostToggle={setCreatePostToggle}
         />
 
 
@@ -350,7 +370,9 @@ function Home({
             cal={cal} 
             set_dateInView={set_dateInView}
             selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}/>
+            setSelectedDate={setSelectedDate}
+            sectionClass={sectionClass}
+            setSectionClass={setSectionClass}/>
         }
         {current.map && 
           <Mapp 
@@ -632,6 +654,9 @@ export default function Main() {
       macros: 'enter',
       settings: 'enter',
       map: '',
+      mapSettings: '_enter',
+      calendar: '',
+      createPost: ''
   })
   
   const [current, setCurrent] = React.useState({
@@ -639,6 +664,7 @@ export default function Main() {
     social: false, //true, false or social
     calendar: false, //true or false
     map: false,
+    createPost: false,
     scrollTo: null,
     currentLog: null,
     modal: false, //for <UserProfile>, when user leaves page via a fullList, ensures modal is still up

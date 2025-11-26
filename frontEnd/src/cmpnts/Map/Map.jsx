@@ -473,14 +473,12 @@ export default function Mapp ({
 				}
 
 				setPostBoardClass('down')
-
-				// let secondStep = setTimeout(()=> {
-				// 	setPostBoardInfo(data)
-				// }, 600);
 					
 				let thirdStep = setTimeout(()=> {
 					setPostBoardClass('up')
-				}, 1000);
+				}, 600);
+
+				toggleFilter();
 
 				initialMap.getView().animate({
 					center: clickedCoords,
@@ -518,19 +516,22 @@ export default function Mapp ({
 	}, [currentCenter, markers, isMapMounted]) 
 
 
-	function openPopupWithPosts(posts) {
-		setPostInfo(posts);
-		setCurrentPostIndex(0);
-		setPostBoardClass('down');
-		setTimeout(() => setPostBoardClass('up'), 1000);
-	}
+	// function openPopupWithPosts(posts) {
 
-	function openPopupWithSinglePost(post) {
-		setPostInfo([post]);
-		setCurrentPostIndex(0);
-		setPostBoardClass('down');
-		setTimeout(() => setPostBoardClass('up'), 1000);
-	}
+	// 	setPostInfo(posts);
+	// 	setCurrentPostIndex(0);
+	// 	setPostBoardClass('down');
+	// 	setTimeout(() => setPostBoardClass('up'), 500);
+	// 	toggleFilter();
+	// }
+
+	// function openPopupWithSinglePost(post) {
+	// 	setPostInfo([post]);
+	// 	setCurrentPostIndex(0);
+	// 	setPostBoardClass('down');
+	// 	setTimeout(() => setPostBoardClass('up'), 500);
+	// 	toggleFilter();
+	// }
 
 	function handleNextPost() {
 		setCurrentPostIndex((prevIndex) => (prevIndex + 1) % postInfo.length);
@@ -703,6 +704,7 @@ export default function Mapp ({
 	const [cyclePosts, setCyclePosts] = React.useReducer(state => !state, false);
 	const [currentPostIndex, setCurrentPostIndex] = React.useState(0);
 	const [postInfo, setPostInfo] = React.useState([]);
+	const [filterToggle, toggleFilter] = React.useReducer(state => !state, false);
 
 	return (
 		<div id="MAP" className={`${sectionClass.map}`}>
@@ -822,8 +824,10 @@ export default function Mapp ({
 			
 
 			{/* F I L T E R S*/}
-			<div id="filters"> 
-				<p>Filter Posts By</p>
+			<div id="filters" className={`${filterToggle == true ? 'open' : ''}`}> 
+				<button id='title'
+						class={`buttonDefault`}
+						onClick={toggleFilter}>Filter Posts By</button>
 
 				<ul>
 					<li>
@@ -847,6 +851,8 @@ export default function Mapp ({
 								}}>Macros</button>
 					</li>
 				</ul>
+
+				<button id="close" onClick={toggleFilter} class={"buttonDefault"}>Close</button>
 			</div>
 
 			{/* D A T E  S E L E C T I O N */}
@@ -917,7 +923,7 @@ export default function Mapp ({
 
 			{/* S E T T I N G S */}
 			{current.modal == true &&
-				<div id="mapSettings" className={`_enter`}>
+				<div id="mapSettings" className={`${sectionClass.mapSettings}`}>
 
 					<h2>Map Settings</h2>
 
@@ -955,8 +961,27 @@ export default function Mapp ({
 						       </ul>
 
 						</li>
-
 					</ul>
+
+					<button id="close" onClick={()=> {
+						// setSectionClass({
+						// 	...sectionClass,
+						// 	mapSettings: '_enter'
+						// })
+						console.log('response');
+
+						document.getElementById('mapSettings').classList.add('_enter');
+
+						let delay = setTimeout(()=> {
+							setCurrent({
+								...current, 
+								modal: false,
+								map: true
+							})		
+						}, 300)
+						
+					}} class={"buttonDefault"}>Close</button>
+					
 
 				</div>
 			}

@@ -11,7 +11,9 @@ export default function OptionsButton({
 	selectedDate, 
 	setSelectedDate,
 	setSectionClass,
-	sectionClass
+	sectionClass,
+	createPostToggle,
+	setCreatePostToggle
 }) {
 
 	// each object is option name and function
@@ -69,7 +71,16 @@ export default function OptionsButton({
 		*/
 		{
 			name: 'New Post',
-			function: null,
+			function: ()=> {
+				setCreatePostToggle();
+
+				setCurrent({
+					...current,
+					createPost: true
+				})
+
+				setOptionsOpen(false);
+			},
 			class: ''
 		},
 		{
@@ -79,7 +90,22 @@ export default function OptionsButton({
 		},
 		{
 			name: 'Calendar',
-			function: null,
+			function: ()=> {
+				const hajime = new Date();
+
+				setSelectedDate({
+					day: hajime.getDate(),
+					month: hajime.getMonth(),
+					year: hajime.getFullYear()
+				})
+
+				setCurrent({
+					...current,
+					calendar: true
+				})
+
+				setOptionsOpen(false);
+			},
 			class: ''
 		},
 		{
@@ -146,7 +172,49 @@ export default function OptionsButton({
 		},
 		{
 			name: 'Settings',
-			function: null,
+			function: ()=> {
+
+				if(!current.modal) {
+					console.log('response2');
+
+					setCurrent({
+						...current, 
+						modal: true,
+						map: true
+					})
+
+					setOptionsOpen(false);
+					let delay = setTimeout(()=> {
+						document.getElementById('mapSettings').classList.remove('_enter');			
+					}, 300)
+					
+					// setSectionClass({
+					// 	...sectionClass,
+					// 	mapSettings: ''
+					// })	
+				}
+				if(current.modal) {
+					// setSectionClass({
+					// 	...sectionClass,
+					// 	mapSettings: '_enter'
+					// })
+					console.log('response');
+
+					document.getElementById('mapSettings').classList.add('_enter');
+
+					setOptionsOpen(false);
+
+					setCurrent({
+						...current, 
+						modal: false,
+						map: true
+					})
+
+					// let delay = setTimeout(()=> {
+									
+					// }, 300)
+				}
+			},
 			class: ''
 		},
 		{
@@ -172,9 +240,101 @@ export default function OptionsButton({
 						transition: false
 					})
 				}, 300)
+				let delay2 = setTimeout(()=> {
+						setSectionClass({
+						...sectionClass,
+						map: ''
+					})
+				}, 600)
 			},
 			class: ''
 		},
+	]
+	const calendarOptions = [
+		{
+			name: 'Post',
+			function: null,
+			class: ''
+		},
+		{
+			name: 'Settings',
+			function: ()=> {
+			},
+			class: ''
+		},
+		{
+			name: 'Close',
+			function: ()=> {
+				console.log(current);
+				if(current.section == 'social') {
+					setActiveSection(1)
+				}
+				else if(current.section == 'home') {
+					setActiveSection(2)
+				}
+				setOptionsOpen(false);
+
+				setSectionClass({
+					...sectionClass,
+					calendar: 'leave'
+				})
+				let delay = setTimeout(()=> {
+					setCurrent({
+						...current,
+						calendar: false,
+						transition: false
+					})
+				}, 300)
+				let delay2 = setTimeout(()=> {
+						setSectionClass({
+						...sectionClass,
+						calendar: ''
+					})
+				}, 600)
+			},
+			class: ''
+		},
+	];
+
+	const createPostOptions = [
+		{
+			name: 'Close',
+			function: ()=> {
+				setActiveSection(2);
+				setOptionsOpen(false);
+				setSectionClass({
+					...sectionClass,
+					createPost: 'leave'
+				});
+
+				let delay = setTimeout(()=> {
+					setCurrent({
+						...current,
+						createPost: false,
+					})
+				}, 300)
+				let delay2 = setTimeout(()=> {
+					setSectionClass({
+						...sectionClass,
+						createPost: ''
+					})
+					setCreatePostToggle();
+				}, 600)
+
+			},
+			class: ''
+		},
+		{
+			name: 'Draft',
+			function: null,
+			class: ''
+		},
+		{
+			name: 'Post',
+			function: null,
+			class: ''
+		},
+		
 	]
 	
 	const currentRef = React.useRef(current);
@@ -184,13 +344,16 @@ export default function OptionsButton({
 		socialOptions, 
 		homeOptions, 
 		macrosOptions,
-		mapOptions]);
+		mapOptions,
+		calendarOptions,
+		createPostOptions
+	]);
 	const activeGroup = optionsGroup[activeSection];
 	const [optionsOpen, setOptionsOpen] = React.useState(false);
 
+	const [mapClassToggle, setMapClassToggle] = React.useReducer(state => !state, true);
+
 	const hajime = new Date();
-
-
 
 	const launchOptions = () => {
 
@@ -246,6 +409,12 @@ export default function OptionsButton({
 		}
 		if(current.map == true) {
 			setActiveSection(4)
+		}
+		if(current.calendar == true) {
+			setActiveSection(5)
+		}
+		if(current.createPost == true) {
+			setActiveSection(6)
 		}
 	}, [current])
 

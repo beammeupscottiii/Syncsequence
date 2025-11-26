@@ -1,7 +1,85 @@
-
 ## S y n c S e q . x y z
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
+### 11. 18. 2025
+@0420 Add text button working
+
+
+### 11. 14. 2025
+@1705 Added open and close animations to <CreatePost>
+
+### 11. 07. 2025
+@0515 Added icons for options to <CreatePost>
+
+To Do, currently:
+- functionality for options
+	- add text
+	- add image
+	- privacy toggle
+	- tag user's modal
+	- add tags modal
+	- locations modal
+- post and draft options functional 
+	- draft list component
+- change open and close animation to match Map & Calendar ✔️
+- add logo(?) to <OptionsButton>
+
+### 11. 05. 2025
+@0335 Working on <CreatePost> redesign
+
+### 10. 21. 2025
+@1355 working on <Calendar> done for now. However, will need to revisit redoing the 
+algorithm for making the calendar eventually - for instance, Sept 2025 is incorrect.
+
+### 10. 20. 2025
+@1415 <Calendar> redesigned and buttons functional. Transitions are smooooth
+<CreatePost> is up next!!
+
+Also changed logo color to black. May make a lighter shade of black and make larger
+
+@0435 Calendar redesigned. Just need to adjust the buttons abit
+
+### 10. 18. 2025
+@2145 Working on changing the animation for the months within <Calendar>
+
+### 10. 16. 2025
+@1205 <Calendar> added. Need to adjust CSS to position it properly - probably same thing
+as with the <Mapp>
+Would also like to redesign the month picker (._. )_
+
+### 10. 12. 2025
+@0855 As expected, button within internal <Mapp> settings closes it just fine (._. )_
+
+In <Mapp> make sure selecting posts toggles filtersToggle ✔️
+
+Next, add <Calendar>
+
+Currently Doing...
+	Redesign <Mapp> ✔️
+		<OptionsButton> should be visible over it ✔️
+	Re Add <Calendar> ✔️
+		- redesign?
+then,
+	<CreatePost> redesign
+
+To Do Next:
+- Add Settings Section ✔️
+- Then the sectionOptions button ✔️
+- After, the CreatePost overlay
+- Redoing PopupNotifs / Instants process
+
+@0845 Unable to get <Mapp> internal settings to close after being opened via the settings
+	button in <OptionsButton> 
+a 'close' button within the settings page would probably work fine. But id like them both
+to...
+
+@0130 Updated filters window design for <Mapp>. The internal datepicker works as intended.
+Need to add tags filter eventually.
+Connect internal settings modal to the optionsButton...
+
+having trouble connecting <Mapp> internal settings to <OptionsButton>
+settings open, but then close. 'enter' class isnt removed
+
 ### 10. 10. 2025
 @0900 Fixed issue by using sectionClass state var to change <Mapp> element's class to
 'leave' instead
@@ -20,12 +98,18 @@ Will see if earlier version of project had smoother transition
 @0845 current adjustment seems to work...
 
 Currently Doing...
-	Redesign <Mapp>
-		<OptionsButton> should be visible over it
+	Redesign <Mapp> ✔️
+		<OptionsButton> should be visible over it ✔️
 	Re Add <Calendar>
 		- redesign?
 then,
 	<CreatePost> redesign
+
+To Do Next:
+- Add Settings Section ✔️
+- Then the sectionOptions button ✔️
+- After, the CreatePost overlay
+- Redoing PopupNotifs / Instants process
 
 
 @0830 Adding <Mapp> back to the project, need to come up with solution for positioning

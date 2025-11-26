@@ -3,12 +3,12 @@ import * as React from 'react';
 import APIaccess from '../../apiaccess';
 import Log from '../blog/log';
 // import './sections.css';
-// import './userLog.css';
+import './userLog.css';
 import FullList from '../../components/base/fullList';
 
 let accessAPI = APIaccess();
 
-function ReturnElement ({el, setCurrent, current}) {
+function ReturnElement ({el, setCurrent, current, createPostToggle, setCreatePostToggle}) {
 
 	let [ifLeave, setLeave] = React.useState(false);
 	
@@ -21,10 +21,7 @@ function ReturnElement ({el, setCurrent, current}) {
 		}, 300)
 		
 		let third = setTimeout(()=> {
-			setCurrent({
-				...current,
-				modal: false
-			})
+			setCreatePostToggle();
 		}, 500)
 	}
 
@@ -317,7 +314,15 @@ function MultiSelect({suggestions, setSuggestions, setModal}) {
 	);
 }
 
-export function CreatePost({setCurrent, current, socketMessage, setSocketMessage, selectedDate}) {
+export function CreatePost({
+	setCurrent, 
+	current, 
+	socketMessage, 
+	setSocketMessage, 
+	selectedDate,
+	createPostToggle,
+	setCreatePostToggle
+}) {
 
 	const userID = sessionStorage.getItem('userID');
 	const username = sessionStorage.getItem('userName');
@@ -924,7 +929,12 @@ export function CreatePost({setCurrent, current, socketMessage, setSocketMessage
 			*/}
 			<div id="headerWrapper">
 
-				<ReturnElement el={el} current={current} setCurrent={setCurrent}/>
+				<ReturnElement 
+					el={el} 
+					current={current} 
+					setCurrent={setCurrent}
+					createPostToggle={createPostToggle}
+					setCreatePostToggle={setCreatePostToggle}/>
 
 				<div id="dateSetter">
 					<h3>Creating Entry for</h3>

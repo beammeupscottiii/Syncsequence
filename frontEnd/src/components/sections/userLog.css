@@ -2,7 +2,7 @@
 	C R E A T E  P O S T
 * * */
 
-section#HOME div#createPost {
+section#BASE div#createPost {
 	position: absolute;
 	top: 0;
 	width: 100%;
@@ -13,7 +13,7 @@ section#HOME div#createPost {
 	background-color: white;
 }
 
-section#HOME div#createPost._fade {
+section#BASE div#createPost._fade {
 	opacity: 0;
 	transition: all ease-in-out 0.5s;
 }
@@ -54,7 +54,7 @@ section#HOME div#createPost._fade {
 
 
 
-section#HOME div#createPost div#headerWrapper {
+section#BASE div#createPost div#headerWrapper {
 	display: flex;
 	width: 97%;
 	margin: 16px 0 24px;
@@ -62,20 +62,20 @@ section#HOME div#createPost div#headerWrapper {
 }
 
 
-section#HOME div#createPost div#headerWrapper svg {
+section#BASE div#createPost div#headerWrapper svg {
 	display: inline-block;
 	margin-right: 0;
 }
 
-section#HOME div#createPost div#headerWrapper div#dateSetter {
+section#BASE div#createPost div#headerWrapper div#dateSetter {
 	display: inline-block;
 	position: relative;
 	margin-left: 20px;
 	top: -8px;
 }
 
-section#HOME div#createPost div#headerWrapper div#dateSetter h3,
-section#HOME div#createPost div#headerWrapper div#dateSetter h2 {
+section#BASE div#createPost div#headerWrapper div#dateSetter h3,
+section#BASE div#createPost div#headerWrapper div#dateSetter h2 {
 	font-family: 'Raleway';
 	font-weight: 600;
 	font-size: 1em;
@@ -85,15 +85,15 @@ section#HOME div#createPost div#headerWrapper div#dateSetter h2 {
 	margin: 12px 0 4px;
 }
 
-section#HOME div#createPost div#headerWrapper div#dateSetter h2 {
+section#BASE div#createPost div#headerWrapper div#dateSetter h2 {
 	font-size: 2em;
 	color: var(--greyscale-details);
 	margin: 8px 0 0;
 }
 
 
-section#HOME div#createPost div#headerWrapper svg#draftIcon {
-	position: absolute;
+section#BASE div#createPost div#headerWrapper svg#draftIcon {
+/*	position: absolute;*/
     right: 0;
     margin-right: 20px;
     margin-top: 4px;
@@ -101,19 +101,19 @@ section#HOME div#createPost div#headerWrapper svg#draftIcon {
     transition: all ease-in-out 0.2s;
 }
 
-section#HOME div#createPost div#headerWrapper svg#draftIcon.hover {
+section#BASE div#createPost div#headerWrapper svg#draftIcon.hover {
     background-color: var(--greyscale-backdrop);
     border-radius: 8px;
 }
 
-section#HOME div#createPost div#headerWrapper svg#draftIcon path, 
-section#HOME div#createPost div#headerWrapper svg#draftIcon rect {
+section#BASE div#createPost div#headerWrapper svg#draftIcon path, 
+section#BASE div#createPost div#headerWrapper svg#draftIcon rect {
 	fill: var(--greyscale-icons);
 }
 
 
 
-section#HOME div#createPost form {
+section#BASE div#createPost form {
 	width: 95%;
 	margin: 0 auto;
 	overflow-x: hidden;
@@ -213,7 +213,7 @@ div#createPost fieldset div#moreContent input#addImage {
 
 
 
-section#HOME div#createPost div#options {
+section#BASE div#createPost div#options {
 	position: absolute;
 	left: 50%;
 	transform: translateX(-50%);
@@ -221,7 +221,7 @@ section#HOME div#createPost div#options {
 	bottom: 0px;
 }
 
-section#HOME div#createPost div#options button {
+section#BASE div#createPost div#options button {
 	background-color: transparent;
 	border: none;
 	outline: none;
@@ -231,12 +231,12 @@ section#HOME div#createPost div#options button {
 
 
 
-section#HOME div#createPost div#taggedUsers {
+section#BASE div#createPost div#taggedUsers {
 	margin: 36px auto;
 	border-bottom: 1px solid var(--greyscale-accent);
 }
 
-	section#HOME div#createPost div#taggedUsers p {
+	section#BASE div#createPost div#taggedUsers p {
 		margin: 8px;
 		margin-left: 0;
 		color: var(--greyscale-accent);
@@ -249,18 +249,18 @@ section#HOME div#createPost div#taggedUsers {
     	line-height: 22px;
 	}
 
-	section#HOME div#createPost div#taggedUsers ul#selected {
+	section#BASE div#createPost div#taggedUsers ul#selected {
 		margin: 8px 8px;
 		padding: 0;
 		list-style-type: none;
 	}
 
-	section#HOME div#createPost div#taggedUsers ul#selected li {
+	section#BASE div#createPost div#taggedUsers ul#selected li {
 		display: inline-block;
 		margin: 0 4px;
 	}
 
-	section#HOME div#createPost div#taggedUsers ul#options {
+	section#BASE div#createPost div#taggedUsers ul#options {
 		height: 100px;
 		overflow-x: scroll;
 		list-style-type: none;
@@ -268,30 +268,30 @@ section#HOME div#createPost div#taggedUsers {
 		margin: 0;
 	}
 
-	section#HOME div#createPost div#taggedUsers ul#options li {
+	section#BASE div#createPost div#taggedUsers ul#options li {
 		margin: 8px 8px 8px 16px;
 	}
 
-	section#HOME div#createPost div#taggedUsers ul#options li span {
+	section#BASE div#createPost div#taggedUsers ul#options li span {
 		display: inline-block;
 	}
 
-	section#HOME div#createPost div#taggedUsers ul#options li p {
+	section#BASE div#createPost div#taggedUsers ul#options li p {
 		display: inline-block;
 		color: black;
 		margin-left: 9px;
 	}
 
 
-section#HOME div#createPost div#tagsSelection {
+section#BASE div#createPost div#tagsSelection {
 /*	margin-bottom: 36px;*/
 }
 
-section#HOME div#createPost div#tagsSelection div#inputWrapper div#selected{
+section#BASE div#createPost div#tagsSelection div#inputWrapper div#selected{
 	
 }
 
-section#HOME div#createPost div#tagsSelection div#inputWrapper {
+section#BASE div#createPost div#tagsSelection div#inputWrapper {
 /*	width: 100%;*/
 	display: flex;
 	flex-direction: row;
@@ -299,7 +299,7 @@ section#HOME div#createPost div#tagsSelection div#inputWrapper {
     border-bottom: 2px solid var(--greyscale-elements);
 }
 
-section#HOME div#createPost div#tagsSelection div#inputWrapper ul#selected {
+section#BASE div#createPost div#tagsSelection div#inputWrapper ul#selected {
 /*	max-width: 100%;*/
 	display: flex;
 	flex-direction: row;
@@ -309,7 +309,7 @@ section#HOME div#createPost div#tagsSelection div#inputWrapper ul#selected {
     margin: 4px;
 }
 
-section#HOME div#createPost div#tagsSelection div#inputWrapper ul#selected li {
+section#BASE div#createPost div#tagsSelection div#inputWrapper ul#selected li {
 	display: block;
 	position: relative;
 /*	top: 7px;*/
@@ -320,17 +320,17 @@ section#HOME div#createPost div#tagsSelection div#inputWrapper ul#selected li {
 	padding: 6px 8px;
 }
 
-section#HOME div#createPost div#tagsSelection div#inputWrapper ul#selected li p {
+section#BASE div#createPost div#tagsSelection div#inputWrapper ul#selected li p {
 	display: inline;
 	color: var(--greyscale-text);
 }
 
-section#HOME div#createPost div#tagsSelection div#inputWrapper ul#selected li svg {
+section#BASE div#createPost div#tagsSelection div#inputWrapper ul#selected li svg {
 	display: inline;
 	margin: 0 0 -2px 6px;
 }
 
-section#HOME div#createPost div#tagsSelection div#inputWrapper input {
+section#BASE div#createPost div#tagsSelection div#inputWrapper input {
 	width: auto;
 	margin: 0 10px;
 	border-bottom: none;
@@ -346,11 +346,11 @@ section#HOME div#createPost div#tagsSelection div#inputWrapper input {
  *   button#newTag
  */
 
-section#HOME div#createPost div#tagsSelection div#resultsWrapper {
+section#BASE div#createPost div#tagsSelection div#resultsWrapper {
 	background-color: white;
 }
 
-section#HOME div#createPost div#tagsSelection ul#autocomplete {
+section#BASE div#createPost div#tagsSelection ul#autocomplete {
 	list-style-type: none;
 	display: block;
 	height: 100px;
@@ -359,17 +359,17 @@ section#HOME div#createPost div#tagsSelection ul#autocomplete {
 	overflow-y: scroll;
 }
 
-section#HOME div#createPost div#tagsSelection ul#autocomplete li {
+section#BASE div#createPost div#tagsSelection ul#autocomplete li {
 	margin: 12px 0;
 }
 
-section#HOME div#createPost div#tagsSelection div#resultsWrapper button#makeNewTag {
+section#BASE div#createPost div#tagsSelection div#resultsWrapper button#makeNewTag {
 	width: 100%;
 	margin: 8px auto 20px;
 	text-align: center;
 }
 
-section#HOME div#createPost div#tagsSelection div#resultsWrapper div#no-autocomplete {
+section#BASE div#createPost div#tagsSelection div#resultsWrapper div#no-autocomplete {
 	width: 100%;
 	text-align: center;
 	margin: 36px 0 24px;
@@ -378,29 +378,29 @@ section#HOME div#createPost div#tagsSelection div#resultsWrapper div#no-autocomp
 
 
 
-section#HOME div#createPost form button#setPrivate {
+section#BASE div#createPost form button#setPrivate {
 	text-align: left;
 	margin: 36px 0 16px;
 }
 
-section#HOME div#createPost form button#setPrivate.nonActive {
+section#BASE div#createPost form button#setPrivate.nonActive {
 	color: var(--greyscale-accent);
 }
 
-section#HOME div#createPost form button#pinLocation {
+section#BASE div#createPost form button#pinLocation {
 	text-align: left;
 	margin: 8px 0;
 	margin-bottom: 28px;
 	display: block;
 }
 
-section#HOME div#createPost form button#pinLocation.nonActive {
+section#BASE div#createPost form button#pinLocation.nonActive {
 	color: var(--greyscale-accent);
 }
 
 
 
-section#HOME div#createPost div#createNewTag {
+section#BASE div#createPost div#createNewTag {
 	width: 80%;
 	position: absolute;
 	top: 50%;
@@ -416,11 +416,11 @@ section#HOME div#createPost div#createNewTag {
 	animation: 0.25s ease-in-out forwards _enter;
 }
 
-section#HOME div#createPost div#createNewTag.leave {
+section#BASE div#createPost div#createNewTag.leave {
 	animation: 0.25s ease-in-out forwards _leave;
 }
 
-section#HOME div#createPost div#createNewTag h2 {
+section#BASE div#createPost div#createNewTag h2 {
 	font-family: 'Raleway';
     font-weight: 600;
     font-size: 1.75em;
@@ -429,22 +429,22 @@ section#HOME div#createPost div#createNewTag h2 {
     line-height: 22px;
 }
 
-section#HOME div#createPost div#createNewTag input {
+section#BASE div#createPost div#createNewTag input {
 	margin: 48px auto 36px;
 }
 
-section#HOME div#createPost div#createNewTag div#buttonWrapper {
+section#BASE div#createPost div#createNewTag div#buttonWrapper {
 	margin: 8px auto 16px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 }
 
-section#HOME div#createPost div#createNewTag div#buttonWrapper button {
+section#BASE div#createPost div#createNewTag div#buttonWrapper button {
 	width: 50%;
 }
 
-section#HOME div#createPost div#createNewTag div#buttonWrapper button.nonActive {
+section#BASE div#createPost div#createNewTag div#buttonWrapper button.nonActive {
 	color: var(--greyscale-accent);
 }
 

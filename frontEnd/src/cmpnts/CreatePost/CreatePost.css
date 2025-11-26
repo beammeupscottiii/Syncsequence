@@ -1,0 +1,119 @@
+div#createPostt {
+	position: absolute;
+	top: 50%;
+/*	right: 0;*/
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	height: 100vh;
+
+	z-index: 20;
+	background-color: white;
+	box-sizing: border-box;
+	padding: 0px 12px;
+
+	overflow-y: scroll;
+	animation: 0.25s ease-in-out forwards _scaleFadeIn;
+}
+
+	div#createPostt.leave {
+		animation: 0.25s ease-in-out forwards _scaleFadeOut;
+	}
+
+
+div#createPostt div#returnButtonWrapper {
+	display: flex;
+	position: relative;
+/*	top: 60px;*/
+	width: 100%;
+	margin-top: 60px;
+}
+
+div#createPostt div#returnButtonWrapper svg {
+
+}
+
+div#createPostt form {
+	width: 100%;
+	margin: 8px auto 0;
+/*	overflow-x: hidden;*/
+/*	overflow-y: scroll;*/
+/*	height: calc(100% - 160px);*/
+	padding: 0;
+}
+
+div#createPostt form fieldset {
+	padding: 0;
+	border: none;
+	margin: 0;
+}
+
+div#createPostt form fieldset input,
+div#createPostt form fieldset textarea {
+
+	width: 95%;
+	display: block;
+	margin: 16px auto;
+	border: 2px solid var(--greyscale-elements);
+	border-radius: 8px;
+	padding: 12px 8px;
+	background-color: transparent;
+
+	font-family: 'Raleway';
+	font-weight: 400;
+	font-size: 0.9em;
+	color: var(--greyscale-text);
+	letter-spacing: 2px;
+	line-height: 22px;
+}
+
+div#createPostt form fieldset div#titleWrapper {
+	position: relative;
+}
+
+div#createPostt form fieldset div#titleWrapper button {
+	font-family: 'Open Sans';
+	font-weight: 500;
+	font-size: 1.15em;
+
+	position: absolute;
+	right: -2px;
+	top: -16px;
+
+	background-color: white;
+
+	padding: 6px 12px 6px 12px;
+}
+
+div#createPostt form fieldset input#title {
+	font-size: 1.15em;
+	padding: 16px 8px;
+}
+
+
+div#createPostt form fieldset button.remove {
+	display: block;
+	margin: -12px 0 12px;
+	font-size: 0.8em;
+	width: fit-content;
+	margin-left: auto;
+}
+
+
+div#createPostt ul#optionsWrapper {
+	margin: 0;
+	margin-bottom: 36px;
+	padding: 0;
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+
+	border: 2px solid var(--greyscale-elements);
+	border-radius: 8px;
+	padding: 12px 0 6px;
+}
+
+div#createPostt ul#optionsWrapper li {
+	margin: 0 8px;
+}
