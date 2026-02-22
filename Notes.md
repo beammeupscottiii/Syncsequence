@@ -1,9 +1,212 @@
 ## S y n c S e q . x y z
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
+
+### 02. 22. 2026
+@0210 Now working on <Instants>
+unable to backup project due to front end node modules...
+
+Prompt for Gem:
+"""
+Alright, I'd like your assistance in building a pop element  which takes the 
+		- message
+		- confirmation function
+		- or interaction function 
+		from an external component, and provides a confirm button, 
+		an accept or interact button and a cancel button.
+		Cancel button simply closes the pop up. Also has internal functions for when pop up is externally prompted by websockets. 
+"""
+
+
+### 02. 21. 2026
+@1915 Problem fixed :D Deleting drafts, finito...
+Style update, then we work on instants...
+
+@1905 fixed the previous issue, but now when a post is added to drafts, it doesnt show up within the draft list.
+Need to 'slow it down' so that, if fields are populated and draft is made, that draft
+appears in the list as it shows up
+
+@1900 deleting drafts works, but doing so closes the modal...
+
+
+
+### 02. 17. 2026
+@1645 For deleting drafts, would like to have confirmation with button pop up
+BUT I suppose we could leave that for later...
+
+
+### 02. 10. 2026
+@0535 Adding draft to form works now also.
+Need to add delete function,
+quick styling update.
+
+***Overall T B D***
+Begin reworking <instants> after posting and drafting are working
+	- notif popup for when pinLocation does and doesnt successfully get coordinates
+	- we are creating the new algo flow, only adding the post popups for now.
+Add a 'create tag' button and form to 'TagsNTopics' popup in <SelectionModal>
+Fix / restyle <Post> page
+						  <Macros> page 
+							<ManageConnections>
+								- Search and Manage will happen within Social, no modal
+							<userProfile> for other users
+<Interactions> to be updated
+restyled, but also revamped to ensure all interactions which have notifs, have notifs...
+<Messages> to be *added*
+<EditProfile> to be *added*
+	- connect to settings option too
+Color Scheme options in Settings
+
+TBCH, I dont completely remember everything necessary for Alpha 1.0 release...
+Maps do need to be updated to MapBox company
+<Global> section
+<Groups> section
+Different forms of posting (Event & Stream)
+
+alpha1.0 includes streams and default posting
+
+
+### 02. 02. 2026
+@1230 Opening Draft page now works. 
+Will affirm adding draft data to form works as well,
+& add delete function
+
+@0848 clicking draft button needs to determine whether there is content in form.
+if yes, save it then go to draftsList
+if not, go straight to draftsList
+Function needs to be written in CreatePost, ported up and then down in OptionsButton
+
+
+### 02. 01. 2026
+@1655 just need to plug in DraftsList component, ensure that it works
+
+### 01. 28. 2026
+@0915 in draftFunction, if postContent has nothing in, go to draftPage
+if content has something, save it and then go to draft page.
+also have to find / port functionality for porting over a draft into the create page
+
+### 01. 26. 2026
+@1435 externally triggering submit through options button now works :D 
+
+### 01. 25. 2026
+@1425 CreatePost needs way to send feedback to optionsButton to not close the modal
+if all checks dont pass.
+
+setActiveSection and setOptionsOpen are both funcs internal to optionsButton
+that need to be triggered on submit...
+
+@1230 Setup <createPost> for external submit triggering
+
+### 01. 23. 2026
+@1225 Its actually placeholders that I'm seeing. Make the color of them even lighter.
+Theres a delay when opening the location inputs. I'd like the numbers to be in even before
+the user clicks to toggle it open
+
+***TDN***
+- A lil style for pinLocation
+
+
+***Overall T B D***
+Begin reworking <instants> after posting and drafting are working
+	- notif popup for when pinLocation does and doesnt successfully get coordinates
+Fix / restyle <Post> page
+						  <Macros> page 
+							<ManageConnections>
+							<userProfile> for other users
+
+
+@1205 pin location functionality works - opening the inputs adds it automatically if 
+permissions are enabled.
+Writing to the inputs completely overrides the numbers already there tho...
+
+### 01. 19. 2026
+@0705 pinLocation state seems to serve as a 'checker' for the actual location data
+that gets submitted...
+
+One is the coordinate info that gets populated if location persmissons are up
+The other is what a user would need to enter manually
+
+locationPermissionData,
+and
+locationData
+for renaming...
+
+***the plan***
+for selectionModal, if in 'location mode', automatically get locationData on open
+populate locationPermissionData
+
+locationData get's LPD data is location permission is allowed. if it isn't - add
+error message notifying and how to fix
+
+### 01. 13. 2026
+@0333 Implemeneted the suggestion concerning adding 'US' for the states
+Would like to have localFilteredSuggestions cleared for when <selectionModal> is
+	in location mode, but a win is a win...
+
+To Do...
+* Limit ul size within SelectionModal...
+	for Tags N topics, have user's tags at the top of the list
+	***ALSO*** add 'create new tag' button for modal when it's tags
+* connect optionsButton for 'post' and 'drafts' to work....
+	- for drafts, button will save post to drafts then go to drafts list
+	  if post details are filled in. Otherwise, it just goes to drafts
+
+### 01. 05. 2026
+@0440 Need to figure out solution for selecting location in location mode
+also, should probably modify USA search results,
+so 'city, state(US)' add '(US)' to state part...
+
+@0333 menuButton not switching for <Map> and <Cal>
+
+### 01. 04. 2026
+@0910 Limit ul size within SelectionModal...
+for Tags N topics, have user's tags at the top of the list
+***ALSO*** add 'create new tag' button for modal when it's tags
+
+flow:
+button closes selectionModal, opens newTags modal
+	saving tag:
+	closes newTags modal, reopens selectionModal. New tag should be at top 
+
+### 01. 02. 2026
+@0330 Tag user's modal functional. Needs to be styled.
+Need to test with Tags n Topics,
+then reintegrate locations.
+may add location data into the selectionModal component directly
+
+* add <datePicker> to <CreatePost> also
+
+@0455 
+HAPPY NEW YEARS & HAPPY INDEPENDANCE DAY 
+
+Clicking on the 'tag users' button prompts the modal now,
+but there are issues....
+
+### 12. 08. 2025
+@1040 Gotta add css and functionality to selection modal in CreatePost.
+gotta test with users, tags n topics and locations :D
+Then,
+weworking posting and drafting.
+We can clean up the <Post> page and <Macros> 
+and the <ManageConnections> needs to be reAdded (._.)_
+Then, <userProfile> for other users
+AND THEN
+maybe, we can rework <instants> T-T
+
+
+### 12. 02. 2025
+@0815 For tagging users, make new array of objects containing entire user value from
+the fetch request + selected: true: {...user, selected: true}
+
+### 11. 30. 2025
+@1420 Back button at top and Privacy Toggle now working
+
+### 11. 27. 2025
+@0610 ImageAdd is now functional. Only need to select image once now :D
+However, same image cannot be readded in same place after removal....
+
 ### 11. 18. 2025
 @0420 Add text button working
-
 
 ### 11. 14. 2025
 @1705 Added open and close animations to <CreatePost>

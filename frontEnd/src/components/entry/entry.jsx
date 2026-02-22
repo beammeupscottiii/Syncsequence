@@ -893,6 +893,10 @@ export default function Entry({useAuth, setUserID, userDocumentSettings, setUser
 							initialChoiceElement.style.display = 'none';
 						}, 550)
 					}}>Log In</button>
+
+					<button id="about" onClick={(e)=> {
+						e.preventDefault()
+					}}>About</button>
 				</div>
 			}
 			

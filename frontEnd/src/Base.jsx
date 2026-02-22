@@ -153,10 +153,6 @@ function Home({
     document.title = 'Syncseq.xyz/home'
   }, [])
 
-  React.useEffect(()=> {
-    updateLog()
-  }, [current.modal, current.customizer])
-
   /*
       09. 19. 2025
       section refs should also be within UIC
@@ -168,7 +164,11 @@ function Home({
   let profileRef = React.useRef();
   let settingsRef = React.useRef();
   const [createPostToggle, setCreatePostToggle] = React.useReducer(state => !state, false);
+  const [draftsList, setDraftsList] = React.useReducer(state => !state, false);
 
+    React.useEffect(()=> {
+      updateLog()
+    }, [createPostToggle, current.customizer])
 
   /* 
     09. 20. 2025
@@ -198,6 +198,11 @@ function Home({
     }
   }
 
+
+
+  // For Prompting Post and Draft Submission in <CreatePost>
+  const triggerSubmitRef = React.useRef(null);
+  const triggerDraftRef = React.useRef(null);
 
   return (
     <section id="BASE" ref={el} className={`${enter == true ? '_enter' : ''}`}>  
@@ -331,7 +336,17 @@ function Home({
                       selectedDate={selectedDate}
                       createPostToggle={createPostToggle}
                       setCreatePostToggle={setCreatePostToggle} 
-                      sectionClass={sectionClass}/>
+                      sectionClass={sectionClass}
+                      setSectionClass={setSectionClass}
+                      setCreatePostToggle={setCreatePostToggle}
+                      // triggerSubmit={triggerSubmit}
+                      // setTriggerSubmit={setTriggerSubmit}
+                      // triggerDraftRef={triggerDraftRef}
+                      // setTriggerDraftRef={setTriggerDraftRef}
+                      triggerSubmitRef={triggerSubmitRef}
+                      triggerDraftRef={triggerDraftRef}
+                      draftsList={draftsList}
+                      setDraftsList={setDraftsList}/>
         }
 
         {(!current.map &&( current.modal && current.section == 'macros')) &&
@@ -355,6 +370,11 @@ function Home({
 
             createPostToggle={createPostToggle}
             setCreatePostToggle={setCreatePostToggle}
+
+            triggerSubmitRef={triggerSubmitRef}
+            triggerDraftRef={triggerDraftRef}
+            draftsList={draftsList}
+            setDraftsList={setDraftsList}
         />
 
 
@@ -470,7 +490,7 @@ export default function Main() {
    */
   React.useEffect(()=> {
     if(authed == true) {
-      setSocketURL(`ws://172.30.32.142:3333/?${userID}`);
+      setSocketURL(`ws://172.21.160.52:3333/?${userID}`);
       getUnreadCount();
     }
   }, [authed])

@@ -48,10 +48,15 @@ div#createPostt form fieldset {
 	margin: 0;
 }
 
+div#createPostt form fieldset div#contentWrapper {
+	position: relative;
+	width: 95%;
+}
+
 div#createPostt form fieldset input,
 div#createPostt form fieldset textarea {
 
-	width: 95%;
+	width: 100%;
 	display: block;
 	margin: 16px auto;
 	border: 2px solid var(--greyscale-elements);
@@ -68,6 +73,7 @@ div#createPostt form fieldset textarea {
 }
 
 div#createPostt form fieldset div#titleWrapper {
+	width: 95%;
 	position: relative;
 }
 
@@ -77,7 +83,7 @@ div#createPostt form fieldset div#titleWrapper button {
 	font-size: 1.15em;
 
 	position: absolute;
-	right: -2px;
+	right: -20px;
 	top: -16px;
 
 	background-color: white;
@@ -85,10 +91,25 @@ div#createPostt form fieldset div#titleWrapper button {
 	padding: 6px 12px 6px 12px;
 }
 
-div#createPostt form fieldset input#title {
+div#createPostt form fieldset div#titleWrapper input#title {
 	font-size: 1.15em;
 	padding: 16px 8px;
 }
+
+
+	div#createPostt form fieldset div.textAreaWrapper {}
+
+	div#createPostt form fieldset div.mediaWrapper {
+		margin: 16px auto -16px;
+		padding: 12px 8px;
+		width: 100%;
+	}
+		div#createPostt form fieldset div.mediaWrapper img {
+			width: 100%;
+			border-radius: 8px;
+			margin-bottom: 16px;
+		}
+
 
 
 div#createPostt form fieldset button.remove {
@@ -117,3 +138,109 @@ div#createPostt ul#optionsWrapper {
 div#createPostt ul#optionsWrapper li {
 	margin: 0 8px;
 }
+
+div#createPostt ul#optionsWrapper li button {}
+
+	svg#privacyToggle.active g g path.a {
+		fill: black;
+	}
+
+	svg#privacyToggle.active g line {
+		stroke: black;
+	}
+
+
+
+
+div#createPostt div#selectionModal_bg {}
+
+div#createPostt div#selectionModal_wr {}
+
+div#createPostt div#selectionModal_wr h2 {}
+
+
+/* Full-screen background overlay */
+div#selectionModal_bg {
+  position: fixed; /* Sits on top of everything */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent black */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top */
+}
+
+/* The modal window itself */
+div#selectionModal_wr {
+  background-color: #fff;
+  border-radius: 8px; /* Rounded corners */
+  padding: 24px 12px;
+  width: 85%; /* Responsive width */
+  max-width: 400px; /* Maximum width */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border: 2px solid var(--greyscale-elements);
+  position: relative; /* For positioning the close button */
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+}
+
+/* Title */
+div#selectionModal_wr h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--greyscale-text);
+  text-align: left
+}
+
+
+div#selectionModal_wr ul.options {
+	list-style-type: none;
+	max-height: 300px;
+	overflow-y: scroll;
+}
+
+div#selectionModal_wr ul.selected {
+	list-style-type: none;
+}
+
+
+button.close-button {
+  position: relative;
+  bottom: -80px;
+  right: -90%;
+  background: none;
+  border: none;
+  color: var(--greyscale-text);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+
+  width: fit-content;
+  height: fit-content;
+  border: 2px solid var(--greyscale-accent);
+  border-radius: 24px;
+}
+
+div#selectionModal_wr button#pinLocation {
+    text-align: left;
+    margin: 8px 0;
+    margin-bottom: 28px;
+    display: block;
+}
+
+	button#pinLocation.nonActive {
+		text-align: left;
+	    margin: 8px 0;
+	    margin-bottom: 28px;
+	    display: block;
+	}
+
+
+div#selectionModal_wr div#coordinatesWrapper {}

@@ -1413,28 +1413,76 @@ app.post('/settings', verify, upload.any(), async(req, res)=> {
             const apiKey = process.env.GCS_PLACES_API_KEY;
             const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&key=${apiKey}&types=(regions)`;
 
-            const response = await fetch(url);
-            const data = await response.json();
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
 
-            const filtered = data.predictions.map(place => {
-                const placeParts = place.description.split(','); // Split "New York, NY, USA"
-                const cleanedName = placeParts.length > 2
-                  ? `${placeParts[0]}, ${placeParts[placeParts.length - 1]}` // Keep city & country only
-                  : place.description; // If no state abbreviation, keep as-is
-
-                return {
-                    description: cleanedName.trim(),
-                    place_id: place.place_id
+                if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
+                    return res.status(500).json({ error: 'Google API error', details: data });
                 }
-            })
+
+                const filtered = (data.predictions || []).map(place => {
+                    const terms = place.terms; // Array of { value: "Name" }
+                    const numTerms = terms.length;
+                    const lastTerm = terms[numTerms - 1].value;
+                    
+                    let cleanedName = '';
+
+                    // 1. If it's just a country (e.g., "France")
+                    if (numTerms === 1) {
+                        cleanedName = terms[0].value;
+                    } 
+                    // 2. If it's in the US (last term is usually "USA" or "United States")
+                    else if (lastTerm === 'USA' || lastTerm === 'United States') {
+                        const city = terms[0].value;
+                        const state = terms[1] ? terms[1].value : '';
+                        
+                        // Format: [City], [State] (US)
+                        cleanedName = state ? `${city}, ${state} (US)` : `${city} (US)`;
+                    } 
+                    // 3. Anywhere else (International City)
+                    else {
+                        const city = terms[0].value;
+                        const country = terms[numTerms - 1].value;
+                        
+                        // Format: [City], [Country]
+                        cleanedName = `${city}, ${country}`;
+                    }
+
+                    return {
+                        name: cleanedName.trim(),
+                        place_id: place.place_id
+                    };
+                });
+
+                res.status(200).send(filtered);
+
+            } catch (error) {
+                res.status(500).json({ error: 'Server error', message: error.message });
+            }
+
+            // const response = await fetch(url);
+            // const data = await response.json();
+
+            // const filtered = data.predictions.map(place => {
+            //     const placeParts = place.description.split(','); // Split "New York, NY, USA"
+            //     const cleanedName = placeParts.length > 2
+            //       ? `${placeParts[0]}, ${placeParts[placeParts.length - 1]}` // Keep city & country only
+            //       : place.description; // If no state abbreviation, keep as-is
+
+            //     return {
+            //         description: cleanedName.trim(),
+            //         place_id: place.place_id
+            //     }
+            // })
 
                 
 
-            if (data.status !== 'OK') {
-                return res.status(500).json({ error: 'Google API error', details: data });
-            }
+            // if (data.status !== 'OK') {
+            //     return res.status(500).json({ error: 'Google API error', details: data });
+            // }
 
-            res.status(200).send(filtered);
+            // res.status(200).send(filtered);
         }
 
         else if(req.body.option == 'pinnedPosts') {

@@ -321,7 +321,7 @@ export function CreatePost({
 	setSocketMessage, 
 	selectedDate,
 	createPostToggle,
-	setCreatePostToggle
+	setCreatePostToggle,
 }) {
 
 	const userID = sessionStorage.getItem('userID');
@@ -370,37 +370,7 @@ export function CreatePost({
 				}		
 			])	
 		} 
-		// else if(event.target.name == 'content') {
-
-		// 	let copy;
-		// 	for(let i = 0; i < postContent.length; i++) {
-		// 		if(postContent[i].index == event.target.dataset.index) {
-		// 			copy = true;
-		// 		}
-		// 	}
-
-		// 	 if (copy == true) {
-		// 		if(postContent.length == 1) {
-		// 			setPostContent([
-		// 				{ 
-		// 					content: event.target.value,
-		// 					type: "text", 
-		// 					index: event.target.dataset.index 
-		// 				}		
-		// 			])
-		// 		} else {
-		// 			let _postContent = JSON.parse(JSON.stringify(postContent));
-		// 			_postContent.pop();
-		// 			setPostContent([
-		// 				..._postContent,
-		// 				{
-		// 					content: event.target.value,
-		// 					type: "text", 
-		// 					index: event.target.dataset.index
-		// 				}
-		// 			])
-		// 		}
-		// 	} 
+		
 		//chatGPT recommended update
 		else if (event.target.name == 'content') {
 		  let existingItem = postContent.find(item => item.index == event.target.dataset.index);
@@ -776,7 +746,7 @@ export function CreatePost({
 		setDrafts(request);
 	}
 	
-
+	
 	const [enter, setEnter] = React.useReducer(state => !state, true);
 	const [modal, setModal] = React.useReducer(state => !state, false);
 	const [isPrivate_2, setIsPrivate_2] = React.useReducer(state => !state, false);

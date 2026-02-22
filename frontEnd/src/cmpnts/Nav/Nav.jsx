@@ -95,12 +95,8 @@ export function Navmenu({
 
 			get element with id equal to current.section
 			change it's class
-			use animationend to switch current.section to name to button name 
-		*/
-
-		/*
-			current active section needs classChange to 'leave'
-			at animationend, change current.section to selected section
+			use animationend eventlistener to switch current.section to 
+			name to button name 
 		*/
 		let sectionToChange = current.section;
 		setSectionClass({

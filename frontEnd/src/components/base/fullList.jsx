@@ -130,7 +130,6 @@ export default function FullList({
 			}
 		}
 
-
 		else if(event.target.name == 'remove') {
 			if(selection.length == 0) {
 				setSocketMessage({
@@ -274,6 +273,7 @@ export default function FullList({
 		// document.getElementsByName('lon')[0].value = post.location.lon;
 		// document.getElementsByName('lat')[0].value = post.location.lat;
 
+		//change this implementation
 		let fullList = document.getElementById('FullList');
 		fullList.classList.add('leave')
 

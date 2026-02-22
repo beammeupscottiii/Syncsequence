@@ -84,54 +84,6 @@ let addImage =
   </g>
 </svg>
 
-let privacyToggle =
-<svg 
-  xmlns="http://www.w3.org/2000/svg" 
-  width="29.455" 
-  height="24.899" 
-  viewBox="0 0 29.455 24.899">
-  <g 
-    id="Group_566" 
-    data-name="Group 566" 
-    transform="translate(-4609.355 -603.878)">
-    <g 
-      id="Path_8" 
-      data-name="Path 8" 
-      transform="translate(4612 606.95)" 
-      fill="none">
-      <path 
-        d="M12.05,0c7.076,0,14.76,8.49,14.76,9.466s-7.684,9.287-14.76,9.287S-2.645,11.511-2.645,9.466,4.974,0,12.05,0Z" 
-        stroke="none"/>
-      <path 
-        d="M 12.0501594543457 1.999996185302734 C 8.684169769287109 1.999996185302734 5.358940124511719 4.036735534667969 3.676389694213867 5.250805854797363 C 2.509799957275391 6.092576026916504 1.402379989624023 7.065005302429199 0.5581092834472656 7.988955497741699 C -0.07658958435058594 8.683549880981445 -0.4126834869384766 9.184514999389648 -0.5662364959716797 9.462612152099609 C -0.4120731353759766 9.736064910888672 -0.07626724243164062 10.22669982910156 0.5551395416259766 10.90390586853027 C 1.397468566894531 11.80733585357666 2.503580093383789 12.7577953338623 3.669719696044922 13.58019542694092 C 5.350118637084961 14.76528549194336 8.673379898071289 16.75339508056641 12.0501594543457 16.75339508056641 C 14.40024948120117 16.75339508056641 17.33581924438477 15.53045558929443 20.31610870361328 13.30986595153809 C 22.28052711486816 11.84619331359863 23.7551441192627 10.32939338684082 24.47718620300293 9.457530975341797 C 23.75682258605957 8.569526672363281 22.27989196777344 7.018864631652832 20.30921936035156 5.519125938415527 C 17.3272590637207 3.249775886535645 14.39413928985596 1.999996185302734 12.0501594543457 1.999996185302734 M 12.0501594543457 -3.814697265625e-06 C 19.1262092590332 -3.814697265625e-06 26.81019020080566 8.490435600280762 26.81019020080566 9.466375350952148 C 26.81019020080566 10.44230556488037 19.1262092590332 18.75339508056641 12.0501594543457 18.75339508056641 C 4.974109649658203 18.75339508056641 -2.64453125 11.5106954574585 -2.64453125 9.466375350952148 C -2.64453125 7.422045707702637 4.974109649658203 -3.814697265625e-06 12.0501594543457 -3.814697265625e-06 Z" 
-        stroke="none" 
-        fill="rgba(112,112,112,0.5)"/>
-    </g>
-    <g 
-      id="Path_9" 
-      data-name="Path 9" 
-      transform="translate(4618.583 610.827)" 
-      fill="none">
-      <path 
-        d="M5.5,0A5.5,5.5,0,0,1,11,5.5,5.7,5.7,0,0,1,9.862,8.851,5.347,5.347,0,0,1,5.5,11a5.5,5.5,0,0,1,0-11Z" 
-        stroke="none"/>
-      <path 
-        d="M 5.5 2 C 3.570089817047119 2 2 3.570089817047119 2 5.5 C 2 7.429909706115723 3.570089817047119 9 5.5 9 C 6.771279811859131 9 7.792150020599365 8.343709945678711 8.202680587768555 7.733940124511719 L 8.217010498046875 7.712940216064453 C 8.758520126342773 6.930280208587646 9 6.247789859771729 9 5.5 C 9 3.570089817047119 7.429909706115723 2 5.5 2 M 5.5 0 C 8.537569999694824 0 11 2.462430000305176 11 5.5 C 11 6.648200035095215 10.64815998077393 7.71422004699707 9.861720085144043 8.850890159606934 C 9.056220054626465 10.04732036590576 7.389369964599609 11 5.5 11 C 2.462430000305176 11 0 8.537569999694824 0 5.5 C 0 2.462430000305176 2.462430000305176 0 5.5 0 Z" 
-        stroke="none" 
-        fill="rgba(112,112,112,0.5)"/>
-    </g>
-    <line 
-      id="Line_223" 
-      data-name="Line 223" 
-      y1="23.488" 
-      x2="23.366" 
-      transform="translate(4612.399 604.583)" 
-      fill="none" 
-      stroke="rgba(112,112,112,0.5)" 
-      stroke-width="2"/>
-  </g>
-</svg>
-
 let tagUsers = 
 <svg 
   xmlns="http://www.w3.org/2000/svg" 
@@ -316,14 +268,490 @@ const addLocationData =
 
 
 
+function SelectionModal({ title, data, setData, modal, setModal }) {
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [apiResults, setApiResults] = React.useState([]);
+  const [loadingResults, setLoadingResults] = React.useState(false);
 
-export default function CreatePostt({
+  // 1. Determine if data is an array or a single object
+  const isLocationMode = title == 'Location';
+  const dataIsArray = Array.isArray(data);
+
+  const localFilteredOptions = React.useMemo(() => {
+	  if (!dataIsArray || !searchQuery) return [{name: data.name}] || [];
+
+	  const lowerCaseQuery = searchQuery.toLowerCase();
+	  return data.filter(item => {
+	    const matchesUsername = item.username?.toLowerCase().includes(lowerCaseQuery);
+	    const primaryName = item.name || item.fullname;
+	    const matchesName = primaryName?.toLowerCase().includes(lowerCaseQuery);
+	    return matchesUsername || matchesName;
+	  });
+  }, [data, searchQuery, dataIsArray]);
+
+  React.useEffect(() => {
+	  // Only run this if we are NOT in array mode
+	  if (dataIsArray) return;
+
+	  if (!searchQuery.trim()) {
+	    // If empty, show current location as the only option
+	    setApiResults(data ? [{ ...data }] : []);
+	    return;
+	  }
+
+	  const fetchLocations = async () => {
+	    setLoadingResults(true);
+	    try {
+	      const response = await accessAPI.userSettings({
+	        option: 'searchLocation',
+	        query: searchQuery
+	      });
+	      setApiResults(response || []);
+	    } catch (err) {
+	      console.error('Error fetching suggestions:', err);
+	      setApiResults([]);
+	    } finally {
+	      setLoadingResults(false);
+	    }
+	  };
+
+	  const debounce = setTimeout(fetchLocations, 400); // Wait 400ms after user stops typing
+	  return () => clearTimeout(debounce);
+  }, [searchQuery, dataIsArray, data]);
+
+  // 4. The Final List for the JSX
+  const filteredOptions = dataIsArray ? localFilteredOptions : apiResults;
+
+
+  //for placing selected options within it's state
+  const selectedOptions = React.useMemo(() => {
+  	if(dataIsArray) {
+  		return data.filter(item => item.selected);
+  	}
+  	else return [{name: data.name}]
+  }, [data]);
+
+  // Fix: Use 'id' instead of 'name' for more reliable matching
+  const toggleSelection = async (clickedOption) => {
+	  if(dataIsArray) {
+	  	// 1. Identify what we are looking for (Username takes priority, then Name)
+		  const targetValue = clickedOption.userName || clickedOption.name;
+
+		  // 2. Prevent execution if both are missing (safety check)
+		  if (!targetValue) return;
+
+		  setData(prevData =>
+		    prevData.map(item => {
+		      // 3. Check if this specific item's username or name matches our target
+		      const itemValue = item.userName || item.name;
+		      
+		      return itemValue === targetValue 
+		        ? { ...item, selected: !item.selected } 
+		        : item;
+		    })
+		  );
+	  }
+	  else {
+	  	setData({
+	  		...data,
+	  		name: clickedOption.name
+	  	})
+	  }
+  };
+
+  //for controlled inputs
+  const [manualCoordinates, setManualCoordinates] = React.useState({
+  	lat: '',
+  	lon: ''
+  })
+
+  const coordinatesOnChange = (e) => {
+		if(e.target.name == 'lon') {
+
+			const val = e.target.value;
+			if (/^-?\d*\.?\d*$/.test(val)) {
+				setManualCoordinates({
+					...manualCoordinates,
+					lon: e.target.value
+				})
+			}
+		}
+		else if(e.target.name == 'lat') {
+
+			const val = e.target.value;
+			if (/^-?\d*\.?\d*$/.test(val)) {
+				setManualCoordinates({
+					...manualCoordinates,
+					lat: e.target.value
+				})
+			}
+		}
+  }
+
+  //Auto sync controlled inputs with setData
+  React.useEffect(()=> {
+
+  	if(!isLocationMode || !setData.open) return;
+
+  	if(manualCoordinates.lat !== '' && manualCoordinates.lon !== '') {
+  		setData({
+  			...data,
+  			lon: manualCoordinates.lon,
+  			lat: manualCoordinates.lat
+  		})
+  	} else {
+  		setData({
+  			...data,
+  			lon: '',
+  			lat: ''
+  		})
+  	}
+  }, [manualCoordinates, setData, isLocationMode])
+
+
+  //Necessary shtuff for getting geolocation
+  const getGeoInfo_options = {
+		enableHighAccuracy: true,
+		timeout: 5000,
+		maximumAge: 0
+  };
+  const getGeoInfo_success = (pos) => {
+
+  		console.log(pos.coords.longitude.toFixed(6))
+  		console.log(pos.coords.latitude.toFixed(6))
+
+		setManualCoordinates({
+			lon: pos.coords.longitude.toFixed(6),
+			lat: pos.coords.latitude.toFixed(6)
+		})
+		console.log('Location data saved within state')
+  }
+  const getGeoInfo_error = (err) => {
+	 console.log(`Error (${err.code}): ${err.message}`)
+  }
+
+
+  //Get coordinates when button is toggled
+  React.useEffect(()=> {
+		if(manualCoordinates.lon) {
+			return;
+		}
+
+		if(isLocationMode) {
+			if(navigator.geolocation) {
+				navigator.permissions.query({name: "geolocation"}).then((result)=> {
+					console.log(result);
+
+					if(result.state == "granted") {
+						navigator.geolocation.getCurrentPosition(getGeoInfo_success, getGeoInfo_error, getGeoInfo_options)
+					}
+					else if(result.state == "prompt") {
+						navigator.geolocation.getCurrentPosition(getGeoInfo_success, getGeoInfo_error, getGeoInfo_options)
+					}
+					else if(result.state == "denied") {
+						//can utilize the popUpNotif to instruct user on how to activate location permissions
+						// setLocationData({
+						// 	lon: undefined,
+						// 	lat: undefined
+						// })
+						setManualCoordinates({
+							lon: undefined,
+							lat: undefined
+						})
+					}
+				})
+			}
+		}
+		else {
+			console.log("geolocation permissions not active")
+		}
+  }, []) //fires automatically if in location mode
+
+
+
+  return (
+    <div id="selectionModal_bg">
+      <div id="selectionModal_wr">
+        <h2>{title}</h2>
+
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-input"
+        />
+
+        {/* --- List of ALL Options --- */}
+        <ul className="options">
+          
+          {filteredOptions.map((option) => (
+            /* ✅ Added implicit return using parentheses ( ) instead of { } */
+            <li
+              key={option.id}
+              onClick={() => toggleSelection(option)}
+              className={`option ${option.selected ? 'selected' : ''}`}
+            >
+              <p>{(option.name || option.userName) || option.description}</p>
+              {option.username && option.fullname && (
+                <span> ({option.fullName})</span>
+              )}
+            </li>
+          ))}
+        </ul>
+
+        {/* --- List of SELECTED Options --- */}
+        <ul className="selected">
+          {selectedOptions.length > 0 &&
+          	selectedOptions.map((option) => (
+            <li key={option.id} onClick={() => toggleSelection(option)}>
+              {option.userName || option.name}
+            </li>
+          ))}
+        </ul>
+
+         <button onClick={() => setModal(false)} className="close-button">
+	        &#10005;
+	      </button>
+      </div>
+
+      {isLocationMode &&
+      	<button id="pinLocation"
+			className={`buttonDefault ${data.open == true ? 'active' : 'nonActive'}`}
+			onClick={(e)=> {
+				e.preventDefault(); 
+				if(data.open == false) {
+					setData({
+						...data,
+						open: true
+					})
+				} else {
+					setData({
+						...data,
+						open: false
+					})
+				}
+			}}>
+			Pin Location
+		</button>
+      }
+      {data.open &&
+		<div id="coordinatesWrapper">
+			
+			<div id="lonWrap" className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>
+				<p className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>LON</p>
+				<input type="text"
+						inputMode="decimal"
+						name="lon"
+						onChange={coordinatesOnChange}
+						placeholder={manualCoordinates.lon}/>
+			</div>
+			<div id="latWrap" className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>
+				<p className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>LAT</p>
+				<input type="text"
+						inputMode="decimal"
+						name="lat"
+						onChange={coordinatesOnChange}
+						placeholder={manualCoordinates.lat}/>
+			</div>
+		</div>
+	}	
+     
+    </div>
+  )
+}
+
+function DraftPage({
+  dataList,
+  setDataList,
+  draftsList,
+  setDraftsList,
+  postContent,
+  setPostContent,
+  tagged,
+  setTagged,
+  suggestions,
+  setSuggestions,
+  setPrivate,
+  setPinLocation,
+}) {
+
+	// const [dataList, setDataList] = React.useState([]);
+	const [selection, setSelection] = React.useState([]);
+	const el = React.useRef();
+	// let dataList = dataList;
+
+	const updateDrafts = async() => {
+		let update = await accessAPI.getDrafts();
+		setDataList(update);
+	}
+
+	const deleteDraft = async(draftID) => {
+		let request = await accessAPI.deletePost(draftID);
+		if(request) {
+			updateDrafts();
+		}
+	}
+
+	const setAsPost = (postID) => {
+		let post = dataList.find(post => post._id == postID);
+		console.log(post);
+		
+		let updatedDrafts = dataList.map(original => {
+			if(original._id == post._id) {
+				return {
+					...original,
+					selected: true
+				}
+			}
+			else return original	
+		})
+		setDataList(updatedDrafts);
+
+		/* Setting Post Content */
+		let title = document.getElementById('title');
+		title.value = post.title;
+
+		if(post.content.length > 0) {
+			post.content.forEach((piece, index) => {
+				if(index == 0) {
+					setPostContent([
+						{
+							content: piece.content,
+							type: piece.type,
+							index: piece.place
+						}
+					])
+				}
+				else {
+					setPostContent([
+						...postContent,
+						{
+							content: piece.content,
+							type: piece.type,
+							index: piece.place	
+						}
+					])
+				}
+			})
+		}
+
+		let updatedTagged = tagged.map(user1 => {
+			let user2 = post.taggedUsers.find(user => user._id == user1._id);
+			if(user2) {
+				return { ...user1, selected: true};
+			}
+			else return user1;
+		});
+		setTagged(updatedTagged);
+		// console.log(updatedTagged);
+
+		let updatedSuggestions = suggestions.map(tag1 => {
+			let tag2 = post.tags.find(tag => tag.name == tag1.name);
+			if(tag2) {
+				return { ...tag1, selected: true};
+			}
+			else return tag1;
+		});
+		setSuggestions(updatedSuggestions);
+		// console.log(updatedSuggestions); 
+
+		if(post.isPrivate == true) {
+			setPrivate();
+		}
+
+		if(post.location) {	
+			setPinLocation({
+				open: true,
+				lon: post.location.lon, 
+				lat: post.location.lat,
+				name: post.location.name ? post.location.name : null
+			});
+		}
+
+		el.current.classList.add('leave');
+
+		let second = setTimeout(()=> {
+			setDraftsList();	
+		}, 500)
+	}
+
+	//Enter animation
+	React.useEffect(()=> {
+		let elCurrent = el.current;
+		let delay = setTimeout(()=> {
+			elCurrent.classList.remove('_enter');	
+		}, 200)
+	}, [])
+
+	return (
+		<div id="draftsList" ref={el}>
+			
+			<h2 id="title">
+				Drafts
+			</h2>
+
+			<ul id="dataList">
+				{dataList.map((entry) => (
+
+					<li key={entry._id} className={`view`} onClick={(e)=> {
+							e.preventDefault()
+							setAsPost(entry._id);
+					}}>	
+						{entry.title &&
+							<h3>{entry.title}</h3>
+						}
+						{entry.content.length > 0 &&
+							<p>{entry.content[0].content}</p>
+						}
+						{entry.images &&
+							<ul className='images'>
+								{entry.images.map(img => (
+									<li>
+										<img src={img}/>
+									</li>
+								))}
+							</ul>
+						}
+						
+						<button className={`buttonDefault`} onClick={(e)=> {
+							e.preventDefault();
+							e.stopPropagation();
+							deleteDraft(entry._id);
+						}}>Delete</button>
+					</li>
+				))}
+			</ul>
+			
+			<div id="exitWrapper">
+				<button className={`buttonDefault`}
+					onClick={(e)=> {
+						e.preventDefault();
+
+						el.current.classList.add('leave');
+
+						let second = setTimeout(()=> {
+							setDraftsList();	
+						}, 500)
+					}}>Exit</button>	
+			</div>
+		</div>
+	)
+}
+
+export default function CreatePostt ({
+	draftsList,
+	setDraftsList,
 	setCurrent, 
 	current, 
 	socketMessage, 
 	setSocketMessage, 
 	selectedDate,
-	sectionClass
+	sectionClass,
+	setSectionClass,
+	setCreatePostToggle,
+	triggerSubmitRef,
+	triggerDraftRef
 }) {
 
 	const userID = sessionStorage.getItem('userID');
@@ -331,9 +759,16 @@ export default function CreatePostt({
 	const privacySetting = sessionStorage.getItem('privacySetting');
 	const [drafts, setDrafts] = React.useState([]);
 	const [formData, setFormData] = React.useState({});
-	const [suggestions, setSuggestions] = React.useState([]);
+	const [tagsNTopics, setTagsNTopics] = React.useState([]);
 	const [tagged, setTagged] = React.useState([]); //user's connections
 	const [isPrivate, setPrivate] = React.useReducer(state => !state, false);
+	const [locationData, setLocationData] = React.useState({ 
+		//values are null until user initially selects pinLocation 
+		lon: undefined, //40.6569 
+		lat: undefined, //-73.9605
+		name: '',
+		open: false
+	});
 	const [postContent, setPostContent] = React.useState([
 		{
 			content: '',
@@ -398,8 +833,11 @@ export default function CreatePostt({
 		}
 	}
 
-	const handleSubmit = async(event) => {
-		event.preventDefault();
+	const handleSubmit = React.useCallback(async(event) => {
+
+		console.log('recieved');
+
+		if (event && event.preventDefault) event.preventDefault();
 		console.log(postContent);
 		let title = document.getElementById('title');
 
@@ -412,11 +850,11 @@ export default function CreatePostt({
 		    return content.content instanceof File;
 		  }
 		})) {
-		setSocketMessage({
-		    type: 'error',
-		    message: 'At least a Title, Text, or Media is needed to make a post!'
-		  });
-		  return;  // Stop the form submission if validation fails
+			setSocketMessage({
+			    type: 'error',
+			    message: 'At least a Title, Text, or Media is needed to make a post!'
+			  });
+			  return false;  // Stop the form submission if validation fails
 		}  
 		else {
 			
@@ -447,7 +885,7 @@ export default function CreatePostt({
 				}
 			}
 
-			let tags = suggestions.filter(el => el.selected == true).map(el => el.name);
+			let tags = tagsNTopics.filter(el => el.selected == true).map(el => el.name);
 			if(tags.length > 0) {
 				submission.append('tags', tags);	
 			} 
@@ -472,9 +910,9 @@ export default function CreatePostt({
 				submission.append('usePostedByDate', true);
 			}
 
-			if(pinLocation.open) {
-				submission.append('geoLon', pinLocation.lon);
-				submission.append('geoLat', pinLocation.lat);
+			if(locationData.lon) {
+				submission.append('geoLon', locationData.lon);
+				submission.append('geoLat', locationData.lat);
 			}	
 			console.log(submission);
 			console.log(tags);
@@ -483,27 +921,34 @@ export default function CreatePostt({
 
 			if(submit.confirm == true) {
 				console.log("Post submission successful");
-				element.classList.remove('_enter');
-				element.classList.add('_fade');
-				let delay = setTimeout(()=> {
-					setCurrent({
-						...current,
-						modal: false
-					})
-				}, 300)
+				// element.classList.remove('_enter');
+				// element.classList.add('_fade');
+				// let delay = setTimeout(()=> {
+				// 	setCurrent({
+				// 		...current,
+				// 		modal: false
+				// 	})
+				// }, 300)
 
 				let utilizedDraft = drafts.find(post => post.selected == true);
 				if(utilizedDraft) {
 					await accessAPI.deleteDraft(utilizedDraft._id)	
 				}
+
+				setSocketMessage({
+					confirm: 'postUpload'
+				})
 				
+				return true;
+
 			} else if(submit.message) {
-					element.classList.remove('_loading');
-					console.log('Issue with post submission');
-					setSocketMessage({
-						type: 'error',
-						message: submit.message
-					})
+				element.classList.remove('_loading');
+				console.log('Issue with post submission');
+				setSocketMessage({
+					type: 'error',
+					message: submit.message
+				})
+				return false;
 			}
 
 			/**
@@ -525,114 +970,103 @@ export default function CreatePostt({
 					postTitle: title.value
 				})
 
-			} else {
-				setSocketMessage({
-					confirm: 'postUpload'
-				})
 			}
 		}
-	}
+	}, [postContent, locationData, tagsNTopics])
 
-	const draftPost = async(event) => {
+	const draftPost = async(event = null) => {
+		if (event && event.preventDefault) event.preventDefault();
 
-			event.preventDefault();
-			console.log(postContent);
+		let title = document.getElementById('title');
+		if (!title.value.trim() || !postContent.some(content => {
+		  if (content.type === 'text') {
+		    // Only apply trim to text content
+		    return typeof content.content === 'string' && content.content.trim() !== '';
+		  } else if (content.type === 'media') {
+		    // Check if media content is a valid File object
+		    return content.content instanceof File;
+		  }
+		})) {
+			setDraftsList();
+			console.log('true');
+			return true;
+		}
+		else {
 
-			if(!formData.title) {
-					setSocketMessage({
-						type: 'error',
-						message: 'Atleast a Title, Text or Media is needed to make a post!'
-					})
-			} else if (postContent.length < 1) {
-				setSocketMessage({
-						type: 'error',
-						message: 'Atleast a Title, Text or Media is needed to make a post!'
-					})
-			}
-			else {
-				element.classList.add('_loading');
-				let submission = new FormData();
+			element.classList.add('_loading');
+			let submission = new FormData();
 
-				submission.append('type', 'draft');
-				submission.append('title', formData.title);
-				submission.append('isPrivate', isPrivate);
-				submission.append('privacyTogglable', sessionStorage.getItem('privacySetting'));
-				submission.append('profilePhoto', sessionStorage.getItem('profilePhoto'));
+			submission.append('type', 'draft');
+			submission.append('title', formData.title);
+			submission.append('isPrivate', isPrivate);
+			submission.append('privacyTogglable', sessionStorage.getItem('privacySetting'));
+			submission.append('profilePhoto', sessionStorage.getItem('profilePhoto'));
 
-				for(let i=0; i < postContent.length; i++){
-					if(postContent[i].type == 'text') {
-						if(postContent[i].content === '') {
-							return null;
-						} else {
-							let content = postContent[i].content;
-							submission.append(`${postContent[i].index}`, content)
-						}
-						
-					} else if(postContent[i].type == 'image') {
+			for(let i=0; i < postContent.length; i++){
+				if(postContent[i].type == 'text') {
+					if(postContent[i].content === '') {
+						return null;
+					} else {
 						let content = postContent[i].content;
 						submission.append(`${postContent[i].index}`, content)
 					}
-				}
-
-				let tags = suggestions.filter(el => el.selected == true).map(el => el.name);
-				if(tags.length > 0) {
-					submission.append('tags', tags);	
-				} 
-				
-				let taggedUsers = tagged.filter(user => user.selected == true).map(user => {
-					return {
-						_id: user._id, 
-						username: user.userName
-					}
-				});
-				if(taggedUsers.length > 0) {
-					submission.append('taggedUsers', JSON.stringify(taggedUsers));
-				}
-				console.log(taggedUsers);
-
-				if(selectedDate.day != null) {
-					submission.append('usePostedByDate', false);
-					submission.append('postedOn_month', selectedDate.month);
-					submission.append('postedOn_day', selectedDate.day);
-					submission.append('postedOn_year', selectedDate.year);
-				} else {
-					submission.append('usePostedByDate', true);
-				}
-
-				if(pinLocation.open) {
-					submission.append('geoLon', pinLocation.lon);
-					submission.append('geoLat', pinLocation.lat);
-				}	
-				console.log(submission);
-				console.log(tags);
-
-				let submit = await accessAPI.createPost(submission);
-
-				if(submit.confirm == true) {
-					console.log(submit);
-					element.classList.remove('_enter');
-					element.classList.add('_fade');
-					let second = setTimeout(()=> {
-						setCurrent({
-							...current,
-							modal: false
-						})
-					}, 300)
-
-					let third = setTimeout(()=> {
-						setSocketMessage({
-							confirm: 'postDrafted'
-						})
-					}, 300)
-				} else if(submit.message) {
-					element.classList.remove('_loading');
-					console.log('Issue with post submission');
-					setSocketMessage({
-						type: 'error',
-						message: submit.message
-					})
+					
+				} else if(postContent[i].type == 'image') {
+					let content = postContent[i].content;
+					submission.append(`${postContent[i].index}`, content)
 				}
 			}
+
+			let tags = tagsNTopics.filter(el => el.selected == true).map(el => el.name);
+			if(tags.length > 0) {
+				submission.append('tags', tags);	
+			} 
+			
+			let taggedUsers = tagged.filter(user => user.selected == true).map(user => {
+				return {
+					_id: user._id, 
+					username: user.userName
+				}
+			});
+			if(taggedUsers.length > 0) {
+				submission.append('taggedUsers', JSON.stringify(taggedUsers));
+			}
+			console.log(taggedUsers);
+
+			if(selectedDate.day != null) {
+				submission.append('usePostedByDate', false);
+				submission.append('postedOn_month', selectedDate.month);
+				submission.append('postedOn_day', selectedDate.day);
+				submission.append('postedOn_year', selectedDate.year);
+			} else {
+				submission.append('usePostedByDate', true);
+			}
+
+			if(locationData.lon) {
+				submission.append('geoLon', locationData.lon);
+				submission.append('geoLat', locationData.lat);
+			}	
+			console.log(submission);
+			console.log(tags);
+
+			let submit = await accessAPI.createPost(submission);
+
+			if(submit.confirm == true) {
+				getDrafts();
+				await setDraftsList();
+				return true;
+			} 
+			else if(submit.message) {
+				element.classList.remove('_loading');
+				console.log('Issue with post submission');
+				
+				setSocketMessage({
+					type: 'error',
+					message: submit.message
+				})
+			}
+		}
+		
 	}
 
 	const newContent = (type) => {
@@ -654,7 +1088,7 @@ export default function CreatePostt({
 		setTagged(request);
 	}
 
-	const getSuggestions = async() => {
+	const gettagsNTopics = async() => {
 
 		let topics = await accessAPI.getSuggestions();
 		let userTags = await accessAPI.getUserTags(); //gets all tags 
@@ -679,7 +1113,7 @@ export default function CreatePostt({
 			results.push(..._userTags);
 		}
 		console.log(results)
-		setSuggestions(results);
+		setTagsNTopics(results);
 	}
 
 	const getDrafts = async() => {
@@ -687,21 +1121,30 @@ export default function CreatePostt({
 		setDrafts(request);
 	}
 
+	React.useLayoutEffect(() => {
+	    // Register Submit Logic
+	    if (triggerSubmitRef) {
+	        triggerSubmitRef.current = handleSubmit;
+	    }
+
+	    // Register Draft Logic
+	    if (triggerDraftRef) {
+	        triggerDraftRef.current = draftPost;
+	    }
+
+	    // Cleanup both on unmount
+	    return () => {
+	        if (triggerSubmitRef) triggerSubmitRef.current = null;
+	        if (triggerDraftRef) triggerDraftRef.current = null;
+	    };
+	}, [triggerSubmitRef, triggerDraftRef, handleSubmit, draftPost]);
+	
+
 	const [enter, setEnter] = React.useReducer(state => !state, true);
 	const [modal, setModal] = React.useReducer(state => !state, false);
 	const [isPrivate_2, setIsPrivate_2] = React.useReducer(state => !state, false);
 	const [newTag_value, setNewTag_value] = React.useState('');
-	const tagModal = React.useRef();
-	const [locationData, setLocationData] = React.useState({ //values are null until user initially selects pinLocation 
-		lon: undefined, //40.6569 
-		lat: undefined //-73.9605
-	}); 
-	const [pinLocation, setPinLocation] = React.useState({
-		open: false,
-		lon: undefined, 
-		lat: undefined
-	});
-	const [draftList, setDraftList] = React.useReducer(state => !state, false);
+	const tagModal = React.useRef(); 
 	const el = React.useRef();
 	const element = el.current;
 
@@ -711,9 +1154,9 @@ export default function CreatePostt({
 	}
 
 	const hajime = new Date(),
-      kyou = hajime.getDate(),
-      kongetsu = hajime.getMonth() + 1,
-      kotoshi = hajime.getFullYear();
+      	  kyou = hajime.getDate(),
+      	  kongetsu = hajime.getMonth() + 1,
+      	  kotoshi = hajime.getFullYear();
 
 	let newTag_onChange = (e) => {
 
@@ -740,95 +1183,12 @@ export default function CreatePostt({
 		*/
 	}
 
-	const onChange = (e) => {
-		if(e.target.name == 'lon') {
-			setPinLocation({
-				...pinLocation,
-				lon: e.target.value
-			})
-		}
-		else if(e.target.name == 'lat') {
-			setPinLocation({
-				...pinLocation,
-				lat: e.target.value
-			})
-		}
-	}
-
-	const getGeoInfo_options = {
-		enableHighAccuracy: true,
-		timeout: 5000,
-		maximumAge: 0
-	};
-
-	const getGeoInfo_success = (pos) => {
-		// setLocationData({
-		// 	lon: pos.longitude,
-		// 	lat: pos.latitude
-		// })
-		setPinLocation({
-			...pinLocation,
-			lon: pos.longitude,
-			lat: pos.latitude
-		})
-		console.log('Location data saved within state')
-	}
-
-	const getGeoInfo_error = (err) => {
-		console.log(`Error (${err.code}): ${err.message}`)
-	}
-
-
-	//for getting user location details upon toggling 'pinLocation'
-	React.useEffect(()=> {
-		if(pinLocation.lon) {
-			return;
-		}
-
-		if(navigator.geolocation) {
-			navigator.permissions.query({name: "geolocation"}).then((result)=> {
-				console.log(result);
-
-				if(result.state == "granted") {
-					navigator.geolocation.getCurrentPosition(getGeoInfo_success, getGeoInfo_error, getGeoInfo_options)
-				}
-				else if(result.state == "prompt") {
-					navigator.geolocation.getCurrentPosition(getGeoInfo_success, getGeoInfo_error, getGeoInfo_options)
-				}
-				else if(result.state == "denied") {
-					//can utilize the popUpNotif to instruct user on how to activate location permissions
-					// setLocationData({
-					// 	lon: undefined,
-					// 	lat: undefined
-					// })
-					setPinLocation({
-						...pinLocation,
-						lon: undefined,
-						lat: undefined
-					})
-				}
-			})
-		}
-		else {
-			console.log("geolocation permissions not active")
-		}
-	}, [pinLocation.open])
-
 	//update main data: connections, topics and tags, drafted posts
 	React.useEffect(()=> {
 		getConnections();
-		getSuggestions();
+		gettagsNTopics();
 		getDrafts();
 	}, []);
-
-	//update tags on new tag creation
-	React.useEffect(()=> {
-
-		if(socketMessage.type == 'confirmation' && socketMessage.message == 'tagAdd') {
-			getSuggestions();
-			setModal();
-		}
-	}, [socketMessage]);
 
 	//Enter animation
 	React.useEffect(()=> {
@@ -845,7 +1205,7 @@ export default function CreatePostt({
 
 		if(type == 'text') {
 				return	(
-					<div >
+					<div className={`textAreaWrapper`}>
 						<textarea 
 							key={index}
 							className={"textareaImageAdd"}
@@ -855,7 +1215,7 @@ export default function CreatePostt({
 							onChange={handleChange}
 							data-index={index}
 							rows="8"
-							cols="30"
+							// cols="30"
 							value={info ? info : undefined}
 						/>
 						{index > 0 &&
@@ -877,7 +1237,7 @@ export default function CreatePostt({
 
 			// let link = images.find(element => element.index == index);
 			return (
-				<div >
+				<div className={`mediaWrapper`}>
 					<img key={index} src={info}/> 
 
 					<button className={`buttonDefault remove`}
@@ -894,11 +1254,105 @@ export default function CreatePostt({
 		}
 	}
 
+
+	//SVG I C O N S
+	let privacyToggle =
+	<svg 
+	  xmlns="http://www.w3.org/2000/svg" 
+	  width="29.455" 
+	  height="24.899" 
+	  viewBox="0 0 29.455 24.899"
+	  id="privacyToggle"
+	  className={`${isPrivate == true ? 'active' : ''}`}
+	  onClick={()=> {
+	  	setPrivate();
+	  }}>
+	  <g 
+	    id="Group_566" 
+	    data-name="Group 566" 
+	    transform="translate(-4609.355 -603.878)">
+	    <g 
+	      id="Path_8" 
+	      data-name="Path 8" 
+	      transform="translate(4612 606.95)" 
+	      fill="none">
+	      <path 
+	        d="M12.05,0c7.076,0,14.76,8.49,14.76,9.466s-7.684,9.287-14.76,9.287S-2.645,11.511-2.645,9.466,4.974,0,12.05,0Z" 
+	        stroke="none"/>
+	      <path 
+	      	className="a"
+	        d="M 12.0501594543457 1.999996185302734 C 8.684169769287109 1.999996185302734 5.358940124511719 4.036735534667969 3.676389694213867 5.250805854797363 C 2.509799957275391 6.092576026916504 1.402379989624023 7.065005302429199 0.5581092834472656 7.988955497741699 C -0.07658958435058594 8.683549880981445 -0.4126834869384766 9.184514999389648 -0.5662364959716797 9.462612152099609 C -0.4120731353759766 9.736064910888672 -0.07626724243164062 10.22669982910156 0.5551395416259766 10.90390586853027 C 1.397468566894531 11.80733585357666 2.503580093383789 12.7577953338623 3.669719696044922 13.58019542694092 C 5.350118637084961 14.76528549194336 8.673379898071289 16.75339508056641 12.0501594543457 16.75339508056641 C 14.40024948120117 16.75339508056641 17.33581924438477 15.53045558929443 20.31610870361328 13.30986595153809 C 22.28052711486816 11.84619331359863 23.7551441192627 10.32939338684082 24.47718620300293 9.457530975341797 C 23.75682258605957 8.569526672363281 22.27989196777344 7.018864631652832 20.30921936035156 5.519125938415527 C 17.3272590637207 3.249775886535645 14.39413928985596 1.999996185302734 12.0501594543457 1.999996185302734 M 12.0501594543457 -3.814697265625e-06 C 19.1262092590332 -3.814697265625e-06 26.81019020080566 8.490435600280762 26.81019020080566 9.466375350952148 C 26.81019020080566 10.44230556488037 19.1262092590332 18.75339508056641 12.0501594543457 18.75339508056641 C 4.974109649658203 18.75339508056641 -2.64453125 11.5106954574585 -2.64453125 9.466375350952148 C -2.64453125 7.422045707702637 4.974109649658203 -3.814697265625e-06 12.0501594543457 -3.814697265625e-06 Z" 
+	        stroke="none" 
+	        fill="rgba(112,112,112,0.5)"/>
+	    </g>
+	    <g 
+	      id="Path_9" 
+	      data-name="Path 9" 
+	      transform="translate(4618.583 610.827)" 
+	      fill="none">
+	      <path 
+	        d="M5.5,0A5.5,5.5,0,0,1,11,5.5,5.7,5.7,0,0,1,9.862,8.851,5.347,5.347,0,0,1,5.5,11a5.5,5.5,0,0,1,0-11Z" 
+	        stroke="none"/>
+	      <path 
+	      	className="a"
+	        d="M 5.5 2 C 3.570089817047119 2 2 3.570089817047119 2 5.5 C 2 7.429909706115723 3.570089817047119 9 5.5 9 C 6.771279811859131 9 7.792150020599365 8.343709945678711 8.202680587768555 7.733940124511719 L 8.217010498046875 7.712940216064453 C 8.758520126342773 6.930280208587646 9 6.247789859771729 9 5.5 C 9 3.570089817047119 7.429909706115723 2 5.5 2 M 5.5 0 C 8.537569999694824 0 11 2.462430000305176 11 5.5 C 11 6.648200035095215 10.64815998077393 7.71422004699707 9.861720085144043 8.850890159606934 C 9.056220054626465 10.04732036590576 7.389369964599609 11 5.5 11 C 2.462430000305176 11 0 8.537569999694824 0 5.5 C 0 2.462430000305176 2.462430000305176 0 5.5 0 Z" 
+	        stroke="none" 
+	        fill="rgba(112,112,112,0.5)"/>
+	    </g>
+	    <line 
+	      id="Line_223" 
+	      data-name="Line 223" 
+	      y1="23.488" 
+	      x2="23.366" 
+	      transform="translate(4612.399 604.583)" 
+	      fill="none" 
+	      stroke="rgba(112,112,112,0.5)" 
+	      stroke-width="2"/>
+	  </g>
+	</svg>
+
+
+	const [activeType, setActiveType] = React.useState(null); //users, locations, tags
+	const getModalConfig = () => {
+	    switch(activeType) {
+	      case 'users': 
+	        return { title: 'Tag Users', data: tagged, setter: setTagged };
+	      case 'location': 
+	        return { title: 'Location', data: locationData, setter: setLocationData };
+	      case 'tags':
+	      	return { title: 'Tags & Topics', data: tagsNTopics, setter: setTagsNTopics };
+	      default: 
+	        return null;
+	    }
+	  };
+  	const config = getModalConfig();
+
+
 	return (
 		<div id="createPostt" ref={el} className={`${sectionClass.createPost}`}>
 			
 			<div id="returnButtonWrapper">
 				<svg 
+				  onClick={()=> {
+					setSectionClass({
+						...sectionClass,
+						createPost: 'leave'
+					});
+
+					let delay = setTimeout(()=> {
+						setCurrent({
+							...current,
+							createPost: false,
+						})
+					}, 300)
+					let delay2 = setTimeout(()=> {
+						setSectionClass({
+							...sectionClass,
+							createPost: ''
+						})
+						setCreatePostToggle();
+					}, 600)
+				  }}
 				  xmlns="http://www.w3.org/2000/svg" 
 				  width="48" 
 				  height="48" 
@@ -922,7 +1376,12 @@ export default function CreatePostt({
 
 					<div id="titleWrapper">
 
-						<button id="datePicker" className={`buttonDefault`}>
+						<button 
+							id="datePicker" 
+							className={`buttonDefault`}
+							onClick={(e)=> {
+								e.preventDefault();
+							}}>
 							{kongetsu}. {kyou}. {kotoshi}
 						</button>
 
@@ -946,11 +1405,11 @@ export default function CreatePostt({
 				</fieldset>
 			</form>
 
-
 			{/* O P T I O N S   W R A P P E R */}
 			<ul id="optionsWrapper">
 				
-				<li>
+				{/*ADD TEXT*/}
+				<li> 
 					<button onClick={(e)=> {
 						e.preventDefault()
 						newContent('text')
@@ -959,38 +1418,82 @@ export default function CreatePostt({
 					</button>
 				</li>
 
+				{/*ADD IMAGE*/}
 				<li>
-					<button>
+					<button 
+						htmlFor="addImage"
+						onClick={(e)=> {
+							e.preventDefault();
+							document.getElementById('addImage').click();
+						}
+					}>
 						{addImage}
 					</button>
+
+					<input	
+						onChange={handleChange}
+						id='addImage' 
+						type="file" 
+						accept="image/*"
+						name='image' 
+						hidden />
 				</li>
 
+				{/*PRIVACY TOGGLE*/}
 				<li>
 					<button>
 						{privacyToggle}
 					</button>
 				</li>
 
+				{/*TAG USERS*/}
 				<li>
-					<button>
+					<button onClick={()=> setActiveType('users')}>
 						{tagUsers}
 					</button>
 				</li>
 
+				{/*ADD TAGS*/}
 				<li>
-					<button>
+					<button onClick={()=> setActiveType('tags')}>
 						{addTags}
 					</button>
 				</li>
 
+				{/*ADD LOCATION DATA*/}
 				<li>
-					<button>
+					<button onClick={()=> setActiveType('location')}>
 						{addLocationData}
 					</button>
 				</li>
-
 			</ul>
 
+			{activeType &&
+				<SelectionModal 
+					title={config.title} 
+					data={config.data} 
+					setData={config.setter}  
+					setModal={()=> setActiveType(null)}
+				/>
+			}
+
+			{draftsList &&
+			  <DraftPage
+				  dataList={drafts}
+				  setDataList={setDrafts}
+				  draftsList={draftsList}
+				  setDraftsList={setDraftsList}
+				  postContent={postContent}
+				  setPostContent={setPostContent}
+				  tagged={tagged}
+				  setTagged={setTagged}
+				  suggestions={tagsNTopics}
+				  setSuggestions={setTagsNTopics}
+				  setPrivate={setPrivate}
+				  setPinLocation={setLocationData}/>
+			}
+			
+			
 		</div>
 	)
-}
+};
