@@ -1,0 +1,70 @@
+
+div#Instants {
+  position: absolute;
+  bottom: -140px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96%;
+  margin: 0 auto;
+  z-index: 50;
+  background-color: white;
+  border: 2px solid var(--site-gray-lite);
+  border-radius: 3px;
+  box-sizing: border-box;
+  padding: 6px 12px 12px;
+
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+  div#Instants.active {
+    animation: active 0.5s ease-in-out forwards;
+  }
+
+  div#Instants.nonActive {
+    animation: nonActive 0.5s ease-in-out;
+  }
+
+  @keyframes active {
+    0% {
+      display: block;
+      opacity: 0;
+      bottom: -100px;
+    }
+    100% {
+      bottom: 10px;
+      opacity: 1;
+    }
+  }
+
+  @keyframes nonActive {
+    0% {
+      bottom: 10px;
+      opacity: 1;
+    }
+    99% {
+      bottom: -100px;
+      opacity: 0;
+    }
+    100%{
+      display: none;
+    }
+  }
+
+div#Instants div#actions {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+div#Instants div.actions button {
+  margin: 0 12px;
+  font-size: 1em;
+  padding: 0;
+}
+
+div#Instants div.actions button:first-child {
+  margin-left: 0px;
+}

@@ -7,7 +7,7 @@
 
 export default function APIaccess(key) {
 
-	const apiAddr = "http://172.21.160.52:3333";
+	const apiAddr = "http:///172.17.243.173:3333";
 	let savedKey = sessionStorage.getItem('userKey')
 	// const userKey = savedKey ? savedKey : key;
 
@@ -169,7 +169,7 @@ export default function APIaccess(key) {
 			//?pull=${pull}?lastID=${lastID} for future update
 
 			let userKey = sessionStorage.getItem('userKey');
-			let log = await fetch(`${apiAddr}/posts/log?type=social`, {
+			let log = await fetch(`${apiAddr}/posts/log?type=taggedPosts`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',

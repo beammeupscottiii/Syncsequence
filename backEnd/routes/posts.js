@@ -248,48 +248,62 @@ app.get('/log', verify, async (req,res) => {
     let type = req.query.type,
         monthChart = req.query.monthChart;
     
-    if(type == 'social') {
+    if(type == 'taggedPosts') {
 
         /* 05. 09. 2024
            need to filter posts by privacyDefault on or off
         */
 
-        let socialPosts = await Posts.find(
-          {'owner': {$in: connections}, 
-           'type': {$ne: "draft"}}
-        ).sort(
-          {createdAt: -1}
-        ).populate('owner', 'username profilePhoto')
+        let taggedPosts = await Posts.find({
+          'taggedUsers._id': user._id,     
+          'owner': { $ne: user._id },       
+          'type': { $ne: "draft" }
+        })
+        .sort({ createdAt: -1 })
+        .populate('owner', 'username profilePhoto');
+        // .populate({path: 'owner', select: 'username profilePhoto'})
 
-        console.log('Retrieved social posts for ' +user.userName+ " " +socialPosts.length);
+        console.log('Retrieved social posts for ' +user.userName+ " " +taggedPosts.length);
 
           let d = new Date(),
               currentYear = d.getFullYear(),
               currentMonth = d.getMonth(),
               currentDay = d.getDate();
 
-          let results = socialPosts.filter((post) => {
+          // let results = socialPosts.filter((post) => {
 
-            if(post.isPrivate == true) {
-              return null;
-            }
+          //   if(post.isPrivate == true) {
+          //     return null;
+          //   }
 
-            /*all posts made within or before current year*/
-            else if (post.postedOn_year <= currentYear) {
+          //   /*all posts made within or before current year*/
+          //   else if (post.postedOn_year <= currentYear) {
 
-              /* removes posts within current year, beyond current month */
-              if(post.postedOn_year == currentYear && post.postedOn_month > currentMonth) {
-                 return null;
-              }
+          //     /* removes posts within current year, beyond current month */
+          //     if(post.postedOn_year == currentYear && post.postedOn_month > currentMonth) {
+          //        return null;
+          //     }
                   
-              if(post.postedOn_day > currentDay && post.postedOn_month == currentMonth) {
-                 return null;
-              }
+          //     if(post.postedOn_day > currentDay && post.postedOn_month == currentMonth) {
+          //        return null;
+          //     }
 
-              else {
-                return post;
-              }
-            }
+          //     else {
+          //       return post;
+          //     }
+          //   }
+          // });
+
+          //AI recommended improvement for date filter
+          let results = taggedPosts.filter((post) => {
+              if (post.isPrivate) return false;
+
+              // Create date objects for comparison
+              const postDate = new Date(post.postedOn_year, post.postedOn_month, post.postedOn_day);
+              const today = new Date(currentYear, currentMonth, currentDay);
+
+              // Only return true if the post date is today or in the past
+              return postDate <= today;
           });
 
           let sortByDate = (posts) => {
@@ -330,7 +344,7 @@ app.get('/log', verify, async (req,res) => {
       // ).populate('owner', 'username profilePhoto').populate('taggedUsers.id', 'username');
 
       let posts;
-      if (req.query.userID == 'undefined'){
+      if (req.query.userID == 'undefined'){ //currentUser, includes privates
 
         posts = await Posts.find({
           owner: mongoose.Types.ObjectId(_id),
@@ -410,7 +424,7 @@ app.get('/log', verify, async (req,res) => {
       console.log('customLog ' +req.query.logNumber);
       let posts;
 
-      if(req.query.logNumber == 0) { //user only
+      if(req.query.logNumber == 0) { //user only, includes privates
 
         posts = await Posts.find({
           owner: mongoose.Types.ObjectId(_id),
@@ -492,7 +506,6 @@ app.get('/log', verify, async (req,res) => {
       console.log("Results reordered");
 
       res.status(200).send(results)
-
     }
 
     else if (type == 'drafts') {
@@ -504,11 +517,6 @@ app.get('/log', verify, async (req,res) => {
       // console.log('line366 in /posts' +posts);
 
       res.status(200).send(posts);
-    } 
-    else if (type == 'deleteDraft') {
-
-      await Posts.findByIdAndDelete(mongoose.Types.ObjectId(req.query.postID));
-      res.status(200).send(true);
     }
     
   } catch(err) {

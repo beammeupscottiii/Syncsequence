@@ -23,6 +23,15 @@ section#BASE {
 	padding: 8px;
 	overflow: hidden;
 }
+	
+	section#BASE.leave {
+		animation: _recede 0.5s ease-in-out forwards;	
+	}
+
+	section#BASE.return {
+		animation: _return 0.5s ease-in-out forwards;
+	} 
+	
 
 div#sections {
 	display: flex;
@@ -251,3 +260,82 @@ div.log {
 			transform: translateX(-50%) scale(1);
 		}
 }
+
+
+
+
+
+/* * * 
+		F o r  T h e  F i v e
+		M a i n  S e c t i o n s 
+* * */
+
+div#HOMELOG,
+section#SOCIALS,
+div#groupsList,
+div#macros,
+div#homeLog {
+	width: 98%;
+	height: 100%; /*needs to be fixed for animation */
+	margin: 0 auto;
+	opacity: 0;
+	transition: all 0.5s linear;
+	transform: scale(0.6);
+}
+
+
+/* As HOMELOG is currently the default, it will have 'already present' styling */
+div#HOMELOG {
+	animation: 0.5s ease-in-out forwards appear;
+}
+
+div#HOMELOG.enter,
+section#SOCIALS.enter,
+div#macros.enter {
+	animation: 0.5s ease-in-out forwards _return;
+}
+
+div#HOMELOG.leave,
+section#SOCIALS.leave,
+div#macros.leave {
+	animation: 0.5s ease-in-out forwards _recede;
+}
+
+
+@keyframes appear {
+	0% {
+		opacity: 0;
+		transform: scale(0.9);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);	
+	}
+}
+
+@keyframes disappear {
+	0% {
+		opacity: 1;
+		transform: scale(1);	
+	}
+	100% {
+		opacity: 0;
+		transform: scale(0.9);
+	}
+}
+
+/*	div#HOMELOG.active {
+/*		animation: 0.5s ease-in-out forwards appear;
+	}
+
+	div#SOCIALS.active,
+	div#macros.active {
+		animation: 0.2s ease-in-out forwards appear;
+	}
+
+	div#HOMELOG.not,
+	div#SOCIALS.not,
+	div#macros.not {
+		background-color: transparent;
+		animation: 0.2s ease-in-out forwards disappear;
+	}*/

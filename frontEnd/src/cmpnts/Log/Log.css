@@ -10,7 +10,7 @@ div.log h2.noPostsToday,
 div.log span.postDate {
 	display: block;
 	font-family: "Raleway";
-	font-size: 2.5em;
+	font-size: 3em;
 	color: var(--greyscale-elements);
 	text-align: right;
 	font-weight: 600;
@@ -74,24 +74,32 @@ div.log div.entry button.toProfile {
 }
 
 div.log div.entry button.toProfile img {
-	width: 40px;
-	height: 40px;
+	width: 48px;
+	height: 48px;
 	border-radius: 8px;
 	left: 0;
 	opacity: 0.75;
 }	
 
-div.log div.entry button.toProfile span {
+div.log div.entry button.toProfile p {
 	display: block;
-	margin: 8px 0 8px;
+	margin: 8px 0 2px;
 	color: var(--greyscale-text);
-/*	margin-left: 28px;*/
+	font-weight: 600;
+	font-size: 1em;
+}
+
+div.log div.entry button.toProfile span {
+	font-size: 1.25em;
+	margin-top: 1px;
+	position: relative;
+  bottom: -2px;
 }
 
 
 div.log div.entry h2 {
 	font-family: "Raleway";
-	font-size: 1.25em;
+	font-size: 1.5em;
 	letter-spacing: 1px;
 	font-weight: 400;
 	line-height: 32px;
@@ -106,12 +114,12 @@ div.log div.entry h2#pinned {
 
 div.log div.entry p {
 	font-family: "Open Sans";
-	font-size: 0.8em;
+	font-size: 1em;
 	font-weight: 400;
 	line-height: 24px;
 	color: var(--greyscale-text);
 /*	color: black;*/
-	margin: 4px 0 12px;
+	margin: 12px 0 12px;
 }
 
 div.log div.entry ul#thumbnailsWrapper {

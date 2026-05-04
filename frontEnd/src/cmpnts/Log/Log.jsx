@@ -263,7 +263,7 @@ export default function Log({data, current, setCurrent, isUnified, updateLog}) {
 							goToProfile(UID)
 						}}>
 							<img src={post.profilePhoto}/>
-							<span>&#64;{post.author}</span>
+							<p><span>&#64;</span>{post.author}</p>
 					</button>	
 
 					<div className="textWrapper" onClick={(e)=> {

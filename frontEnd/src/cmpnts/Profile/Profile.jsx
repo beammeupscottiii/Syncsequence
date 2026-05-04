@@ -1,7 +1,7 @@
 /* * * V i t a l s * * */
 import * as React from 'react';
 import APIaccess from '../../apiaccess';
-import {useNavigate, useLocation} from 'react-router-dom';
+import {useNavigate, useLocation, useLoaderData, useParams} from 'react-router-dom';
 import Log from '../Log/Log';
 
 import './Profile.css';
@@ -24,53 +24,118 @@ export default function Profile({
 	const username = sessionStorage.getItem('userName');
 	const navigate = useNavigate();
 	const location = useLocation();
+	const dataData = useLoaderData();
+
+	const { userid } = useParams();
 
 	const [data, setData] = React.useState();
 	const [dataLoaded, setDataLoaded] = React.useState(false);
 	const [userInfo, setUserInfo] = React.useState();
 	const [posts, setPosts] = React.useState();
 	const [collections, setCollections] = React.useState();
-	// const userCity = data.user.settings.preferredLocation.city;
-	// const userState = data.user.settings.preferredLocation.state;
+
+	console.log(userid);
 
 	const updateProfilePage = async() => {
-		let data = await accessAPI.getSingleUser(userID);
-		setData(data);
-		setUserInfo(data.user);
-		// setPinnedPosts(data.pinnedPosts);
-		setCollections(data.collections);
 
-		let connectedUsers = data.user.connections.length + data.user.subscribers.length + data.user.subscriptions.length;
-		setData({
-			...data,
-			connectedUsers: connectedUsers
-		})
-		/*
-			Get user's posts and their pinned posts,
-			add pinned Posts to top of user array,
-			then modify all objects in joint array to have
-			isPinned key, true value if post is pinned
-		*/
-		let allPosts = await accessAPI.pullUserLog({type: 'customLog', logNumber: current.log})
-		const pinnedPostIDs = new Set(data.pinnedPosts.map(p => p._id));
+		//for currentUser's profile
+		if(userid == undefined) {
+			let data = await accessAPI.getSingleUser(userID);
+			setData(data);
+			setUserInfo(data.user);
+			setCollections(data.collections);
 
-		const processedPinned = data.pinnedPosts.map(post => ({
-			...post,
-			isPinned: true
-		}));
+			let connectedUsers = data.user.connections.length + data.user.subscribers.length + data.user.subscriptions.length;
+			setData({
+				...data,
+				connectedUsers: connectedUsers
+			})
+			/*
+				Get user's posts and their pinned posts,
+				add pinned Posts to top of user array,
+				then modify all objects in joint array to have
+				isPinned key, true value if post is pinned
+			*/
 
-		const processedAllPosts = allPosts
-		.filter(post => !pinnedPostIDs.has(post._id))
-		.map(post => ({
-			...post,
-			isPinned: false
-		}));
+			/* 
+				05. 01. 2026
+				as this line below current is,
+				the log that a currentUser will see on their
+				profile is the same as whatever custom log they currently have loaded
 
-		const postsCombined = [...processedPinned, ...processedAllPosts];
-		console.log(postsCombined);
-		setPosts(postsCombined);
+				dunno whether to change this?
+				
+				Okay, new line gets a default log include privates, for currentUser
+				viewing their own profile. includes private posts
+			*/
+			//let allPosts = await accessAPI.pullUserLog({type: 'customLog', logNumber: current.log})
+			let allPosts = await accessAPI.pullUserLog({type: 'user'});
 
-		setDataLoaded(true);
+			if(data.pinnedPosts < 1) {
+				const pinnedPostIDs = new Set(data.pinnedPosts.map(p => p._id));
+
+				const processedPinned = data.pinnedPosts.map(post => ({
+					...post,
+					isPinned: true
+				}));
+
+				const processedAllPosts = allPosts
+				.filter(post => !pinnedPostIDs.has(post._id))
+				.map(post => ({
+					...post,
+					isPinned: false
+				}));
+
+				const postsCombined = [...processedPinned, ...processedAllPosts];
+				setPosts(postsCombined);
+			}
+			else {
+				setPosts(allPosts);
+			}
+			
+
+			setDataLoaded(true);
+		}
+
+		//for viewedUser's profile
+		else {
+			setData(dataData);
+			setUserInfo(dataData.user);
+			setCollections(dataData.collections);
+			let connectedUsers = 
+				dataData.user.connections.length + dataData.user.subscribers.length + dataData.user.subscriptions.length;
+			setData({
+				...data,
+				connectedUsers: connectedUsers
+			});
+
+			let allPosts = await accessAPI.pullUserLog({type: 'user', userID: userid});
+
+			//if viewedUser has pinned posts
+			if(dataData.pinnedPosts > 1) {
+				const pinnedPostIDs = new Set(data.pinnedPosts.map(p => p._id) || []);
+				const processedPinned = data.pinnedPosts.map(post => ({
+					...post,
+					isPinned: true
+				}));
+
+				const processedAllPosts = allPosts
+				.filter(post => !pinnedPostIDs.has(post._id))
+				.map(post => ({
+					...post,
+					isPinned: false
+				}));
+
+				const postsCombined = [...processedPinned, ...processedAllPosts];
+				setPosts(postsCombined);
+			}
+			else {
+				setPosts(allPosts)
+			}
+
+			//final check
+			setDataLoaded(true);
+		}
 	}
 
 	const goToUserSettings = () => {}
@@ -103,8 +168,11 @@ export default function Profile({
 						<h2>@{userInfo.userName}</h2>
 						<h3>{`${userInfo.firstName} ${userInfo.lastName}`}</h3>
 					</li>
+					{
+
+					}
 					<li id="location">
-						<span>{data.user.settings.preferredLocation.city} | {data.user.settings.preferredLocation.state}</span>
+						<span>{userInfo.settings.preferredLocation.city} | {userInfo.settings.preferredLocation.state}</span>
 					</li>
 				</ul>
 
@@ -123,7 +191,7 @@ export default function Profile({
 					<button className={`buttonDefault`} onClick={async(e)=> {
 						e.preventDefault();
 					}}>
-						{data.postCount}
+						{data.postCount || dataData.postCount}
 						<span>Posts</span>
 					</button>
 

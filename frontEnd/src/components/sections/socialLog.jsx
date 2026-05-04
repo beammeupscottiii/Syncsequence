@@ -40,15 +40,15 @@ let oneWaySVG =
 export function ManageConnections({setCurrent, current, setSocketMessage}) {
 
 	const navigate = useNavigate(),
-		  userID = sessionStorage.getItem('userID'),
-		  userName = sessionStorage.getItem('userName'),
-		  [connections, setConnections] = React.useState([]),
-		  [searchQuery, setSearchQuery] = React.useState(''),	
-		  [searchResults, setSearchResults] = React.useState([]),
-		  // [searchFocus, setSearchFocus] = React.useReducer(state => !state, false),
-		  [searchFocus, setSearchFocus] = React.useState(false),
-		  [results, toggleResults] = React.useReducer(state => !state, false),
-		  [headerText, setHeaderText] = React.useState("Connections");
+			  userID = sessionStorage.getItem('userID'),
+			  userName = sessionStorage.getItem('userName'),
+			  [connections, setConnections] = React.useState([]),
+			  [searchQuery, setSearchQuery] = React.useState(''),	
+			  [searchResults, setSearchResults] = React.useState([]),
+			  // [searchFocus, setSearchFocus] = React.useReducer(state => !state, false),
+			  [searchFocus, setSearchFocus] = React.useState(false),
+			  [results, toggleResults] = React.useReducer(state => !state, false),
+			  [headerText, setHeaderText] = React.useState("Connections");
 
 	const onChange = (e) => {
 		setSearchQuery(e.target.value)

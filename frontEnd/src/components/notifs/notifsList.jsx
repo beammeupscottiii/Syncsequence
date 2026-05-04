@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useNavigate, Link } from 'react-router-dom';
 import APIaccess from '../../apiaccess';
-import useUIC from '../../UIcontext';
+import { useUIC } from '../../UIcontext';
 
 import '../../components/base/home.css';
 import './notifs.css';

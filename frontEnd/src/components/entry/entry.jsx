@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import APIaccess from '../../apiaccess';
-import useUIC from '../../UIcontext';
+import { useUIC } from '../../UIcontext';
 
 import '../../index.css';
 import './entry.css';
@@ -295,7 +295,8 @@ function UserLogIn({
 
 	const [formData, setFormData] = React.useReducer(formReducer, {});
 	const [isReady, setIsReady] = React.useReducer(state => !state, false);
-	const { _login }  = useUIC();
+	const [isAuthTrue, set_isAuthTrue] = React.useState(false);
+	const { _login, setAuth }  = useUIC();
 	const navigate = useNavigate();
 
 	const handleSubmit = async (event) => {
@@ -326,17 +327,17 @@ function UserLogIn({
 					password: formData.password
 				});
 
-				// setUserDocumentSettings(user.settings);
-				// console.log(user)
-
 				if(user.confirm == true) {
+
 					exitSequence();
+					set_isAuthTrue(true);
+
+					let delay = setTimeout(()=> {
+						navigate('/home');
+					}, 550)
+
 				} else {
 					console.log(user);
-					setPopUp({
-						active: true,
-						message: user
-					})
 				}
 
 			}	
@@ -375,6 +376,18 @@ function UserLogIn({
 			}
 		}
 	}, [formData])
+
+	React.useEffect(()=> {
+		if(isAuthTrue) {
+			setAuth(true);
+
+			let delay = setTimeout(()=> {
+				navigate('/home');
+			}, 550)
+			return () => clearTimeout(delay);
+
+		}
+	}, [isAuthTrue, navigate, setAuth])
 
 	return (
 		<form id="login" onSubmit={handleSubmit} ref={form}

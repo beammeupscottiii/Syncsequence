@@ -105,9 +105,7 @@ export default function Log({data, section, noHeading, current, setCurrent, isUn
 						console.log(post)
 
 						setTimeout(()=> {
-							navigate(`/post/${post._id}`, {
-								state: {post: post}
-							});
+							navigate(`/post/${post._id}`);
 						}, 600)
 					}}>
 						<h2>{title}</h2>

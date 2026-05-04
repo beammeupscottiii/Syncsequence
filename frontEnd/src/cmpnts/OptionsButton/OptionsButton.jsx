@@ -112,10 +112,12 @@ export default function OptionsButton({
 	sectionClass,
 	createPostToggle,
 	setCreatePostToggle,
-    triggerSubmitRef,
-    triggerDraftRef,
-    draftsList,
-    setDraftsList,
+	manageConnectionsToggle,
+	setManageConnectionsToggle,
+  triggerSubmitRef,
+  triggerDraftRef,
+  draftsList,
+  setDraftsList,
 }) {
 
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -142,7 +144,22 @@ export default function OptionsButton({
 			settings
 		*/
 		{
-			name: 'editProfile',
+			name: 'New Post',
+			function: null,
+			class: ''
+		},
+		{
+			name: 'Calendar',
+			function: null,
+			class: ''
+		},
+		{
+			name: 'Map',
+			function: null,
+			class: ''
+		},
+		{
+			name: 'Edit Profile',
 			function: null,
 			class: ''
 		},
@@ -161,7 +178,17 @@ export default function OptionsButton({
 		*/
 		{
 			name: 'Find & Manage',
-			function: null,
+			function: ()=> {
+				setManageConnectionsToggle();
+
+				setCurrent({
+					...current,
+					section: 'social',
+					manageConnections: true
+				})
+
+				setOptionsOpen(false);
+			},
 			class: ''
 		},
 		{
@@ -202,11 +229,11 @@ export default function OptionsButton({
 			},
 			class: ''
 		},
-		{
-			name: 'View Stream',
-			function: null,
-			class: ''
-		},
+		// {
+		// 	name: 'View Stream',
+		// 	function: null,
+		// 	class: ''
+		// },
 		{
 			name: 'Calendar',
 			function: ()=> {
@@ -240,6 +267,7 @@ export default function OptionsButton({
 				})
 				setCurrent({
 					...current,
+					section: 'wasHome',
 					map: true,
 					transition: false
 				})
@@ -343,7 +371,7 @@ export default function OptionsButton({
 				if(current.section == 'social') {
 					setActiveSection(1)
 				}
-				else if(current.section == 'home') {
+				else if(current.section == 'wasHome') {
 					setActiveSection(2)
 				}
 				setOptionsOpen(false);
@@ -356,6 +384,7 @@ export default function OptionsButton({
 					setCurrent({
 						...current,
 						map: false,
+						section: 'home',
 						transition: false
 					})
 				}, 300)

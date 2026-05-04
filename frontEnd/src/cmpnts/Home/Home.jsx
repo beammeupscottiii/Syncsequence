@@ -29,7 +29,7 @@ export default function UserLog({active, setCurrent, current, log, setLog, secti
 	let noHeading = false;
 
 	return (
-		<div id="userLog" className={ `${sectionClass.home}` } ref={refe}>
+		<div id="HOMELOG" className={ `${sectionClass.home}` } ref={refe}>
 			<Log data={log} 
 				 section={"user"} 
 				 noHeading={noHeading} 

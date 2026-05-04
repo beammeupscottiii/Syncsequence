@@ -1,7 +1,7 @@
 /* * * V i t a l s * * */
 import * as React from 'react';
 import {useNavigate, useLocation, useLoaderData} from 'react-router-dom';
-import useUIC from '../../UIcontext';
+import { useUIC } from '../../UIcontext';
 import APIaccess from '../../apiaccess';
 
 import './Settings.css';

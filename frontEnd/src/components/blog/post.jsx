@@ -49,7 +49,6 @@ export default function Post({
 	const { postID } = useParams();
 	const location = useLocation();
 	const navigate = useNavigate();
-	// const [postData, setPostData] = React.useState(location.state.post);
 	const [postData, setPostData] = React.useState(data);
 	const [comments, setComments] = React.useState([]);
 	const [commentCount, setCommentCount] = React.useState('');
@@ -125,6 +124,9 @@ export default function Post({
 	}
 
 	let deleteComment = async(commentID) => {
+
+		/* 03. 05. 2026
+		make this operate within the component */
 
 		setSocketMessage({
 			action: 'deleteComment',
@@ -289,22 +291,6 @@ export default function Post({
 		let userName = sessionStorage.getItem('userName');
 		let isOwner = postData.owner == userID ? true : false;
 
-		//to be removed once old posts gone
-		// let content, split;
-		// let text = [];
-		// if( Object.keys(postData.content[0]).length > 10 ) {
-		// 	for (let char in postData.content[0]) {
-		// 		text.push(postData.content[0][char]);
-		// 	}
-		// 	text = text.join("");
-		// 	split = true;
-		// 	// console.log(text)
-		// } else if ( Object.keys(postData.content[0].length < 10)) {
-		// 	content = postData.content;
-		// 	split = false;
-		// }
-
-
 	/*** 
 	  	C o m p o n e n t  F u n c t i o n a l i t y
 	***/
@@ -419,22 +405,22 @@ export default function Post({
 	*/
 	let commentsRef = React.useRef()
 	let commentsCurrent = commentsRef.current;
-	React.useEffect(()=> {
+	// React.useEffect(()=> {
 
-		let goToComment = location.state.commentID ? location.state.commentID : null;
+	// 	let goToComment = location.state.commentID ? location.state.commentID : null;
 
-		if(goToComment != null) {
+	// 	if(goToComment != null) {
 
-			console.log('we has comment');
+	// 		console.log('we has comment');
 
-			if(commentsCurrent) {
-				let comment = document.getElementById(location.state.commentID);
-				console.log(comment);
-				comment.scrollIntoView({behavior: "smooth"});
-				/* can add class to comment to make it stand out...*/
-			}
-		}	
-	}, [comments]);
+	// 		if(commentsCurrent) {
+	// 			let comment = document.getElementById(location.state.commentID);
+	// 			console.log(comment);
+	// 			comment.scrollIntoView({behavior: "smooth"});
+	// 			/* can add class to comment to make it stand out...*/
+	// 		}
+	// 	}	
+	// }, [comments]);
 
 
 	/*
@@ -805,19 +791,6 @@ export default function Post({
 	            accessID={accessID}
 	            setAccessID={setAccessID}/>
 	        }
-			<Instant 
-				socketURL={socketURL}
-                socketMessage={socketMessage}
-                setSocketMessage={setSocketMessage}
-                sendMessage={sendMessage}
-                isActive={isActive}
-                setActive={setActive}
-                accessID={accessID}
-                setAccessID={setAccessID}
-                getUnreadCount={getUnreadCount}
-                current={current}
-                setCurrent={setCurrent}
-			/>
 		</section>
 	)
 

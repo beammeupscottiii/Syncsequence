@@ -34,17 +34,22 @@ export default function UserProfile({
 	/* Component Function Related*/
 	const userID = sessionStorage.getItem('userID');
 	const username = sessionStorage.getItem('userName');
-	// const location = useLocation();
 	const dataData = useLoaderData();
 	const [data, setData] = React.useState(dataData);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { userid } = useParams();
 	const cal = CalInfo();
-	const isOwner = data.user._id == userID ? true : false;
+	const isOwner = dataData.user._id == userID ? true : false;
 	const [userInfo, setUserInfo] = React.useState(data.user);
 	const [pinnedPosts, setPinnedPosts] = React.useState(data.pinnedPosts)
 	const [collections, setCollections] = React.useState(data.collections)
+
+	/* 
+		sets data state with loaderData,
+		userid from params,
+		discerns whether is current user or viewed user
+	*/
 
 	const updateProfilePage = async() => {
 		let data = await accessAPI.getSingleUser(userInfo._id);

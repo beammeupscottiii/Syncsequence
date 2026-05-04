@@ -80,7 +80,7 @@ const UserSchema = new mongoose.Schema({
       type: String,
       required: [true, "This field is necessary "]
     },
-    isAvailable: Boolean,
+    isAvailable: String, //Yes, No, Offline 
     profilePhoto: String,
     profileHeader: String,
     bio: String,
@@ -100,16 +100,46 @@ const UserSchema = new mongoose.Schema({
     }],
     connections: [{
         type: mongoose.Schema.Types.ObjectID,
-        ref: 'Users',
+        ref: 'User',
     }],
     subscribers: [{
         type: mongoose.Schema.Types.ObjectID,
-        ref: 'Users',
+        ref: 'User',
     }],
     subscriptions: [{
         type: mongoose.Schema.Types.ObjectID,
-        ref: 'Users',
+        ref: 'User',
     }],
+    // connections: [{
+    //     userID: { 
+    //         type: mongoose.Schema.Types.ObjectId, // Fixed 'ObjectID' to 'ObjectId'
+    //         ref: 'User' // Usually singular 'User' unless your model is named 'Users'
+    //     },
+    //     addedAt: { 
+    //         type: Date, 
+    //         default: Date.now 
+    //     }
+    // }],
+    // subscribers: [{
+    //     userID: { 
+    //         type: mongoose.Schema.Types.ObjectId, 
+    //         ref: 'User' 
+    //     },
+    //     addedAt: { 
+    //         type: Date, 
+    //         default: Date.now 
+    //     }
+    // }],
+    // subscriptions: [{
+    //     userID: { 
+    //         type: mongoose.Schema.Types.ObjectId, 
+    //         ref: 'User' 
+    //     },
+    //     addedAt: { 
+    //         type: Date, 
+    //         default: Date.now 
+    //     }
+    // }],
     customLogs: {
         currentLog: Boolean, //0 is userOnly
         log: [{

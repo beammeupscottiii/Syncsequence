@@ -257,71 +257,128 @@ app.get('/user/:userID', async (req,res) => {
         }
             
           
+        // if(req.query.query == 'getAllConnects') {
+
+        //     //add isconnected and issubscribed
+
+        //     let connects = singleUser.connections,
+        //         subscribers = singleUser.subscribers,
+        //         subscriptions = singleUser.subscriptions;
+
+        //     connects = await User.find({'_id': {$in: connections }});
+        //     subscribers = await User.find({'_id': {$in: subscribers }});
+        //     subscriptions = await User.find({'_id': {$in: subscriptions }});
+
+        //     let connectsList = [],
+        //         subscribersList = [],
+        //         subscriptionsList = [];
+
+        //     connects.forEach((userInfo) => {
+        //         let result = {
+        //             fullName: `${userInfo.firstName} ${userInfo.lastName}`,
+        //             userName: userInfo.userName,
+        //             _id: userInfo._id,
+        //             profilePhoto: userInfo.profilePhoto,
+        //             isConnection: true,
+        //             isSubscriber: false,
+        //             isSubscription: false,
+        //             isAvailable: userInfo.isAvailable
+        //         }
+
+        //         connectsList.push(result);
+        //     })
+
+        //     subscribers.forEach((userInfo) => {
+        //         let result = {
+        //             fullName: `${userInfo.firstName} ${userInfo.lastName}`,
+        //             userName: userInfo.userName,
+        //             _id: userInfo._id,
+        //             profilePhoto: userInfo.profilePhoto,
+        //             isConnection: false,
+        //             isSubscriber: true,
+        //             isSubscription: false,
+        //             isAvailable: userInfo.isAvailable
+        //         }
+
+        //         subscribersList.push(result);
+        //     })
+
+        //     subscriptions.forEach((userInfo) => {
+        //         let result = {
+        //             fullName: `${userInfo.firstName} ${userInfo.lastName}`,
+        //             userName: userInfo.userName,
+        //             _id: userInfo._id,
+        //             profilePhoto: userInfo.profilePhoto,
+        //             isConnection: false,
+        //             isSubscriber: false,
+        //             isSubscription: true,
+        //             isAvailable: userInfo.isAvailable
+        //         }
+
+        //         subscriptionsList.push(result);
+        //     })
+
+        //     let list = [...new Set([...connectsList, ...subscribersList, ...subscriptionsList])];
+
+        //     res.status(200).send(list);
+        //     console.log(`@${_username} list of connections sent`);
+        //     console.log(list);
+
+        //     //if singleUser._id == _id,
+        //     //if connect connections, subscribers or subscriptions include current
+        //     //user, add mutual: true to result
+        // }
         if(req.query.query == 'getAllConnects') {
 
-            //add isconnected and issubscribed
+            const populatedUser = await User.findById(singleUser)
+                .populate('connections', 'firstName lastName userName profilePhoto isAvailable')
+                .populate('subscribers', 'firstName lastName userName profilePhoto isAvailable')
+                .populate('subscriptions', 'firstName lastName userName profilePhoto isAvailable');
 
-            let connects = singleUser.connections,
-                subscribers = singleUser.subscribers,
-                subscriptions = singleUser.subscriptions;
+            console.log(populatedUser);
 
-            connects = await User.find({'_id': {$in: connects }});
-            subscribers = await User.find({'_id': {$in: subscribers }});
-            subscriptions = await User.find({'_id': {$in: subscriptions }});
+            // 2. Helper function to format the nested objects into your flat frontend structure
+            const formatList = (list, type) => {
+                return list.map(item => ({
+                    fullName: `${item.firstName} ${item.lastName}`,
+                    userName: item.userName,
+                    _id: item._id,
+                    profilePhoto: item.profilePhoto,
+                    isConnection: type === 'conn',
+                    isSubscriber: type === 'suber',
+                    isSubscription: type === 'subing',
+                    isAvailable: item.isAvailable
+                }));
+            };
 
-            let connectsList = [],
-                subscribersList = [],
-                subscriptionsList = [];
+            const connectsList = formatList(populatedUser.connections || [], 'conn');
+            const subscribersList = formatList(populatedUser.subscribers || [], 'suber');
+            const subscriptionsList = formatList(populatedUser.subscriptions || [], 'subing');
 
-            connects.forEach((userInfo) => {
-                let result = {
-                    fullName: `${userInfo.firstName} ${userInfo.lastName}`,
-                    userName: userInfo.userName,
-                    _id: userInfo._id,
-                    profilePhoto: userInfo.profilePhoto,
-                    isConnection: true,
-                    isSubscriber: false,
-                    isSubscription: false
+            // 3. Combine them. 
+            // Since some users might be both a subscriber AND a connection, 
+            // we use a Map to ensure unique IDs while keeping the "highest" status.
+            const combinedMap = new Map();
+
+            [...connectsList, ...subscribersList, ...subscriptionsList].forEach(u => {
+                if (!combinedMap.has(u._id.toString())) {
+                    combinedMap.set(u._id.toString(), u);
+                } else {
+                    // Logic to merge statuses if they exist in multiple lists
+                    const existing = combinedMap.get(u._id.toString());
+                    combinedMap.set(u._id.toString(), {
+                        ...existing,
+                        isConnection: existing.isConnection || u.isConnection,
+                        isSubscriber: existing.isSubscriber || u.isSubscriber,
+                        isSubscription: existing.isSubscription || u.isSubscription
+                    });
                 }
+            });
 
-                connectsList.push(result);
-            })
+            const finalList = Array.from(combinedMap.values());
 
-            subscribers.forEach((userInfo) => {
-                let result = {
-                    fullName: `${userInfo.firstName} ${userInfo.lastName}`,
-                    userName: userInfo.userName,
-                    _id: userInfo._id,
-                    profilePhoto: userInfo.profilePhoto,
-                    isConnection: false,
-                    isSubscriber: true,
-                    isSubscription: false
-                }
-
-                subscribersList.push(result);
-            })
-
-            subscriptions.forEach((userInfo) => {
-                let result = {
-                    fullName: `${userInfo.firstName} ${userInfo.lastName}`,
-                    userName: userInfo.userName,
-                    _id: userInfo._id,
-                    profilePhoto: userInfo.profilePhoto,
-                    isConnection: false,
-                    isSubscriber: false,
-                    isSubscription: true
-                }
-
-                subscriptionsList.push(result);
-            })
-
-            let list = [...new Set([...connectsList, ...subscribersList, ...subscriptionsList])];
-
-            res.status(200).send(list);
-
-            //if singleUser._id == _id,
-            //if connect connections, subscribers or subscriptions include current
-            //user, add mutual: true to result
+            res.status(200).send(finalList);
+            console.log(`@${_username} list of connections sent: ${finalList.length} users`);
         } 
 
         else if (req.query.query == 'removeConnect') {
@@ -419,15 +476,10 @@ app.get('/user/:userID', async (req,res) => {
         else if(req.query.query == 'singleUser') {
 
             if(req.params.userID == _id) {
-
-                // let isSubscribed = singleUser.subscribers.includes(_id);
-                // let isConnected = singleUser.connections.includes(_id);
-
                 let posts = await Posts.find({ _id: {$in: singleUser.pinnedPosts}}).sort({createdAt: -1});
                 let postCount = await Posts.countDocuments({
                     'owner': _id, 
                     'type': {$ne: "draft"}, 
-                    // 'isPrivate': {$ne: true}
                     'isPrivate': false
                 });
                 let collections = await Groups.find(
@@ -440,8 +492,6 @@ app.get('/user/:userID', async (req,res) => {
                     pinnedPosts: posts,
                     collections: collections,
                     postCount: postCount,
-                    // isConnected: isConnected,
-                    // isSubscribed: isSubscribed
                 });
             }
             else {
@@ -449,23 +499,30 @@ app.get('/user/:userID', async (req,res) => {
                 let isSubscribed = user.subscribers.includes(_id);
                 let isConnected = user.connections.includes(_id);
                 let posts = await Posts.find({ _id: {$in: user.pinnedPosts}}).sort({createdAt: -1});
-                let postCount = await Posts.countDocuments({'owner': req.params.userID, 'type': {$ne: "draft"}})
-                let collections = await Groups.find(
-                    {admins: {$elemMatch: {$eq: req.params.userID}},
-                    name: {$ne: 'BOOKMARKS'}, 
-                    type: 'collection'}
-                );
+                let postCount = await Posts.countDocuments({
+                    'owner': req.params.userID, 
+                    'type': {$ne: "draft"},
+                    'isPrivate': false
+                });
+                /* 
+                    05. 01. 2026
+                    may include visiblity, external access to viewedUser's
+                    collections in future update
+                */  
+                // let collections = await Groups.find(
+                //     {admins: {$elemMatch: {$eq: req.params.userID}},
+                //     name: {$ne: 'BOOKMARKS'}, 
+                //     type: 'collection'}
+                // );
 
                 res.status(200).send({
                     user: user, 
                     pinnedPosts: posts,
-                    collections: collections,
+                    // collections: collections,
                     postCount: postCount,
                     isConnected: isConnected,
                     isSubscribed: isSubscribed
                 });
-                // isConnected?
-                // isSubscribed?
             }
         }
 
@@ -483,52 +540,97 @@ app.get('/user/:userID', async (req,res) => {
 app.get('/search', verify, async(req, res) => {
 
     try {
+        const auth = req.header('auth-token');
+        const base64url = auth.split('.')[1];
+        const decoded = JSON.parse(Buffer.from(base64url, 'base64'));
+        const {_id, _username} = decoded;
+
+        const singleUser = await User.findById(_id);
+
+        // console.log(singleUser.connections);
+        // console.log(singleUser.subscriptions);
+        // console.log(singleUser.subscribers);
+
+        const myConns = singleUser.connections.map(c => c.toString());
+        const mySubs = singleUser.subscriptions.map(s => s.toString());
+        const mySubers = singleUser.subscribers.map(s => s.toString());
+
+        console.log(myConns);
+        console.log(mySubs);
+        console.log(mySubers);
 
         let makeResult = (user) => {
-        let value = {
-            username: user.userName,
-            fullname: `${user.firstName} ${user.lastName}`,
-            id: user._id
-          }
-          return value
+
+            let userID = user._id.toString();
+
+            let value = {
+                username: user.userName,
+                fullname: `${user.firstName} ${user.lastName}`,
+                id: user._id,
+                profilePhoto: user.profilePhoto,
+                isConnection: myConns.includes(userID),
+                isSubscription: mySubs.includes(userID),
+                isSubscriber: mySubers.includes(userID)
+              }
+            return value
         }
   
         try {
 
-            let list = [];
             let username = req.query.userName;
             
-            const aggSettings = [
+            // const aggSettings = [
+            //     {
+            //         $search: {
+            //             autocomplete: {
+            //                 query: username,
+            //                 path: 'userName',
+            //                 fuzzy:{
+            //                     maxEdits: 2
+
+            //                 }
+            //             }
+            //         }
+            //     },
+            //     {
+            //         $limit: 10
+            //     }
+            // ]
+
+
+            // let response = await User.aggregate(aggSettings);
+
+            const response = await User.aggregate([
                 {
                     $search: {
+                        index: 'default',
                         autocomplete: {
                             query: username,
                             path: 'userName',
-                            fuzzy:{
-                                maxEdits: 2
-
-                            }
+                            tokenOrder: 'any',
+                            fuzzy: { maxEdits: 1, prefixLength: 1 }
                         }
                     }
                 },
+                { $limit: 10 },
                 {
-                    $limit: 10
+                    $project: {
+                        userName: 1,
+                        firstName: 1,
+                        lastName: 1,
+                        profilePhoto: 1
+                    }
                 }
-                // {
-                //     $project: {
-                //         //can include / exclude fields from returned doc, using 
-                //         //fieldname as key and 1 to have it, 0 to exclude it
-                //     }
-                // }
-            ]
-
-            let response = await User.aggregate(aggSettings);
+            ]);
 
             // console.log(response);
-                  
-            list = response.map((user) => {
+
+            let list = response.map((user) => {
                 return makeResult(user);
             })
+
+            // console.log(list.map(s => s.id.toString()));
+
             res.status(200).send(list);
 
         } catch (e) {
@@ -761,7 +863,7 @@ app.post('/notif/:type', verify, async(req, res)=> {
 
                         (async ()=> {
                             let addSenderToReciever = await User.findByIdAndUpdate(sender.id,
-                                {$push: {"connections": recipient.id}},
+                                {$push: {"connections": {userID: recipient.id}}},
                                 {upsert: true}
                             ).then((data)=> {
                                 if(data) {
@@ -770,7 +872,7 @@ app.post('/notif/:type', verify, async(req, res)=> {
                             })
 
                             let addRecieverToSender = await User.findByIdAndUpdate(recipient.id,
-                                {$push: {"connections": sender.id}},
+                                {$push: {"connections": {userID: sender.id}}},
                                 {upsert: true}
                             ).then((data)=> {
                                 if(data) {
@@ -1008,7 +1110,7 @@ app.post('/notif/:type', verify, async(req, res)=> {
                             second = req.body.message == 'subscriptionAccepted' ? recipient.id : sender.id;
 
                         let addSenderToReciever = await User.findByIdAndUpdate(first,
-                            {$push: {"subscribers": second}},
+                            {$push: {"subscribers": {userID: second}}},
                             {upsert: true}
                         ).then((data)=> {
                             if(data) {
@@ -1017,7 +1119,7 @@ app.post('/notif/:type', verify, async(req, res)=> {
                         })
 
                         let addRecieverToSender = await User.findByIdAndUpdate(second,
-                            {$push: {"subscriptions": first}},
+                            {$push: {"subscriptions": {userID: first}}},
                             {upsert: true}
                         ).then((data)=> {
                             if(data) {
@@ -1644,8 +1746,12 @@ app.post('/settings', verify, upload.any(), async(req, res)=> {
 
             let length = user.settings.customLogs.logs.length;
             res.status(200).send(length ? length : 0);
-
         }     
+
+        else if(req.body.action == 'updateActivityStatus') {
+            await User.findByIdAndUpdate(_id, {isAvailable: req.body.state});
+            res.status(200).send(true);
+        }
     }
     catch(err) {
         console.log(err);

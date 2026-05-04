@@ -138,10 +138,11 @@ export default function Header ({
 	unreadCount, 
 	siteLocation,
 	isVisible,
-	children
+	children,
+	isSubPage
 }) {
 
-	let [returnable, setReturnable] = React.useState(isReturnable);
+	// let [returnable, setReturnable] = React.useState(isReturnable);
 	let [isNotifList, setIsNotifList] = React.useState(false);
 
 	return (
@@ -149,7 +150,7 @@ export default function Header ({
 		{/*<header>*/}
 
 			<div id="headerWrapper">
-				{returnable &&
+				{isSubPage &&
 					<ReturnElement />
 				}
 				

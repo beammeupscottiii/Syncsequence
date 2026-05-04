@@ -231,16 +231,20 @@ button.close-button {
 div#selectionModal_wr button#pinLocation {
     text-align: left;
     margin: 8px 0;
-    margin-bottom: 28px;
+    margin-top: 28px;
+    margin-bottom: -36px;
     display: block;
 }
 
 	button#pinLocation.nonActive {
-		text-align: left;
-	    margin: 8px 0;
-	    margin-bottom: 28px;
-	    display: block;
+		/*text-align: left;
+	  margin: 8px 0;
+	  margin-bottom: 28px;
+	  display: block;*/
+	  color: var(--greyscale-accent);
 	}
 
 
-div#selectionModal_wr div#coordinatesWrapper {}
+div#selectionModal_wr div#coordinatesWrapper {
+
+}

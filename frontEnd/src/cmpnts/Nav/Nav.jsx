@@ -42,9 +42,13 @@ export function Navbar({current, setCurrent}) {
 
 	return (
 		<nav>
-			<button class={'buttonDefault'} 
-					id="navButton"
-					onClick={navmenuToggle}>{current.section}</button>
+			<button 
+				class={'buttonDefault'} 
+				id="navButton"
+				onClick={navmenuToggle}>
+			
+				{current.section}
+			</button>
 		</nav>
 	)
 }

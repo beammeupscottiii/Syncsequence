@@ -1,6 +1,8 @@
 /* * * V i t a l s * * */
 import * as React from 'react';
+import {useNavigate} from 'react-router-dom';
 import APIaccess from '../../apiaccess';
+import { useUIC } from '../../UIcontext';
 
 import './CreatePost.css';
 
@@ -268,22 +270,101 @@ const addLocationData =
 
 
 
-function SelectionModal({ title, data, setData, modal, setModal }) {
+function SelectionModal({ 
+  title, 
+  data, 
+  setData, 
+  modal, 
+  setModal 
+}) {
+  const {triggerPopup} = useUIC();
   const [searchQuery, setSearchQuery] = React.useState('');
   const [apiResults, setApiResults] = React.useState([]);
   const [loadingResults, setLoadingResults] = React.useState(false);
 
+  //for Create Tag Modal
+  const [isCreatingTag, setCreatingTag] = React.useReducer(state => !state, false);
+  const [newTagName, setNewTagName] = React.useState('');
+  const [isPrivate, setIsPrivate] = React.useState(false);
+
+  const createTag = async() => {
+
+    if (!newTagName.trim() || newTagName.includes(' ')) {
+       triggerPopup({
+            message: `Please enter a single term with no spaces`, 
+        });
+        return;
+    }
+
+    let body = {
+       type: "tag",
+       name: newTagName,
+       isPrivate: isPrivate,
+       action: 'newTag'
+    }
+
+    let request = await accessAPI.newGroup(body);
+
+    if(request.alreadyExists) {
+
+      setCreatingTag(false);
+
+      triggerPopup({
+          message: `A tag with the name ${newTagName} already exists`, 
+      });
+    }
+    else if (request.confirm) {
+        triggerPopup({
+          message: `New Tag ${newTagName} created!` 
+        })
+
+        //updates tags n topics, should include new tag
+        let topics = await accessAPI.getSuggestions();
+        let userTags = await accessAPI.getUserTags(); //gets all tags 
+
+        let results = [];
+        let _topics = topics.map(topic => {
+          return {
+            name: topic,
+            type: 'topic',
+            selected: false
+          }
+        })
+        results.push(..._topics);
+
+        if(userTags != false) {
+          let _userTags = userTags.map(topic => {
+            return {
+              name: topic.name,
+              type: 'tag',
+              selected: false
+            }
+          })
+          results.push(..._userTags);
+        }
+
+        setData(results);
+
+        setCreatingTag();
+    }
+  }
+
+
+
   // 1. Determine if data is an array or a single object
   const isLocationMode = title == 'Location';
+  const isTagsMode = title == 'Tags & Topics';
   const dataIsArray = Array.isArray(data);
 
   const localFilteredOptions = React.useMemo(() => {
-	  if (!dataIsArray || !searchQuery) return [{name: data.name}] || [];
+	  // if (!dataIsArray || !searchQuery) return [{name: data.name}] || [];
+    if (!dataIsArray) return data ? [data] : [];
+    if (!searchQuery.trim()) return data;
 
 	  const lowerCaseQuery = searchQuery.toLowerCase();
 	  return data.filter(item => {
 	    const matchesUsername = item.username?.toLowerCase().includes(lowerCaseQuery);
-	    const primaryName = item.name || item.fullname;
+	    const primaryName = item.name || item.fullName;
 	    const matchesName = primaryName?.toLowerCase().includes(lowerCaseQuery);
 	    return matchesUsername || matchesName;
 	  });
@@ -322,7 +403,6 @@ function SelectionModal({ title, data, setData, modal, setModal }) {
   // 4. The Final List for the JSX
   const filteredOptions = dataIsArray ? localFilteredOptions : apiResults;
 
-
   //for placing selected options within it's state
   const selectedOptions = React.useMemo(() => {
   	if(dataIsArray) {
@@ -331,7 +411,6 @@ function SelectionModal({ title, data, setData, modal, setModal }) {
   	else return [{name: data.name}]
   }, [data]);
 
-  // Fix: Use 'id' instead of 'name' for more reliable matching
   const toggleSelection = async (clickedOption) => {
 	  if(dataIsArray) {
 	  	// 1. Identify what we are looking for (Username takes priority, then Name)
@@ -430,7 +509,6 @@ function SelectionModal({ title, data, setData, modal, setModal }) {
 	 console.log(`Error (${err.code}): ${err.message}`)
   }
 
-
   //Get coordinates when button is toggled
   React.useEffect(()=> {
 		if(manualCoordinates.lon) {
@@ -468,96 +546,147 @@ function SelectionModal({ title, data, setData, modal, setModal }) {
   }, []) //fires automatically if in location mode
 
 
-
   return (
     <div id="selectionModal_bg">
-      <div id="selectionModal_wr">
-        <h2>{title}</h2>
 
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-input"
-        />
+      {!isCreatingTag ? (
 
-        {/* --- List of ALL Options --- */}
-        <ul className="options">
-          
-          {filteredOptions.map((option) => (
-            /* ✅ Added implicit return using parentheses ( ) instead of { } */
-            <li
-              key={option.id}
-              onClick={() => toggleSelection(option)}
-              className={`option ${option.selected ? 'selected' : ''}`}
-            >
-              <p>{(option.name || option.userName) || option.description}</p>
-              {option.username && option.fullname && (
-                <span> ({option.fullName})</span>
-              )}
-            </li>
-          ))}
-        </ul>
+        <div id="selectionModal_wr">
+          <h2>{title}</h2>
 
-        {/* --- List of SELECTED Options --- */}
-        <ul className="selected">
-          {selectedOptions.length > 0 &&
-          	selectedOptions.map((option) => (
-            <li key={option.id} onClick={() => toggleSelection(option)}>
-              {option.userName || option.name}
-            </li>
-          ))}
-        </ul>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
 
-         <button onClick={() => setModal(false)} className="close-button">
-	        &#10005;
-	      </button>
-      </div>
+          {/* --- List of ALL Options --- */}
+          <ul className="options">
+            
+            {filteredOptions.map((option) => (
+              /* ✅ Added implicit return using parentheses ( ) instead of { } */
+              <li
+                key={option.id}
+                onClick={() => toggleSelection(option)}
+                className={`option ${option.selected ? 'selected' : ''}`}
+              >
+                <p>{(option.name || option.userName) || option.description}</p>
+                {option.username && option.fullName && (
+                  <span> ({option.fullName})</span>
+                )}
+              </li>
+            ))}
+          </ul>
 
-      {isLocationMode &&
-      	<button id="pinLocation"
-			className={`buttonDefault ${data.open == true ? 'active' : 'nonActive'}`}
-			onClick={(e)=> {
-				e.preventDefault(); 
-				if(data.open == false) {
-					setData({
-						...data,
-						open: true
-					})
-				} else {
-					setData({
-						...data,
-						open: false
-					})
-				}
-			}}>
-			Pin Location
-		</button>
+          {/* --- List of SELECTED Options --- */}
+          <ul className="selected">
+            {selectedOptions.length > 0 &&
+              selectedOptions.map((option) => (
+              <li key={option.id} onClick={() => toggleSelection(option)}>
+                {option.userName || option.name}
+              </li>
+            ))}
+          </ul>
+
+          {data.open &&
+            <div id="coordinatesWrapper">
+              
+              <div id="lonWrap" className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>
+                <p className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>LON</p>
+                <input type="text"
+                    inputMode="decimal"
+                    name="lon"
+                    onChange={coordinatesOnChange}
+                    placeholder={manualCoordinates.lon}/>
+              </div>
+              <div id="latWrap" className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>
+                <p className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>LAT</p>
+                <input type="text"
+                    inputMode="decimal"
+                    name="lat"
+                    onChange={coordinatesOnChange}
+                    placeholder={manualCoordinates.lat}/>
+              </div>
+            </div>
+          }
+
+          {isLocationMode &&
+            <button id="pinLocation"
+                     className={`buttonDefault ${data.open == true ? 'active' : 'nonActive'}`}
+                      onClick={(e)=> {
+                        e.preventDefault(); 
+                        if(data.open == false) {
+                          setData({
+                            ...data,
+                            open: true
+                          })
+                        } else {
+                          setData({
+                            ...data,
+                            open: false
+                          })
+                        }
+                      }}>
+                      Pin Location
+              </button>
+          }
+    
+          <button onClick={() => setModal(false)} className="close-button">
+              &#10005;
+          </button>
+
+          {isTagsMode &&
+            <button onClick={() => setCreatingTag()} className="createTag">
+              Create Tag
+            </button>
+          }
+
+        </div>
+
+        ) : (
+
+        <div id="createTag">
+            
+            <div id="selectionModal_wr" className="create-mode">
+              <h2>Create New Tag</h2>
+              
+              <div className="form-group">
+                  <input 
+                      type="text" 
+                      placeholder="Tag Name (e.g. Science)" 
+                      value={newTagName}
+                      onChange={(e) => setNewTagName(e.target.value.replace(/\s/g, ''))} // Prevent spaces
+                  />
+                  
+                  <label className="checkbox-label">
+                      <input 
+                          type="checkbox" 
+                          checked={isPrivate} 
+                          onChange={(e) => setIsPrivate(e.target.checked)} 
+                      />
+                      Private Topic
+                  </label>
+              </div>
+
+              
+              <button onClick={createTag} 
+                      className="save-btn">
+                Save
+              </button>
+
+              <button onClick={() => setCreatingTag()} className="close-button">
+                  &#10005;
+              </button>
+            </div>
+
+        </div>
+
+        )
+
       }
-      {data.open &&
-		<div id="coordinatesWrapper">
-			
-			<div id="lonWrap" className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>
-				<p className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>LON</p>
-				<input type="text"
-						inputMode="decimal"
-						name="lon"
-						onChange={coordinatesOnChange}
-						placeholder={manualCoordinates.lon}/>
-			</div>
-			<div id="latWrap" className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>
-				<p className={`${manualCoordinates.lon !== '' ? 'active' : 'inactive'}`}>LAT</p>
-				<input type="text"
-						inputMode="decimal"
-						name="lat"
-						onChange={coordinatesOnChange}
-						placeholder={manualCoordinates.lat}/>
-			</div>
-		</div>
-	}	
-     
-    </div>
+    </div>  
   )
 }
 
@@ -747,6 +876,7 @@ export default function CreatePostt ({
 	socketMessage, 
 	setSocketMessage, 
 	selectedDate,
+  setSelectedDate,
 	sectionClass,
 	setSectionClass,
 	setCreatePostToggle,
@@ -754,6 +884,8 @@ export default function CreatePostt ({
 	triggerDraftRef
 }) {
 
+  const navigate = useNavigate();
+	const { triggerPopup } = useUIC();
 	const userID = sessionStorage.getItem('userID');
 	const username = sessionStorage.getItem('userName');
 	const privacySetting = sessionStorage.getItem('privacySetting');
@@ -921,23 +1053,22 @@ export default function CreatePostt ({
 
 			if(submit.confirm == true) {
 				console.log("Post submission successful");
-				// element.classList.remove('_enter');
-				// element.classList.add('_fade');
-				// let delay = setTimeout(()=> {
-				// 	setCurrent({
-				// 		...current,
-				// 		modal: false
-				// 	})
-				// }, 300)
-
+				
 				let utilizedDraft = drafts.find(post => post.selected == true);
 				if(utilizedDraft) {
 					await accessAPI.deleteDraft(utilizedDraft._id)	
 				}
 
-				setSocketMessage({
-					confirm: 'postUpload'
-				})
+				//on interact shuld include : navigate(`/post/${submit.postId}`); or such
+				
+				triggerPopup({
+			        message: "Post Submitted!", // "Post Submitted Successfully!"
+			        // onConfirm: () => console.log("should close modal"),
+			        onInteract: () => {
+                navigate(`/post/${submit.postURL}`);
+              },
+              interactMessage: 'View Post'
+			    });
 				
 				return true;
 
@@ -1059,14 +1190,13 @@ export default function CreatePostt ({
 			else if(submit.message) {
 				element.classList.remove('_loading');
 				console.log('Issue with post submission');
-				
+
 				setSocketMessage({
 					type: 'error',
 					message: submit.message
 				})
 			}
-		}
-		
+		}	
 	}
 
 	const newContent = (type) => {
@@ -1158,36 +1288,18 @@ export default function CreatePostt ({
       	  kongetsu = hajime.getMonth() + 1,
       	  kotoshi = hajime.getFullYear();
 
-	let newTag_onChange = (e) => {
-
-		const input = e.currentTarget.value;
-		setNewTag_value(e.currentTarget.value);
-	}
-
-	let newTag_submit = async(e) => {
-
-		let data = {
-			type: 'tag',
-			name: newTag_value,
-			owner: isPrivate_2 == true ? userID : null,
-			admins: [`${isPrivate_2 == true ? userID : null}`],
-			ownerUsername: isPrivate_2 == true ? username : null,
-			hasAccess: [userID],
-			isPrivate: isPrivate_2 == true ? true : false,
-			action: 'newTag'
-		}
-		setSocketMessage(data);
-		console.log(data);
-		/*
-			2nd part of operation in useEffect
-		*/
-	}
-
 	//update main data: connections, topics and tags, drafted posts
 	React.useEffect(()=> {
 		getConnections();
 		gettagsNTopics();
 		getDrafts();
+
+    setSelectedDate({
+      month: kongetsu,
+      day: kyou,
+      year: kotoshi
+    });
+
 	}, []);
 
 	//Enter animation
@@ -1255,7 +1367,7 @@ export default function CreatePostt ({
 	}
 
 
-	//SVG I C O N S
+	//SVG ICONS
 	let privacyToggle =
 	<svg 
 	  xmlns="http://www.w3.org/2000/svg" 
@@ -1311,7 +1423,6 @@ export default function CreatePostt ({
 	  </g>
 	</svg>
 
-
 	const [activeType, setActiveType] = React.useState(null); //users, locations, tags
 	const getModalConfig = () => {
 	    switch(activeType) {
@@ -1325,7 +1436,51 @@ export default function CreatePostt ({
 	        return null;
 	    }
 	  };
-  	const config = getModalConfig();
+  const config = getModalConfig();
+
+  const [dateSelect, setDateSelect] = React.useReducer(state => !state, false);
+
+  const changeDate = (e) => {
+    const { name, value } = e.target;
+    setSelectedDate(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  }
+
+  const validateDate = () => {
+    const { month, day, year } = selectedDate;
+    
+    // Parse to integers
+    const m = parseInt(month);
+    const d = parseInt(day);
+    const y = parseInt(year);
+
+    // Basic check for empty inputs
+    if (!month == null && !day == null && !year == null) {
+      triggerPopup({
+          message: `Please fill in all fields`, 
+      });
+      return;
+    }
+
+    // JS Date uses 0-indexed months (0 = Jan, 1 = Feb)
+    const testDate = new Date(y, m - 1, d);
+
+    // Check if the date rolled over (e.g., Feb 30 -> March 2)
+    const isValid = 
+      testDate.getFullYear() === y &&
+      testDate.getMonth() === m - 1 &&
+      testDate.getDate() === d;
+
+    if (isValid) {
+      setDateSelect()
+    } else {
+      triggerPopup({
+          message: `Date entered is invalid`, 
+      });
+    }
+  }
 
 
 	return (
@@ -1334,24 +1489,24 @@ export default function CreatePostt ({
 			<div id="returnButtonWrapper">
 				<svg 
 				  onClick={()=> {
-					setSectionClass({
-						...sectionClass,
-						createPost: 'leave'
-					});
+  					setSectionClass({
+  						...sectionClass,
+  						createPost: 'leave'
+  					});
 
-					let delay = setTimeout(()=> {
-						setCurrent({
-							...current,
-							createPost: false,
-						})
-					}, 300)
-					let delay2 = setTimeout(()=> {
-						setSectionClass({
-							...sectionClass,
-							createPost: ''
-						})
-						setCreatePostToggle();
-					}, 600)
+  					let delay = setTimeout(()=> {
+  						setCurrent({
+  							...current,
+  							createPost: false,
+  						})
+  					}, 300)
+  					let delay2 = setTimeout(()=> {
+  						setSectionClass({
+  							...sectionClass,
+  							createPost: ''
+  						})
+  						setCreatePostToggle();
+  					}, 600)
 				  }}
 				  xmlns="http://www.w3.org/2000/svg" 
 				  width="48" 
@@ -1381,8 +1536,9 @@ export default function CreatePostt ({
 							className={`buttonDefault`}
 							onClick={(e)=> {
 								e.preventDefault();
+                setDateSelect();
 							}}>
-							{kongetsu}. {kyou}. {kotoshi}
+							{selectedDate.month}. {selectedDate.day}. {selectedDate.year}
 						</button>
 
 						<input 
@@ -1492,6 +1648,39 @@ export default function CreatePostt ({
 				  setPrivate={setPrivate}
 				  setPinLocation={setLocationData}/>
 			}
+
+      {dateSelect &&
+        <div id="dateSelection">
+            
+            <div id='inputWrapper'>
+              <input 
+                type="number" 
+                id="month" 
+                name="month"
+                value={selectedDate.month}
+                placeholder={kongetsu} 
+                onChange={changeDate}/>
+
+              <input 
+                type="number" 
+                id="day" 
+                name="day"
+                value={selectedDate.day}
+                placeholder={kyou}
+                onChange={changeDate}/>
+
+              <input 
+                type="number" 
+                id="year"
+                name="year" 
+                value={selectedDate.year}
+                placeholder={kotoshi}
+                onChange={changeDate}/>
+            </div>
+
+            <button className={`buttonDefault`} onClick={validateDate}>Enter</button>
+        </div>
+      }
 			
 			
 		</div>

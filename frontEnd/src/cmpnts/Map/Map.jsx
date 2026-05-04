@@ -515,24 +515,6 @@ export default function Mapp ({
 		}
 	}, [currentCenter, markers, isMapMounted]) 
 
-
-	// function openPopupWithPosts(posts) {
-
-	// 	setPostInfo(posts);
-	// 	setCurrentPostIndex(0);
-	// 	setPostBoardClass('down');
-	// 	setTimeout(() => setPostBoardClass('up'), 500);
-	// 	toggleFilter();
-	// }
-
-	// function openPopupWithSinglePost(post) {
-	// 	setPostInfo([post]);
-	// 	setCurrentPostIndex(0);
-	// 	setPostBoardClass('down');
-	// 	setTimeout(() => setPostBoardClass('up'), 500);
-	// 	toggleFilter();
-	// }
-
 	function handleNextPost() {
 		setCurrentPostIndex((prevIndex) => (prevIndex + 1) % postInfo.length);
 	}

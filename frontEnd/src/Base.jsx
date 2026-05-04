@@ -6,13 +6,13 @@ import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
-  useLocation
+  useLocation,
+  Outlet
 } from "react-router-dom";
 import useWebSocket, {ReadyState} from 'react-use-websocket';
 import { UIContextProvider, useUIC } from './UIcontext';
 import APIaccess from './apiaccess';
 import CalInfo from './components/calInfo'
-// import {UIContextProvider, UIContext} from './UIcontext';
 
 import './Base.css';
 import './components/base/home.css';
@@ -24,7 +24,8 @@ import NotificationList from './components/notifs/notifsList';
 import { Navbar, Navmenu } from './cmpnts/Nav/Nav';
 import SectionWrapper from './cmpnts/SectionWrapper/SectionWrapper';
 import OptionsButton from './cmpnts/OptionsButton/OptionsButton';
-import SectionsWrapper from './components/sections/sectionsWrapper';
+import Instants from './cmpnts/Instants/Instants'
+
 import Macrospage from './components/macrospage/macrospage';
 import Post from './components/blog/post';
 import Instant from './components/notifs/instant';
@@ -33,25 +34,26 @@ import UserProfile from './components/base/userProfile';
 import AboutPage from './components/base/aboutPage';
 
 
+
 /*
   09. 16. 2025
   These will technically be temporary
 */
 /* import UserLog from './components/sections/userLog'; */
 import Profile from './cmpnts/Profile/Profile';
-import SocialLog from './components/sections/socialLog';
+import SocialSection from './cmpnts/Socials/SocialSection';
 import UserLog from './cmpnts/Home/Home';
 import Macros from './components/sections//macros';
 import Settings from './cmpnts/Settings/Settings';
 
 /*** Sub Sections ***/
-import { CreatePost } from './components/sections/userLog';
+// import { CreatePost } from './components/sections/userLog';
 import CreatePostt from "./cmpnts/CreatePost/CreatePost";
-import { ManageConnections } from './components/sections/socialLog';
+// import { ManageConnections } from './components/sections/socialLog';
+import ManageConnections from './cmpnts/ManageConnections/ManageConnections';
 import { ManageMacros } from './components/sections/macros';
 import Calendar from './cmpnts/Calendar/Calendar';
 import Mapp from './cmpnts/Map/Map';
-// import { MapPage } from './components/map/map';
 import DragSlider from './components/base/dragSlider';
 import './components/sections/sections.css';
 import CustomLogEditor from './components/base/customLogEditor/customLogEditor';
@@ -74,8 +76,6 @@ function HomeOrEntry({ children }) {
 
 /* * * H O M E  C o m p o n e n t * * */
 function Home({
-  userDocumentSettings,
-  setUserDocumentSettings,
   socketURL, 
   socketMessage, 
   setSocketMessage, 
@@ -107,7 +107,8 @@ function Home({
 }) {
 
   const navigate = useNavigate();
-  const { logout } = useUIC();
+  const location = useLocation();
+  const { logout, baseRef } = useUIC();
   const [notifList, setNotifList] = React.useReducer(state => !state, false);
   const [userSettings, setUserSettings] = React.useReducer(state => !state, false);
   const [isLogout, setLogout] = React.useReducer(state => !state, false);
@@ -120,8 +121,8 @@ function Home({
 
   const [enter, setEnter] = React.useReducer(state => !state, true);
   
-  let el = React.useRef();
-  let element = el.current
+  // let el = React.useRef();
+  let element = baseRef.current;
 
   React.useEffect(()=> {
     getUnreadCount();
@@ -166,6 +167,8 @@ function Home({
   const [createPostToggle, setCreatePostToggle] = React.useReducer(state => !state, false);
   const [draftsList, setDraftsList] = React.useReducer(state => !state, false);
 
+  const [manageConnectionsToggle, setManageConnectionsToggle] = React.useReducer(state => !state, false);
+
     React.useEffect(()=> {
       updateLog()
     }, [createPostToggle, current.customizer])
@@ -175,6 +178,7 @@ function Home({
     For Scroll Tracking on div#sections
   */ 
   const [headerVisible, setHeaderVisible] = React.useState(true);
+  const [socialPaddingAdjust, setSocialPaddingAdjust] = React.useState(false);
   const scrollAccumulator = React.useRef(0);
   const scrollThreshold = 60;
   const handleScroll = (deltaY) => {
@@ -183,11 +187,13 @@ function Home({
 
     if(scrollAccumulator.current > scrollThreshold && headerVisible) {
       setHeaderVisible(false);
+      setSocialPaddingAdjust(true);
     }
 
     if(deltaY < 0) {
       if(!headerVisible) {
         setHeaderVisible(true);
+        setSocialPaddingAdjust(false);
       }
 
       scrollAccumulator.current = 0;
@@ -204,8 +210,18 @@ function Home({
   const triggerSubmitRef = React.useRef(null);
   const triggerDraftRef = React.useRef(null);
 
+
+  //Conditionals for whether the Header displays the back button
+  const isSubPage = location.pathname.includes('/post/') ||
+                    location.pathname.includes('/macros') ||
+                    location.pathname.includes('/user');
+
+  // For when UserProfile loads, to update OptionsButton options
+  // can be  conn, subbed or subber
+  const [viewedUserConnStatus, setViewedUserConnStatus] = React.useState('')
+
   return (
-    <section id="BASE" ref={el} className={`${enter == true ? '_enter' : ''}`}>  
+    <section id="BASE" ref={baseRef} className={`${enter == true ? '_enter' : ''}`}>  
 
         {/* H E A D E R  &  N A V B A R */}
         <Header 
@@ -213,7 +229,8 @@ function Home({
           isPost={isPost} 
           setNotifList={setNotifList} 
           unreadCount={unreadCount}
-          isVisible={headerVisible}> 
+          isVisible={headerVisible}
+          isSubPage={isSubPage}> 
       
           <Navbar current={current} 
                   setCurrent={setCurrent}/>
@@ -250,49 +267,50 @@ function Home({
         {/*
             M A I N   S E C T I O N   W R A P P E R
         */}
+        <Outlet />
+
         <SectionWrapper onScrollDelta={handleScroll}>
           {current.section == 'profile' &&
             <Profile
-                  current={current}
-                  setCurrent={setCurrent}
-                  sectionClass={sectionClass}
-                  refe={profileRef}
-                  accessID={accessID}
-                  setAccessID={setAccessID}
-                  log={log}
-                  setLog={setLog}/>
+              current={current}
+              setCurrent={setCurrent}
+              sectionClass={sectionClass}
+              refe={profileRef}
+              accessID={accessID}
+              setAccessID={setAccessID}
+              log={log}
+              setLog={setLog}/>
           }
 
           {current.section == 'social' &&
-            <SocialLog
-                  current={current}
-                  setCurrent={setCurrent} 
-                  log={log}
-                  setLog={setLog}
-                  sectionClass={sectionClass}
-                  refe={socialRef}/>
+            <SocialSection
+              current={current}
+              setCurrent={setCurrent}
+              sectionClass={sectionClass}
+              refe={socialRef} 
+              socialPaddingAdjust={socialPaddingAdjust}/>
           }
 
           {current.section == 'home' &&
             <UserLog  
-                current={current} 
-                setCurrent={setCurrent} 
-                log={log}
-                setLog={setLog}
-                sectionClass={sectionClass}
-                refe={homeRef}/>
+              current={current} 
+              setCurrent={setCurrent} 
+              log={log}
+              setLog={setLog}
+              sectionClass={sectionClass}
+              refe={homeRef}/>
           }
 
           {current.section == 'macros' &&
             <Macros  
-                current={current} 
-                setCurrent={setCurrent}
-                tags={tags}
-                setTags={setTags} 
-                userTopics={userTopics}
-                setUserTopics={setUserTopics}
-                sectionClass={sectionClass}
-                refe={macrosRef}/>
+              current={current} 
+              setCurrent={setCurrent}
+              tags={tags}
+              setTags={setTags} 
+              userTopics={userTopics}
+              setUserTopics={setUserTopics}
+              sectionClass={sectionClass}
+              refe={macrosRef}/>
           }
 
           {current.section == 'settings' &&
@@ -312,10 +330,14 @@ function Home({
         </SectionWrapper>
 
 
-        {(!current.map &&( current.modal && current.section == 'social')) &&
+        {manageConnectionsToggle &&
           <ManageConnections current={current} 
                              setCurrent={setCurrent} 
-                             setSocketMessage={setSocketMessage}/>
+                             setSocketMessage={setSocketMessage}
+                             manageConnectionsToggle={manageConnectionsToggle}
+                             setManageConnectionsToggle={setManageConnectionsToggle}
+                             sectionClass={sectionClass}
+                             setSectionClass={setSectionClass}/>
         }
 
         {/*{createPostToggle &&
@@ -334,15 +356,12 @@ function Home({
                       socketMessage={socketMessage}
                       setSocketMessage={setSocketMessage} 
                       selectedDate={selectedDate}
+                      setSelectedDate={setSelectedDate}
                       createPostToggle={createPostToggle}
                       setCreatePostToggle={setCreatePostToggle} 
                       sectionClass={sectionClass}
                       setSectionClass={setSectionClass}
                       setCreatePostToggle={setCreatePostToggle}
-                      // triggerSubmit={triggerSubmit}
-                      // setTriggerSubmit={setTriggerSubmit}
-                      // triggerDraftRef={triggerDraftRef}
-                      // setTriggerDraftRef={setTriggerDraftRef}
                       triggerSubmitRef={triggerSubmitRef}
                       triggerDraftRef={triggerDraftRef}
                       draftsList={draftsList}
@@ -370,6 +389,9 @@ function Home({
 
             createPostToggle={createPostToggle}
             setCreatePostToggle={setCreatePostToggle}
+
+            manageConnectionsToggle={manageConnectionsToggle}
+            setManageConnectionsToggle={setManageConnectionsToggle}
 
             triggerSubmitRef={triggerSubmitRef}
             triggerDraftRef={triggerDraftRef}
@@ -435,7 +457,7 @@ function Home({
           }
 
 
-        <Instant 
+        {/*<Instant 
           socketMessage={socketMessage} 
           setSocketMessage={setSocketMessage}
           sendMessage={sendMessage}
@@ -444,7 +466,7 @@ function Home({
           accessID={accessID}
           setAccessID={setAccessID}
           getUnreadCount={getUnreadCount}
-        />
+        />*/}
         
     </section>
   )
@@ -465,7 +487,7 @@ export default function Main() {
    * A n d
    * N o t i f i c a t i o n s
    */
-  const { authed, userDocumentSettings, setUserDocumentSettings } = useUIC();
+  const { authed } = useUIC();
   let userID = sessionStorage.getItem('userID');
   
 
@@ -490,7 +512,7 @@ export default function Main() {
    */
   React.useEffect(()=> {
     if(authed == true) {
-      setSocketURL(`ws://172.21.160.52:3333/?${userID}`);
+      setSocketURL(`ws:///172.17.243.173:3333/?${userID}`);
       getUnreadCount();
     }
   }, [authed])
@@ -504,6 +526,7 @@ export default function Main() {
       console.log('socket connection has closed')
     }
   }, [readyState])
+
 
   /**
    * when socket connection R E C I E V E S messages
@@ -676,7 +699,8 @@ export default function Main() {
       map: '',
       mapSettings: '_enter',
       calendar: '',
-      createPost: ''
+      createPost: '',
+      manageConnections: '',
   })
   
   const [current, setCurrent] = React.useState({
@@ -685,6 +709,7 @@ export default function Main() {
     calendar: false, //true or false
     map: false,
     createPost: false,
+    manageConnections: false,
     scrollTo: null,
     currentLog: null,
     modal: false, //for <UserProfile>, when user leaves page via a fullList, ensures modal is still up
@@ -766,153 +791,254 @@ export default function Main() {
       path: "/entry",
       element: <Entry />
     },
-    // R O O T
+
+    //R O O T
     {
       path: "/",
-      element:
-        <HomeOrEntry>
-          <Home 
-                  userDocumentSettings={userDocumentSettings}
-                  setUserDocumentSettings={setUserDocumentSettings} 
-                  // socket & notif stuff 
-                  socketURL={socketURL}
-                  socketMessage={socketMessage}
-                  setSocketMessage={setSocketMessage}
-                  sendMessage={sendMessage}
-                  isActive={isActive}
-                  setActive={setActive}
-                  accessID={accessID}
-                  setAccessID={setAccessID}
-                  unreadCount={unreadCount}
-                  setUnreadCount={setUnreadCount}
-                  getUnreadCount={getUnreadCount}
-                  lastMessage={lastMessage}
-                  // socket & notif stuff
-                  cal={cal}
-                  current={current}
-                  setCurrent={setCurrent}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-
-                  mapData={mapData}
-                  setMapData={setMapData}
-
-                  log={log}
-                  setLog={setLog}
-                  tags={tags}
-                  setTags={setTags}
-                  userTopics={userTopics}
-                  setUserTopics={setUserTopics}
-
-                  sectionClass={sectionClass}
-                  setSectionClass={setSectionClass}
-          />
-        </HomeOrEntry>
-      ,
-    },
-    // H O M E
-    {
-      path: '/home',
-      element:
+      element: 
         <HomeOrEntry>
             <Home 
-                  // socket & notif stuff
-                  socketURL={socketURL}
-                  socketMessage={socketMessage}
-                  setSocketMessage={setSocketMessage}
-                  sendMessage={sendMessage}
-                  isActive={isActive}
-                  setActive={setActive}
-                  accessID={accessID}
-                  setAccessID={setAccessID}
-                  unreadCount={unreadCount}
-                  setUnreadCount={setUnreadCount}
-                  getUnreadCount={getUnreadCount}
-                  lastMessage={lastMessage}
-                  // socket & notif stuff
-                  cal={cal}
-                  current={current}
-                  setCurrent={setCurrent}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
+              // socket & notif stuff
+              socketURL={socketURL}
+              socketMessage={socketMessage}
+              setSocketMessage={setSocketMessage}
+              sendMessage={sendMessage}
+              isActive={isActive}
+              setActive={setActive}
+              accessID={accessID}
+              setAccessID={setAccessID}
+              unreadCount={unreadCount}
+              setUnreadCount={setUnreadCount}
+              getUnreadCount={getUnreadCount}
+              lastMessage={lastMessage}
+              // socket & notif stuff
+              cal={cal}
+              current={current}
+              setCurrent={setCurrent}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
 
-                  mapData={mapData}
-                  setMapData={setMapData}
+              mapData={mapData}
+              setMapData={setMapData}
 
-                  log={log}
-                  setLog={setLog}
-                  tags={tags}
-                  setTags={setTags}
-                  userTopics={userTopics}
-                  setUserTopics={setUserTopics}
+              log={log}
+              setLog={setLog}
+              tags={tags}
+              setTags={setTags}
+              userTopics={userTopics}
+              setUserTopics={setUserTopics}
 
-                  sectionClass={sectionClass}
-                  setSectionClass={setSectionClass}
+              sectionClass={sectionClass}
+              setSectionClass={setSectionClass}
             />
-        </HomeOrEntry>
-    },
-    // P O S T
-    {
-      path: '/post/:postID',
-      loader: async({ params }) => {
-        let request = await accessAPI.getBlogPost(params.postID);
-        return request;
-      },
-      element:
-        <HomeOrEntry>
-          <Post 
-            // socket stuff
-                  socketURL={socketURL}
-                  socketMessage={socketMessage}
-                  setSocketMessage={setSocketMessage}
-                  sendMessage={sendMessage}
-                  isActive={isActive}
-                  setActive={setActive}
-                  accessID={accessID}
-                  setAccessID={setAccessID}
-                  unreadCount={unreadCount}
-                  setUnreadCount={setUnreadCount}
-                  getUnreadCount={getUnreadCount}
-                  lastMessage={lastMessage}
-                  current={current}
-                  setCurrent={setCurrent}
-                 
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-          />
-        </HomeOrEntry>
-    },
-    //M A C R O S P A G E
-    {
-      path: '/macros/:macroname/:macroid',
-      loader: async({ params }) => {
-        let macroInfo = await accessAPI.getTagData(params.macroid, params.macroname);
-        let macroPosts = await accessAPI.groupPosts({action: 'getPosts', groupID: params.macroid, groupName: params.macroname});
-         
-        let doesHaveAccess;
-        if(macroInfo.response == 'topic') {
-          macroInfo.userHasAccess = macroInfo.hasAccess;
-          // macroInfo._id = 'topic';
-        }
-        // else if(macroInfo.hasAccess) {
-        else {
-          doesHaveAccess = macroInfo.hasAccess.filter(el => el == userID);
-          doesHaveAccess = doesHaveAccess.length > 0 ? true : false;
-          macroInfo.userHasAccess = doesHaveAccess;
-        }
-         
-        macroInfo.name = macroInfo.name ? macroInfo.name : params.macroname;
-        macroInfo.ownerUsername = macroInfo.adminUsernames ? macroInfo.adminUsernames[0] : null;
-        macroInfo.ownerID = macroInfo.admins ? macroInfo.admins[0] : null;
-        macroInfo.type = macroInfo.type == undefined ? 'topic' : macroInfo.type;
-        macroInfo.userCount = macroInfo.hasAccess ? macroInfo.hasAccess.length : null;
-        macroInfo.postCount = macroPosts.length ? macroPosts.length : 0
+        </HomeOrEntry>,
+      children: [
+        //Post
+        {
+          path: '/post/:postID',
+          loader: async({ params }) => {
+            let request = await accessAPI.getBlogPost(params.postID);
+            return request;
+          },
+          element:
+              <Post 
+                // socket stuff
+                socketURL={socketURL}
+                socketMessage={socketMessage}
+                setSocketMessage={setSocketMessage}
+                sendMessage={sendMessage}
+                isActive={isActive}
+                setActive={setActive}
+                accessID={accessID}
+                setAccessID={setAccessID}
+                unreadCount={unreadCount}
+                setUnreadCount={setUnreadCount}
+                getUnreadCount={getUnreadCount}
+                lastMessage={lastMessage}
+                current={current}
+                setCurrent={setCurrent}
+                     
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+              />
+        },
 
-        return {macroInfo, macroPosts}
-      },
+        //Profile
+        {
+          path: '/user/:username/:userid',
+          loader: async({ params }) => {
+            let data = await accessAPI.getSingleUser(params.userid);
+            return data;
+          },
+          element: 
+            // <UserProfile
+            //       // socket stuff
+            //       socketURL={socketURL}
+            //       socketMessage={socketMessage}
+            //       setSocketMessage={setSocketMessage}
+            //       sendMessage={sendMessage}
+            //       isActive={isActive}
+            //       setActive={setActive}
+            //       accessID={accessID}
+            //       setAccessID={setAccessID}
+            //       unreadCount={unreadCount}
+            //       setUnreadCount={setUnreadCount}
+            //       getUnreadCount={getUnreadCount}
+            //       lastMessage={lastMessage}
+            //       current={current}
+            //       setCurrent={setCurrent}
+            //       // socket stuff
+            //       selectedDate={selectedDate}
+            //       setSelectedDate={setSelectedDate}
+            // />
+            <Profile
+              current={current}
+              setCurrent={setCurrent}
+              sectionClass={sectionClass}
+              // refe={profileRef}
+              accessID={accessID}
+              setAccessID={setAccessID}
+              log={log}
+              setLog={setLog}/>
+        },
+
+        //Macrospage
+        {
+          path: '/macros/:macroname/:macroid',
+          loader: async({ params }) => {
+            let macroInfo = await accessAPI.getTagData(params.macroid, params.macroname);
+            let macroPosts = await accessAPI.groupPosts({action: 'getPosts', groupID: params.macroid, groupName: params.macroname});
+             
+            let doesHaveAccess;
+            if(macroInfo.response == 'topic') {
+              macroInfo.userHasAccess = macroInfo.hasAccess;
+              // macroInfo._id = 'topic';
+            }
+            // else if(macroInfo.hasAccess) {
+            else {
+              doesHaveAccess = macroInfo.hasAccess.filter(el => el == userID);
+              doesHaveAccess = doesHaveAccess.length > 0 ? true : false;
+              macroInfo.userHasAccess = doesHaveAccess;
+            }
+             
+            macroInfo.name = macroInfo.name ? macroInfo.name : params.macroname;
+            macroInfo.ownerUsername = macroInfo.adminUsernames ? macroInfo.adminUsernames[0] : null;
+            macroInfo.ownerID = macroInfo.admins ? macroInfo.admins[0] : null;
+            macroInfo.type = macroInfo.type == undefined ? 'topic' : macroInfo.type;
+            macroInfo.userCount = macroInfo.hasAccess ? macroInfo.hasAccess.length : null;
+            macroInfo.postCount = macroPosts.length ? macroPosts.length : 0
+
+            return {macroInfo, macroPosts}
+          },
+          element: 
+              <Macrospage
+                // socket stuff
+                socketURL={socketURL}
+                socketMessage={socketMessage}
+                setSocketMessage={setSocketMessage}
+                sendMessage={sendMessage}
+                isActive={isActive}
+                setActive={setActive}
+                accessID={accessID}
+                setAccessID={setAccessID}
+                unreadCount={unreadCount}
+                setUnreadCount={setUnreadCount}
+                getUnreadCount={getUnreadCount}
+                lastMessage={lastMessage}
+                current={current}
+                setCurrent={setCurrent}
+                // socket stuff
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                tags={tags}
+                setTags={setTags}
+                userTopics={userTopics}
+                setUserTopics={setUserTopics}
+              />
+        },
+      ]
+    },
+
+    //H O M E
+    {
+      path: "/home",
       element: 
         <HomeOrEntry>
-          <Macrospage
+            <Home 
+              // socket & notif stuff
+              socketURL={socketURL}
+              socketMessage={socketMessage}
+              setSocketMessage={setSocketMessage}
+              sendMessage={sendMessage}
+              isActive={isActive}
+              setActive={setActive}
+              accessID={accessID}
+              setAccessID={setAccessID}
+              unreadCount={unreadCount}
+              setUnreadCount={setUnreadCount}
+              getUnreadCount={getUnreadCount}
+              lastMessage={lastMessage}
+              // socket & notif stuff
+              cal={cal}
+              current={current}
+              setCurrent={setCurrent}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+
+              mapData={mapData}
+              setMapData={setMapData}
+
+              log={log}
+              setLog={setLog}
+              tags={tags}
+              setTags={setTags}
+              userTopics={userTopics}
+              setUserTopics={setUserTopics}
+
+              sectionClass={sectionClass}
+              setSectionClass={setSectionClass}
+            />
+        </HomeOrEntry>,
+      children: [
+        //Post
+        {
+          path: '/home/post/:postID',
+          loader: async({ params }) => {
+            let request = await accessAPI.getBlogPost(params.postID);
+            return request;
+          },
+          element:
+              <Post 
+                // socket stuff
+                socketURL={socketURL}
+                socketMessage={socketMessage}
+                setSocketMessage={setSocketMessage}
+                sendMessage={sendMessage}
+                isActive={isActive}
+                setActive={setActive}
+                accessID={accessID}
+                setAccessID={setAccessID}
+                unreadCount={unreadCount}
+                setUnreadCount={setUnreadCount}
+                getUnreadCount={getUnreadCount}
+                lastMessage={lastMessage}
+                current={current}
+                setCurrent={setCurrent}
+                     
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+              />
+        },
+
+        //Profile
+        {
+          path: '/home/user/:username',
+          loader: async({ params }) => {
+            let data = await accessAPI.getSingleUser(params.userid);
+            return data;
+          },
+          element: 
+            <UserProfile
                   // socket stuff
                   socketURL={socketURL}
                   socketMessage={socketMessage}
@@ -931,68 +1057,66 @@ export default function Main() {
                   // socket stuff
                   selectedDate={selectedDate}
                   setSelectedDate={setSelectedDate}
-                  tags={tags}
-                  setTags={setTags}
-                  userTopics={userTopics}
-                  setUserTopics={setUserTopics}
-          />
-        </HomeOrEntry>
+            />
+        },
+
+        //Macrospage
+        {
+          path: '/home/macros/:macroname/:macroid',
+          loader: async({ params }) => {
+            let macroInfo = await accessAPI.getTagData(params.macroid, params.macroname);
+            let macroPosts = await accessAPI.groupPosts({action: 'getPosts', groupID: params.macroid, groupName: params.macroname});
+             
+            let doesHaveAccess;
+            if(macroInfo.response == 'topic') {
+              macroInfo.userHasAccess = macroInfo.hasAccess;
+              // macroInfo._id = 'topic';
+            }
+            // else if(macroInfo.hasAccess) {
+            else {
+              doesHaveAccess = macroInfo.hasAccess.filter(el => el == userID);
+              doesHaveAccess = doesHaveAccess.length > 0 ? true : false;
+              macroInfo.userHasAccess = doesHaveAccess;
+            }
+             
+            macroInfo.name = macroInfo.name ? macroInfo.name : params.macroname;
+            macroInfo.ownerUsername = macroInfo.adminUsernames ? macroInfo.adminUsernames[0] : null;
+            macroInfo.ownerID = macroInfo.admins ? macroInfo.admins[0] : null;
+            macroInfo.type = macroInfo.type == undefined ? 'topic' : macroInfo.type;
+            macroInfo.userCount = macroInfo.hasAccess ? macroInfo.hasAccess.length : null;
+            macroInfo.postCount = macroPosts.length ? macroPosts.length : 0
+
+            return {macroInfo, macroPosts}
+          },
+          element: 
+              <Macrospage
+                // socket stuff
+                socketURL={socketURL}
+                socketMessage={socketMessage}
+                setSocketMessage={setSocketMessage}
+                sendMessage={sendMessage}
+                isActive={isActive}
+                setActive={setActive}
+                accessID={accessID}
+                setAccessID={setAccessID}
+                unreadCount={unreadCount}
+                setUnreadCount={setUnreadCount}
+                getUnreadCount={getUnreadCount}
+                lastMessage={lastMessage}
+                current={current}
+                setCurrent={setCurrent}
+                // socket stuff
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                tags={tags}
+                setTags={setTags}
+                userTopics={userTopics}
+                setUserTopics={setUserTopics}
+              />
+        },
+      ]
     },
-    //U S E R  P R O F I L E
-    {
-      path: '/user/:username/:userid',
-      loader: async({ params }) => {
-        let data = await accessAPI.getSingleUser(params.userid);
-        return data;
-      },
-      element: 
-        <HomeOrEntry>
-          <UserProfile
-                  // socket stuff
-                  socketURL={socketURL}
-                  socketMessage={socketMessage}
-                  setSocketMessage={setSocketMessage}
-                  sendMessage={sendMessage}
-                  isActive={isActive}
-                  setActive={setActive}
-                  accessID={accessID}
-                  setAccessID={setAccessID}
-                  unreadCount={unreadCount}
-                  setUnreadCount={setUnreadCount}
-                  getUnreadCount={getUnreadCount}
-                  lastMessage={lastMessage}
-                  current={current}
-                  setCurrent={setCurrent}
-                  // socket stuff
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-          />
-        </HomeOrEntry>
-    },
-    //U S E R  S E T T I N G S
-    {
-      path: '/:username/settings',
-      loader: async({ params }) => {
-        let data = await accessAPI.userSettings({option: 'getUserSettings'});
-        return data;
-      },
-      element: 
-        <HomeOrEntry>
-          <UserSettings
-                  setSocketMessage={setSocketMessage}
-                  socketURL={socketURL}
-                  socketMessage={socketMessage}
-                  sendMessage={sendMessage}
-                  isActive={isActive}
-                  setActive={setActive}
-                  setAccessID={setAccessID}
-                  accessID={accessID}
-                  getUnreadCount={getUnreadCount}
-                  current={current}
-                  setCurrent={setCurrent}
-          />
-        </HomeOrEntry>
-    },
+
     //A B O U T 
     {
       path: '/about',
@@ -1003,11 +1127,238 @@ export default function Main() {
       element: 
         <AboutPage />
     }
+
+    // O L D 
+    // R O O T
+    // {
+    //   path: "/",
+    //   element:
+    //     <HomeOrEntry>
+    //       <Home 
+    //               // socket & notif stuff 
+    //               socketURL={socketURL}
+    //               socketMessage={socketMessage}
+    //               setSocketMessage={setSocketMessage}
+    //               sendMessage={sendMessage}
+    //               isActive={isActive}
+    //               setActive={setActive}
+    //               accessID={accessID}
+    //               setAccessID={setAccessID}
+    //               unreadCount={unreadCount}
+    //               setUnreadCount={setUnreadCount}
+    //               getUnreadCount={getUnreadCount}
+    //               lastMessage={lastMessage}
+    //               // socket & notif stuff
+    //               cal={cal}
+    //               current={current}
+    //               setCurrent={setCurrent}
+    //               selectedDate={selectedDate}
+    //               setSelectedDate={setSelectedDate}
+
+    //               mapData={mapData}
+    //               setMapData={setMapData}
+
+    //               log={log}
+    //               setLog={setLog}
+    //               tags={tags}
+    //               setTags={setTags}
+    //               userTopics={userTopics}
+    //               setUserTopics={setUserTopics}
+
+    //               sectionClass={sectionClass}
+    //               setSectionClass={setSectionClass}
+    //       />
+    //     </HomeOrEntry>
+    //   ,
+    // },
+    // H O M E
+    // {
+    //   path: '/home',
+    //   element:
+    //     <HomeOrEntry>
+    //         <Home 
+    //               // socket & notif stuff
+    //               socketURL={socketURL}
+    //               socketMessage={socketMessage}
+    //               setSocketMessage={setSocketMessage}
+    //               sendMessage={sendMessage}
+    //               isActive={isActive}
+    //               setActive={setActive}
+    //               accessID={accessID}
+    //               setAccessID={setAccessID}
+    //               unreadCount={unreadCount}
+    //               setUnreadCount={setUnreadCount}
+    //               getUnreadCount={getUnreadCount}
+    //               lastMessage={lastMessage}
+    //               // socket & notif stuff
+    //               cal={cal}
+    //               current={current}
+    //               setCurrent={setCurrent}
+    //               selectedDate={selectedDate}
+    //               setSelectedDate={setSelectedDate}
+
+    //               mapData={mapData}
+    //               setMapData={setMapData}
+
+    //               log={log}
+    //               setLog={setLog}
+    //               tags={tags}
+    //               setTags={setTags}
+    //               userTopics={userTopics}
+    //               setUserTopics={setUserTopics}
+
+    //               sectionClass={sectionClass}
+    //               setSectionClass={setSectionClass}
+    //         />
+    //     </HomeOrEntry>
+    // },
+    // P O S T
+    // {
+    //   path: '/post/:postID',
+    //   loader: async({ params }) => {
+    //     let request = await accessAPI.getBlogPost(params.postID);
+    //     return request;
+    //   },
+    //   element:
+    //     <HomeOrEntry>
+    //       <Post 
+    //         // socket stuff
+    //               socketURL={socketURL}
+    //               socketMessage={socketMessage}
+    //               setSocketMessage={setSocketMessage}
+    //               sendMessage={sendMessage}
+    //               isActive={isActive}
+    //               setActive={setActive}
+    //               accessID={accessID}
+    //               setAccessID={setAccessID}
+    //               unreadCount={unreadCount}
+    //               setUnreadCount={setUnreadCount}
+    //               getUnreadCount={getUnreadCount}
+    //               lastMessage={lastMessage}
+    //               current={current}
+    //               setCurrent={setCurrent}
+                 
+    //               selectedDate={selectedDate}
+    //               setSelectedDate={setSelectedDate}
+    //       />
+    //     </HomeOrEntry>
+    // },
+    // M A C R O S P A G E
+    // {
+    //   path: '/macros/:macroname/:macroid',
+    //   loader: async({ params }) => {
+    //     let macroInfo = await accessAPI.getTagData(params.macroid, params.macroname);
+    //     let macroPosts = await accessAPI.groupPosts({action: 'getPosts', groupID: params.macroid, groupName: params.macroname});
+         
+    //     let doesHaveAccess;
+    //     if(macroInfo.response == 'topic') {
+    //       macroInfo.userHasAccess = macroInfo.hasAccess;
+    //       // macroInfo._id = 'topic';
+    //     }
+    //     // else if(macroInfo.hasAccess) {
+    //     else {
+    //       doesHaveAccess = macroInfo.hasAccess.filter(el => el == userID);
+    //       doesHaveAccess = doesHaveAccess.length > 0 ? true : false;
+    //       macroInfo.userHasAccess = doesHaveAccess;
+    //     }
+         
+    //     macroInfo.name = macroInfo.name ? macroInfo.name : params.macroname;
+    //     macroInfo.ownerUsername = macroInfo.adminUsernames ? macroInfo.adminUsernames[0] : null;
+    //     macroInfo.ownerID = macroInfo.admins ? macroInfo.admins[0] : null;
+    //     macroInfo.type = macroInfo.type == undefined ? 'topic' : macroInfo.type;
+    //     macroInfo.userCount = macroInfo.hasAccess ? macroInfo.hasAccess.length : null;
+    //     macroInfo.postCount = macroPosts.length ? macroPosts.length : 0
+
+    //     return {macroInfo, macroPosts}
+    //   },
+    //   element: 
+    //     <HomeOrEntry>
+    //       <Macrospage
+    //               // socket stuff
+    //               socketURL={socketURL}
+    //               socketMessage={socketMessage}
+    //               setSocketMessage={setSocketMessage}
+    //               sendMessage={sendMessage}
+    //               isActive={isActive}
+    //               setActive={setActive}
+    //               accessID={accessID}
+    //               setAccessID={setAccessID}
+    //               unreadCount={unreadCount}
+    //               setUnreadCount={setUnreadCount}
+    //               getUnreadCount={getUnreadCount}
+    //               lastMessage={lastMessage}
+    //               current={current}
+    //               setCurrent={setCurrent}
+    //               // socket stuff
+    //               selectedDate={selectedDate}
+    //               setSelectedDate={setSelectedDate}
+    //               tags={tags}
+    //               setTags={setTags}
+    //               userTopics={userTopics}
+    //               setUserTopics={setUserTopics}
+    //       />
+    //     </HomeOrEntry>
+    // },
+    // U S E R  P R O F I L E
+    // {
+    //   path: '/user/:username/',
+    //   loader: async({ params }) => {
+    //     let data = await accessAPI.getSingleUser(params.userid);
+    //     return data;
+    //   },
+    //   element: 
+    //     <HomeOrEntry>
+    //       <UserProfile
+    //               // socket stuff
+    //               socketURL={socketURL}
+    //               socketMessage={socketMessage}
+    //               setSocketMessage={setSocketMessage}
+    //               sendMessage={sendMessage}
+    //               isActive={isActive}
+    //               setActive={setActive}
+    //               accessID={accessID}
+    //               setAccessID={setAccessID}
+    //               unreadCount={unreadCount}
+    //               setUnreadCount={setUnreadCount}
+    //               getUnreadCount={getUnreadCount}
+    //               lastMessage={lastMessage}
+    //               current={current}
+    //               setCurrent={setCurrent}
+    //               // socket stuff
+    //               selectedDate={selectedDate}
+    //               setSelectedDate={setSelectedDate}
+    //       />
+    //     </HomeOrEntry>
+    // },
+    // U S E R  S E T T I N G S
+    // {
+    //   path: '/:username/settings',
+    //   loader: async({ params }) => {
+    //     let data = await accessAPI.userSettings({option: 'getUserSettings'});
+    //     return data;
+    //   },
+    //   element: 
+    //     <HomeOrEntry>
+    //       <UserSettings
+    //               setSocketMessage={setSocketMessage}
+    //               socketURL={socketURL}
+    //               socketMessage={socketMessage}
+    //               sendMessage={sendMessage}
+    //               isActive={isActive}
+    //               setActive={setActive}
+    //               setAccessID={setAccessID}
+    //               accessID={accessID}
+    //               getUnreadCount={getUnreadCount}
+    //               current={current}
+    //               setCurrent={setCurrent}
+    //       />
+    //     </HomeOrEntry>
+    // },
   ])
 
   return (
-      <UIContextProvider>
+      // <UIContextProvider>
         <RouterProvider router={routerObject} />
-      </UIContextProvider>
+      // </UIContextProvider>
     )
 }

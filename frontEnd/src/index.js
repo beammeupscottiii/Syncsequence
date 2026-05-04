@@ -11,9 +11,12 @@ import './Base.css';
 const body = document.getElementsByTagName('body')[0]
 const root = ReactDOM.createRoot(body);
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
   
-    <Main />
+  //   <Main />
 
-  </React.StrictMode>
+  // </React.StrictMode>
+  <UIContextProvider>
+    <Main />
+  </UIContextProvider>
 );

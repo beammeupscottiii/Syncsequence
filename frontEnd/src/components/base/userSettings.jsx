@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useNavigate, useLocation, useLoaderData} from 'react-router-dom';
 import APIaccess from '../../apiaccess';
-import useUIC from '../../UIcontext';
+import { useUIC } from '../../UIcontext';
 import Instant from '../../components/notifs/instant';
 
 import '../../components/base/home.css';

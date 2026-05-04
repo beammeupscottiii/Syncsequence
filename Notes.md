@@ -2,20 +2,494 @@
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
 
+### 05. 04. 2026
+@1445 connections subsection now shows real connections + onClick options
+
+profile component needs some css adjustments when it's for userProfile
+ - loading animations, which is set in sectionWrapper.css
+ - margin-top: 120px ish
+ - scrolling?
+
+could use a state var from the link? i dunno, ask Gem...
+
+
+### 05. 03. 2026
+@1305 goToProfile animations added to function in <ManageConnections>
+
+next,
+- header css fix
+	- add animations to return button (can navigate while its gone as it wont dismount)
+- userProfile css fix
+	- profile isnt scrolling
+
+@0705 fixed some styling for manageConnection lists
+got baseRef control working in manageConnections, i just need to
+properly implement the animation sequence now
+
+manageConnections doesn't necessarily dismount because the link opened
+so the process should be feasible...
+
+manageConnections will unmount after transiton is complete,
+so 
+	- animate baseElement,
+	- load userProfile
+	- display none manageConnections
+	- bring back baseElement with userProfile
+	- dismount manageConnections
+on back button, user should return back to social section, manageConnections closed
+we COULD keep track of it???
+
+### 05. 01. 2026
+@1225 
+To Do Next:
+	- css fix up of viewedUser profile showing up
+	- fix header with back button added
+	- manageConnections goToProfile animations ✔️
+	- profile doesn't scroll
+	- return button animation
+			return button animation should scale down and fade in the entirity of base section,
+			then scale up, fade in with previous section
+			- may need to create a ref within UIC for base. should probably
+
+and Then:
+  - working on connections/subbing functionality
+  	- connecting functions to optionsButton and Instants 
+
+On the Side:
+	- have connections section load real connections ✔️
+	- fix how connections are added on backend, and the getAllConnects subroute ✔️
+
+
+@0910 the userData sent when viewing profiles needs to be trimmed, cause
+why is the user's encrypted password showing up (T- T)
+
+need to back track that change I made concerning adding an 'added at' value
+in the objects in connections. can just go back to being a list of ids...
+
+
+### 04. 30. 2026
+@0655 cmpnts/Profile component needs to be updated to discern whether
+external user data is being used or current user data...
+
+To Do Next
+	- update <Profile> component to switch between currentUser and externally viewed
+		user
+	- have <ManageConnections> link to external user close the modal first
+
+Then
+- then plan what needs to be done to update the functionality of connecting
+	  and removal on UserProfile component
+- update OptionsButton to have conditional options based on whether user
+	is connected or not to viewed userProfile
+	  - how will I send the info from UserProfile to OptionsButton to make the
+	 		conditional class?
+	 		- we can create isUserConnSubOrSubber state within Home, pass it down 
+	 			to UserProfile and OptionsButton. when userProfile loads, it updates
+	 			this state and is reflected in OptionsButton
+
+W A I T !!!
+Social section's Connection subsection still has the dummy profiles and doesn't
+have the inner modals for each user (profile and message options).
+Need to come back around to that...
+
+@0645 subroute to other user profile is currently old <UserProfile> rather than profile
+Process for viewing profiles...
+
+back button should take user back to social section even if <ManageConnections> modal is closed.
+
+Current section SHOULD be saved so long as page isn't reloaded...
+
+@0610
+button to profile in <ManageConnections> would need to be updated to
+	- close modal, then open subroute
+
+@0535 So, imo, the same Profile component for the current user should be the same
+for the external, viewed user. The component should discern whether it's the current
+user's profile or an external user.
+For now, i'll add it as subroute within home, but i've got to go through it all to
+make sure it can act this way. no need for the 'otherProfile' component
+
+
+### 04. 28. 2026
+@0230 
+To Do Next:
+	- add userProfile to the children within /home ✔️
+	- duplicate /home route in root route ✔️
+	- then plan what needs to be done to update the functionality of connecting
+	  and removal on UserProfile component
+	- update OptionsButton to have conditional options based on whether user
+	  is connected or not to viewed userProfile
+	  - how will I send the info from UserProfile to OptionsButton to make the
+	 		conditional class?
+	 		- we can create isUserConnSubOrSubber state within Home, pass it down 
+	 			to UserProfile and OptionsButton. when userProfile loads, it updates
+	 			this state and is reflected in OptionsButton
+
+
+@0140 Alright so I successfully transitioned <Post> to being a subroute within <Home>
+the backButton within <post> dismounts it and all. 
+so the next steps would be to:
+
+- have the back button appear in the upperleft of the Header when <Post> is up. ✔️
+- Have the Navbar transition to say 'Post' (may leave it so the usual options still
+  available, yeah)
+  - navBar title is changed by current.section state, so that would cover that
+
+
+### 04. 27. 2026
+@2135 There is a way to have different urls for 'sub sections' within a page,
+rather than going to another 'external' page.
+
+Since we're rebuilding anyhow, will take the time to understand how to get
+differing urls with Router, but within <Home> rather than going to another
+seperate component
+
+
+### 04. 22. 2026
+@1600 manageConnection section more or less done for now.
+
+I think it'd be best to rework all the connection functionality now, then move onto messaging. First we'll update the userProfile css to match the style update.
+
+To Be Done Next: 
+- update <userProfile> css styling
+- rework connection & subscription process
+- going on a user's profile should check whether you are connected to them
+  and adjust the options based off of this
+
+
+### 04. 20. 2026
+@2145 search results now return whether results are connected to user. need to
+ 			add css and the conditional SVGs for it now
+
+search results are too inaccurate currently. need to increase accuracy
+
+@2105 working on having search results include whether they are connected to user.
+		  results aren't accurate to query, and the isConn, isSub, etc fields are false...
+
+@2020 updated handleSubmit in ManageConnections so search results update on every key entry
+fixed height by pixel for manageConnection ul's may not be best solution...
+we shall see.
+
+### 04. 18. 2026
+@1245 profilePhotos on <Log> should also have activityBubble.
+
+To Do Next:
+- improve search results accuracy ✔️
+- When a user is selected, clicking elsewhere should remove the options overlay ✔️
+- update handleSubmit for search results to update results on every key entry ✔️
+- search results should include whether results are already connected to user ✔️
+- <ManageConnections> connections list UL probably needs style adjustment for when
+		list gets too long ✔️
+
+Might leave the filtering of connections for after Alpha1.0....
+could just comment it out for now
+
+@0500
+added green activity dot to the upper right corner of images
+	- make conditional for div#dot class on activity status ✔️
+	- add to social section connections subSection ✔️
+
+@0420 adjusted some css for <Log>
+
+
+### 04. 17. 2026
+@0215 may definitely resize filterOptions elements and exit button....
+
+
+### 04. 16. 2026
+@1150 
+TBD
+	- move optionsWrapper above exit button, add functionality (classes and state toggle)
+		to have it move up and down <p> onClick ✔️
+	- add functionality to filter buttons (im now realizing that the users are 	
+		automatically stored in sequence T- T. Just need to reverse the original order, can make api call again and then flip it) 
+	- add profile images ✔️
+	- add activity bubble to top right corner of images ✔️
+		- make conditional for div#dot class on activity status ✔️
+		- add to social section connections subSection ✔️
+	- update handleSubmit for search results to update results on every key entry
+	- search results should include whether results are already connected to user
+	- When a user is selected, clicking elsewhere should remove the options overlay
+	- <ManageConnections> connections list UL probably needs style adjustment for when
+		list gets too long
+
+### 04. 15. 2026
+@0820 may need to fix add and subscribe functionality, and then remove functionality
+on backend before finishing <ManageConnections>
+
+To Do Next:
+- add getConnections function to <ManageConnections> ✔️
+- check current functionality, add whatever needs to be added
+- css adjustments ✔️
+  - add profile images ✔️
+- update handleSubmit for search results to update results on every key entry
+	- search results should include whether results are already connected to user 
+- When a user is selected, clicking elsewhere should remove the options overlay
+- add activity bubble to top right corner of images 
+
+
+@0800 fixed issue with api call not returning connections,
+had to fix backend subroute AND modify @admin user doc on mongoDB
+
+At some point, i'll just run this off of a new database to fix the user
+connections issue AND the notifications nesting issue
+
+
+
+### 04. 14. 2026
+@1725 previous issue fixed. 
+Designs show that optionsButton isn't available in <ManageConnections>
+Should redesign to include or Make <ManageConnections> z index higher?
+
+Plans for macros section options was individual modals
+one component will house all the modal options.
+Should add design in XD
+
+To Do Next:
+- add getConnections function to <ManageConnections> ✔️
+- check current functionality, add whatever needs to be added
+- css adjustments
+
+@01330 find&manage button in <optionsButton> goes to home section for some reason !?
+
+
+
+### 04. 13. 2026
+@0925 when a user's activity status updates, this should be an instant, websocket
+update that changes the info for everyone they are connected to.
+
+My idea:
+user's frontend has list of all connections they broadcast to.
+when a connection changes activity status, they broadcast to this list (initial
+user is a part of it also)
+this triggers the component to update, only updating the activity status
+as itd be the only info changed
+
+
+
+### 04. 12. 2026
+@0510 added 'show more' functionality for connections subsection
+
+add activity bubble to top right corner of images 
+
+add functionality to update this on backend too ✔️
+
+and then, add manageConnections
+
+Most Recent To Do List til Alpha1.0
+
+  - add popups for error responses in <createPost>
+  - add popup with info or link on to how to set location
+  - create design for ManageConnections ✔️
+  - add manageConnections modal
+  - Fix / restyle <Post> page
+
+AFTER:
+
+update <Macros> section to have same drawer functionality as <Socials>
+
+Redesign(?) <Macrospage> page 
+update styling for <userProfile> for other users
+<Interactions> to be updated, restyled based off of designs -
+	also revamped to ensure all interactions which have notifs, have notifs...
+<Messages> to be *added*
+<EditProfile> to be *added*
+	- connect to settings option too	
+Color Scheme options in Settings
+
+
+Transition from openMaps to mapbox
+
+Instants + Websocket interactions like connections, subscriptions, tagging posts
+need to be redone
+
+
+@0345
+working on: ✔️
+adjusting css to have sections be collapsable: 
+an initial loading of the first 6 items.
+closing the section collapses to just header no matter how long
+
+### 04. 10. 2026
+@0740 more css done for connections section. made addition to the script for adjusting
+the header on scroll, so the social section also moves up. The button to expand
+the Tagged Posts section would be blocked otherwise.
+
+tbd,
+add 'show more' button below connections to load more of them.
+Not sure how connection's section list should be filtered? 
+it'll most likely just be sequential by default...
+
+Have Gem help me figure out that functionality
+
+and add activity bubble to top right corner of images
+
+make connections section fully collapseable too
+
+
+### 04. 09. 2026
+@1020 Initial skeleton HTML added for connections section...
+will add some CSS next, have Gem assist with functionality, concerning
+loading more entries to the drop down with the 'show more' button
+
+
+### 04. 06. 2026
+@1920 List of sections in Social section should change to 'Connections', 'Groups', 'Tagged Posts'.
+
+### 04. 01. 2026
+@1745 should add condition to each title in TaggedPosts list. if there are
+more users other than the user themselves, list the number of ALL tagged users
+if only user is tagged? no span
+
+may start working on Section's mini connection list next. all other additions for
+taggedPosts section could wait until later.
+especially as we have to redo or atleast check how adding friends or accessing
+them will be different
+
+
+### 03. 31. 2026
+@2130 updated user docs so that addedAt date is included for connections and subbing.
+will allow connections list to be filtered by added by date. Also modified the
+subroute for new connections.  
+but i'll now most likely need to edit the backend or modify something concerning the
+new adding process....
+
+@2110 
+To Do:
+- add conditional to + button in header,
+	if sectionClass.social open, the plus sign. if closed, negative sign
+- some styling cause bleh ✔️
+
+### 03. 30. 2026
+@2145 Alright so,
+I changed the backend subroute so that it gets posts user is tagged in, authored by others
+I set up the HTML and JS skeleton for the api call and listing the results.
+
+I need to:
+- make dummy posts ✔️
+- style the section header correctly ✔️
+- drawer functionality: clicking header should expand and close the list ✔️
+Then
+- make actual tagged posts
+- ensure goToPost works (should be simple)
+After
+- Begin connections section
+	- backend query for connections should get ALL at once (maybe will be different in future). only manageConnections shows them all at once, 
+	connections section shows about 10 at a time, and only who's active.
+
+
+@2055
+Note for backend:
+add manual Date filters to the MongoDB query so the database only sends back the posts we actually need.
+
+@1345 fixed the issue where transition to home wasn't happening after sign in credentials
+submit
+
+### 03. 19. 2026
+@0145 Have to create new SocialSection before manageConnections ...
+
+### 03. 16. 2026
+@1635 updated styles for ManageConnections, connectionsList and interactionsList for
+userProfile
+
+### 03. 12. 2026
+@1410 datePicker works :D Just needs to be styled now, will...
+do later?
+
+To Do Next:
+  - add popups for error responses
+  - add popup with info or link on to how to set location
+  - create design for ManageConnections ✔️
+  - add manageConnections modal
+  - Fix / restyle <Post> page
+
+AFTER:
+
+Redesign(?) <Macrospage> page 
+Add	<userProfile> for other users
+<Interactions> to be updated, restyled based off of designs -
+	also revamped to ensure all interactions which have notifs, have notifs...
+<Messages> to be *added*
+<EditProfile> to be *added*
+	- connect to settings option too	
+Color Scheme options in Settings
+
+
+### 03. 11. 2026
+@1935 html added for DateSelect. May have to find alternatives to confirm the date is
+legit, as Gem's suggestion currently isnt working.
+Also, changing the values in the inputs should change the date in the title header?
+is not doing so...
+
+### 03. 09. 2026
+@2015 Should be able to have a useEffect track when the state data for the Menu button changes, toggle a state for it's class which has it fade in and out
+
+@0425 create new dateSelect toggle for the componenent within CreatePost, adjust 'setSelectedDate' state from Main
+
+FIX !
+- menuButton is changing to Map options when map component is open ✔️
+  - fixed, but Home Nav button says 'washome' temporarily during switch...
+  - could just display.none it, then return it. would have to create and 
+    prop drill a ref tho (._._)
+
+
+### 03. 08. 2026
+@0100 To do next, add datePicker within createPost, toggled by date
+
+after,
+Fix / restyle <Post> page
+
+I suppose once all core features are added and confirmed working,
+we'll optimize their frontEnd algos and backend routes
+and work on adding CSS, unifying the design
+
+### 03. 07. 2026
+@1620 Template for createTag added, along side functions.
+Just need to test to ensure it's all working... ✔️
+
+- tags n topics needs to be updated after making new tag ✔️
+
+### 03. 05. 2026
+@1105 now working on add createTag button and modal to SelectionModal
+
+@0935 'view post' button does now work fr!
+need to add popUp alerts for when error responses in <Post>
+
+To Do Next:
+  - add popups for error responses
+  - add popup with info or link on to how to set location 
+  - create tag button in tagsNtopics modal ✔️
+  - info isn't showing for locations, or tagsNtopics... ✔️
+  - datePicker within createPost, toggled by date ✔️
+
+@0245 viewPost button from Instants should work...
+
+@1245 If i remove this line if(!isOpen) return null; from Instants, movement
+becomes smoother but it flashes on page reload...
+
+### 03. 04. 2026
+@1655 font size adjustment for Instants + leaving animation need to be worked on
+
+@0325 fixed issue with login transition. Instants seems to be toggling, must
+be issues with css.
+Yeah it was issue with CSS. Dont think we need to keep the faded background
+just for Instant popup...
+
+### 03. 03. 2026
+@1845 Theres an issue with loggin in. after the fade out, it hangs. Refreshing successfully
+loads the homepage tho
+
+
 ### 02. 22. 2026
+@1735 successfully pushed to github!
+Now working on implementing Gemini's solution to the PopUp
+first test it's working, then implement webSockets
+
 @0210 Now working on <Instants>
 unable to backup project due to front end node modules...
 
 Prompt for Gem:
-"""
-Alright, I'd like your assistance in building a pop element  which takes the 
-		- message
-		- confirmation function
-		- or interaction function 
-		from an external component, and provides a confirm button, 
-		an accept or interact button and a cancel button.
-		Cancel button simply closes the pop up. Also has internal functions for when pop up is externally prompted by websockets. 
-"""
+
 
 
 ### 02. 21. 2026
@@ -41,17 +515,17 @@ Need to add delete function,
 quick styling update.
 
 ***Overall T B D***
-Begin reworking <instants> after posting and drafting are working
+Reworking <instants> after posting and drafting 2/3
+	- creating new algo flow ✔️
+	- add post confirmation popup ✔️
 	- notif popup for when pinLocation does and doesnt successfully get coordinates
-	- we are creating the new algo flow, only adding the post popups for now.
-Add a 'create tag' button and form to 'TagsNTopics' popup in <SelectionModal>
+Add a 'create tag' button and form to 'TagsNTopics' popup in <SelectionModal> ✔️
 Fix / restyle <Post> page
-						  <Macros> page 
-							<ManageConnections>
-								- Search and Manage will happen within Social, no modal
-							<userProfile> for other users
-<Interactions> to be updated
-restyled, but also revamped to ensure all interactions which have notifs, have notifs...
+	<Macrospage> page 
+	<ManageConnections>
+		- Search and Manage will happen within Social, no modal
+	<userProfile> for other users
+<Interactions> to be updated, restyled, but also revamped to ensure all interactions which have notifs, have notifs...
 <Messages> to be *added*
 <EditProfile> to be *added*
 	- connect to settings option too
