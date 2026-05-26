@@ -122,507 +122,591 @@ export default function OptionsButton({
 
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-	const closeMenu = () => {
-		const newOptionsGroup = optionsGroup.map((group, index) => {
-			if(index == activeSection) {
-				const classifiedGroup = group.map((item, index) => ({
-					...item,
-					class: ""
-				}));
-				return classifiedGroup;
+	
+
+	const allGroups = React.useMemo(()=> {
+
+		const profileOptions = [
+			{
+				name: 'New Post',
+				function: null,
+				class: "",
+				display: current.section === 'User' ? false : true
+			},
+			{
+				name: 'Calendar',
+				function: null,
+				class: ``,
+				display: current.section === 'User' ? false : true
+			},
+			{
+				name: 'Map',
+				function: null,
+				class: ``,
+				display: current.section === 'User' ? false : true
+			},
+			{
+				name: 'Edit Profile',
+				function: null,
+				class: ``,
+				display: current.section === 'User' ? false : true
+			},
+			{
+				name: 'settings',
+				function: null,
+				class: ``,
+				display: current.section === 'User' ? false : true
+			},
+			{
+				name: 'Request, Connect',
+				function: null,
+				class: ``,
+				//
+				display: (current.section === 'User' && (!current.isConnected && !current.isSubscribed))
+			},
+			{
+				name: 'Request, Subscribe',
+				function: null,
+				class: ``,
+				display: (current.section === 'User' && (!current.isConnected && !current.hasSubscription))
+			},
+			{
+				name: 'Remove, Connect',
+				function: null,
+				class: ``,
+				display: current.section === 'User' && current.isConnected
+			},
+			{
+				name: 'Remove, Subscriber',
+				function: null,
+				class: ``,
+				display: current.section === 'User' && current.isSubscribed
+			},
+			{
+				name: 'Remove, Subscription',
+				function: null,
+				class: ``,
+				display: current.section === 'User' && current.hasSubscription
+			},
+		];
+		const socialOptions = [
+
+			{
+				name: 'Find & Manage',
+				function: ()=> {
+					setManageConnectionsToggle();
+
+					setCurrent({
+						...current,
+						section: 'social',
+						manageConnections: true
+					})
+
+					setOptionsOpen(false);
+				},
+				class: '',
+				display: true
+			},
+			{
+				name: 'Add to Stream',
+				function: null,
+				class: '',
+				display: true
+			},
+			{
+				name: 'Calendar',
+				function: null,
+				class: '',
+				display: true
+			},
+			{
+				name: 'Map',
+				function: null,
+				class: '',
+				display: true
 			}
-			return group;
-		})
-		setOptionsGroup(newOptionsGroup);
-		setOptionsOpen(false);
-	}
-
-	// each object is option name and function
-	const profileOptions = [
-		/* 
-			edit profile
-			settings
-		*/
-		{
-			name: 'New Post',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'Calendar',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'Map',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'Edit Profile',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'settings',
-			function: null,
-			class: ''
-		}
-	];
-	const socialOptions = [
-		/*
-			Add to Stream
-			Find & Manage
-			Calendar
-			Map
-		*/
-		{
-			name: 'Find & Manage',
-			function: ()=> {
-				setManageConnectionsToggle();
-
-				setCurrent({
-					...current,
-					section: 'social',
-					manageConnections: true
-				})
-
-				setOptionsOpen(false);
-			},
-			class: ''
-		},
-		{
-			name: 'Add to Stream',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'Calendar',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'Map',
-			function: null,
-			class: ''
-		}
-	];
-	const homeOptions = [
-		/*
-			View Stream
-			New Post
-			Calendar
-			Map
-			Custom Feeds
-		*/
-		{
-			name: 'New Post',
-			function: ()=> {
-				setCreatePostToggle();
-
-				setCurrent({
-					...current,
-					createPost: true
-				})
-
-				setOptionsOpen(false);
-			},
-			class: ''
-		},
-		// {
-		// 	name: 'View Stream',
-		// 	function: null,
-		// 	class: ''
-		// },
-		{
-			name: 'Calendar',
-			function: ()=> {
-				const hajime = new Date();
-
-				setSelectedDate({
-					day: hajime.getDate(),
-					month: hajime.getMonth(),
-					year: hajime.getFullYear()
-				})
-
-				setCurrent({
-					...current,
-					calendar: true
-				})
-
-				setOptionsOpen(false);
-			},
-			class: ''
-		},
-		{
-			name: 'Map',
-
-			function: ()=> {
-				const hajime = new Date();
-				
-				setSelectedDate({
-					day: hajime.getDate(),
-					month: hajime.getMonth(),
-					year: hajime.getFullYear()
-				})
-				setCurrent({
-					...current,
-					section: 'wasHome',
-					map: true,
-					transition: false
-				})
-
-				console.log(current);
-				setOptionsOpen(false);
-			},
-			class: ''
-		},
-		{
-			name: `Custom Log: ${current.log}`,
-			function: null,
-			class: ''
-		},
-	];
-	const macrosOptions = [
-		/*
-			Create Tag
-			Delete Tags
-			New Collection
-			Manage Collections
-		*/
-		{
-			name: 'Create Tag',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'Delete Tags',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'New Collection',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'Manage Collections',
-			function: null,
-			class: ''
-		},
-	];
-	const mapOptions = [
-		{
-			name: 'Post',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'Settings',
-			function: ()=> {
-
-				if(!current.modal) {
-					console.log('response2');
+		];
+		const homeOptions = [
+			{
+				name: 'New Post',
+				function: ()=> {
+					setCreatePostToggle();
 
 					setCurrent({
-						...current, 
-						modal: true,
-						map: true
+						...current,
+						createPost: true
 					})
 
 					setOptionsOpen(false);
-					let delay = setTimeout(()=> {
-						document.getElementById('mapSettings').classList.remove('_enter');			
-					}, 300)
+				},
+				class: '',
+				display: true
+			},
+			{
+				name: 'Calendar',
+				function: ()=> {
+					const hajime = new Date();
+
+					setSelectedDate({
+						day: hajime.getDate(),
+						month: hajime.getMonth(),
+						year: hajime.getFullYear()
+					})
+
+					setCurrent({
+						...current,
+						calendar: true
+					})
+
+					setOptionsOpen(false);
+				},
+				class: '',
+				display: true
+			},
+			{
+				name: 'Map',
+
+				function: ()=> {
+					const hajime = new Date();
 					
-					// setSectionClass({
-					// 	...sectionClass,
-					// 	mapSettings: ''
-					// })	
-				}
-				if(current.modal) {
-					// setSectionClass({
-					// 	...sectionClass,
-					// 	mapSettings: '_enter'
-					// })
-					console.log('response');
+					setSelectedDate({
+						day: hajime.getDate(),
+						month: hajime.getMonth(),
+						year: hajime.getFullYear()
+					})
+					setCurrent({
+						...current,
+						section: 'wasHome',
+						map: true,
+						transition: false
+					})
 
-					document.getElementById('mapSettings').classList.add('_enter');
+					console.log(current);
+					setOptionsOpen(false);
+				},
+				class: '',
+				display: true
+			},
+			{
+				name: `Custom Log: ${current.log}`,
+				function: null,
+				class: '',
+				display: true
+			},
+		];
+		const macrosOptions = [
+			{
+				name: 'Create Tag',
+				function: null,
+				class: '',
+				display: true
+			},
+			{
+				name: 'Delete Tags',
+				function: null,
+				class: '',
+				display: true
+			},
+			{
+				name: 'New Collection',
+				function: null,
+				class: '',
+				display: true
+			},
+			{
+				name: 'Manage Collections',
+				function: null,
+				class: '',
+				display: true
+			},
+		];
+		const mapOptions = [
+			{
+				name: 'Post',
+				function: null,
+				class: '',
+				display: true
+			},
+			{
+				name: 'Settings',
+				function: ()=> {
 
+					if(!current.modal) {
+						console.log('response2');
+
+						setCurrent({
+							...current, 
+							modal: true,
+							map: true
+						})
+
+						setOptionsOpen(false);
+						let delay = setTimeout(()=> {
+							document.getElementById('mapSettings').classList.remove('_enter');			
+						}, 300)
+						
+						// setSectionClass({
+						// 	...sectionClass,
+						// 	mapSettings: ''
+						// })	
+					}
+					if(current.modal) {
+						// setSectionClass({
+						// 	...sectionClass,
+						// 	mapSettings: '_enter'
+						// })
+						console.log('response');
+
+						document.getElementById('mapSettings').classList.add('_enter');
+
+						setOptionsOpen(false);
+
+						setCurrent({
+							...current, 
+							modal: false,
+							map: true
+						})
+
+						// let delay = setTimeout(()=> {
+										
+						// }, 300)
+					}
+				},
+				class: '',
+				display: true
+			},
+			{
+				name: 'Close',
+				function: ()=> {
+					console.log(current);
+					// if(current.section == 'social') {
+					// 	setActiveSection(1)
+					// }
+					// else if(current.section == 'wasHome') {
+					// 	setActiveSection(2)
+					// }
 					setOptionsOpen(false);
 
-					setCurrent({
-						...current, 
-						modal: false,
-						map: true
-					})
-
-					// let delay = setTimeout(()=> {
-									
-					// }, 300)
-				}
-			},
-			class: ''
-		},
-		{
-			name: 'Close',
-			function: ()=> {
-				console.log(current);
-				if(current.section == 'social') {
-					setActiveSection(1)
-				}
-				else if(current.section == 'wasHome') {
-					setActiveSection(2)
-				}
-				setOptionsOpen(false);
-
-				setSectionClass({
-					...sectionClass,
-					map: 'leave'
-				})
-				let delay = setTimeout(()=> {
-					setCurrent({
-						...current,
-						map: false,
-						section: 'home',
-						transition: false
-					})
-				}, 300)
-				let delay2 = setTimeout(()=> {
-						setSectionClass({
-						...sectionClass,
-						map: ''
-					})
-				}, 600)
-			},
-			class: ''
-		},
-	]
-	const calendarOptions = [
-		{
-			name: 'Post',
-			function: null,
-			class: ''
-		},
-		{
-			name: 'Settings',
-			function: ()=> {
-			},
-			class: ''
-		},
-		{
-			name: 'Close',
-			function: ()=> {
-				console.log(current);
-				if(current.section == 'social') {
-					setActiveSection(1)
-				}
-				else if(current.section == 'home') {
-					setActiveSection(2)
-				}
-				setOptionsOpen(false);
-
-				setSectionClass({
-					...sectionClass,
-					calendar: 'leave'
-				})
-				let delay = setTimeout(()=> {
-					setCurrent({
-						...current,
-						calendar: false,
-						transition: false
-					})
-				}, 300)
-				let delay2 = setTimeout(()=> {
-						setSectionClass({
-						...sectionClass,
-						calendar: ''
-					})
-				}, 600)
-			},
-			class: ''
-		},
-	];
-	const createPostOptions = [
-		{
-			name: 'Close',
-			function: ()=> {
-				setActiveSection(2);
-				setOptionsOpen(false);
-				setSectionClass({
-					...sectionClass,
-					createPost: 'leave'
-				});
-
-				let delay = setTimeout(()=> {
-					setCurrent({
-						...current,
-						createPost: false,
-					})
-				}, 300)
-				let delay2 = setTimeout(()=> {
 					setSectionClass({
 						...sectionClass,
-						createPost: ''
+						map: 'leave'
 					})
-					setCreatePostToggle();
-				}, 600)
+					let delay = setTimeout(()=> {
+						setCurrent({
+							...current,
+							map: false,
+							section: 'home',
+							transition: false
+						})
+					}, 300)
+					let delay2 = setTimeout(()=> {
+							setSectionClass({
+							...sectionClass,
+							map: ''
+						})
+					}, 600)
+				},
+				class: '',
+				display: true
 			},
-			class: ''
-		},
-		{
-			name: 'Draft',
-			function: async()=> {
-				
-				let drafting = await triggerDraftRef.current();
-				if(drafting) {
-					console.log('yes');
-					closeMenu();
-				}
+		];
+		const calendarOptions = [
+			{
+				name: 'Post',
+				function: null,
+				class: '',
+				display: true
 			},
-			class: ''
-		},
-		{
-			name: 'Post',
-			function: async()=> {
-
-				if (isSubmitting || !triggerSubmitRef.current) return;
-
-    			setIsSubmitting(true);
-
-    			console.log('posting...');
-
-    			try {
-		            // 3. Execute the function stored in the Ref and WAIT for the result
-		            const isSuccess = await triggerSubmitRef.current();
-
-		            // 4. Conditional UI Cleanup
-		            if (isSuccess) {
-		                // Success! Proceed with animations and section changes
-		                setActiveSection(2);
-		                setOptionsOpen(false);
-		                setSectionClass({
-		                    ...sectionClass,
-		                    createPost: 'leave'
-		                });
-
-		                // First delay for the 'leave' animation
-		                setTimeout(() => {
-		                    setCurrent({
-		                        ...current,
-		                        createPost: false,
-		                    });
-		                }, 300);
-
-		                // Second delay to reset classes and toggle state
-		                setTimeout(() => {
-		                    setSectionClass({
-		                        ...sectionClass,
-		                        createPost: ''
-		                    });
-		                    setCreatePostToggle();
-		                    setIsSubmitting(false); // Reset for future use
-		                }, 600);
-
-		            } else {
-		                // Failure: Unlock the button so the user can fix errors and try again
-		                console.log('Submission failed. Keeping modal open.');
-		                setIsSubmitting(false);
-		            }
-		        } catch (error) {
-		            console.error('Error during submission:', error);
-		            setIsSubmitting(false);
-		        }
+			{
+				name: 'Settings',
+				function: ()=> {
+				},
+				class: '',
+				display: true
 			},
-			class: ''
-		},	
-	];
+			{
+				name: 'Close',
+				function: ()=> {
+					console.log(current);
+					// if(current.section == 'social') {
+					// 	setActiveSection(1)
+					// }
+					// else if(current.section == 'home') {
+					// 	setActiveSection(2)
+					// }
+					setOptionsOpen(false);
+
+					setSectionClass({
+						...sectionClass,
+						calendar: 'leave'
+					})
+					let delay = setTimeout(()=> {
+						setCurrent({
+							...current,
+							calendar: false,
+							transition: false
+						})
+					}, 300)
+					let delay2 = setTimeout(()=> {
+							setSectionClass({
+							...sectionClass,
+							calendar: ''
+						})
+					}, 600)
+				},
+				class: '',
+				display: true
+			},
+		];
+		const createPostOptions = [
+			{
+				name: 'Close',
+				function: ()=> {
+					// setActiveSection(2);
+					setOptionsOpen(false);
+					setSectionClass({
+						...sectionClass,
+						createPost: 'leave'
+					});
+
+					let delay = setTimeout(()=> {
+						setCurrent({
+							...current,
+							createPost: false,
+						})
+					}, 300)
+					let delay2 = setTimeout(()=> {
+						setSectionClass({
+							...sectionClass,
+							createPost: ''
+						})
+						setCreatePostToggle();
+					}, 600)
+				},
+				class: '',
+				display: true
+			},
+			{
+				name: 'Draft',
+				function: async()=> {
+					
+					let drafting = await triggerDraftRef.current();
+					if(drafting) {
+						console.log('yes');
+						closeMenu();
+					}
+				},
+				class: '',
+				display: true
+			},
+			{
+				name: 'Post',
+				function: async()=> {
+
+					if (isSubmitting || !triggerSubmitRef.current) return;
+
+	    			setIsSubmitting(true);
+
+	    			console.log('posting...');
+
+	    			try {
+			            // 3. Execute the function stored in the Ref and WAIT for the result
+			            const isSuccess = await triggerSubmitRef.current();
+
+			            // 4. Conditional UI Cleanup
+			            if (isSuccess) {
+			                // Success! Proceed with animations and section changes
+			                // setActiveSection(2);
+			                setOptionsOpen(false);
+			                setSectionClass({
+			                    ...sectionClass,
+			                    createPost: 'leave'
+			                });
+
+			                // First delay for the 'leave' animation
+			                setTimeout(() => {
+			                    setCurrent({
+			                        ...current,
+			                        createPost: false,
+			                    });
+			                }, 300);
+
+			                // Second delay to reset classes and toggle state
+			                setTimeout(() => {
+			                    setSectionClass({
+			                        ...sectionClass,
+			                        createPost: ''
+			                    });
+			                    setCreatePostToggle();
+			                    setIsSubmitting(false); // Reset for future use
+			                }, 600);
+
+			            } else {
+			                // Failure: Unlock the button so the user can fix errors and try again
+			                console.log('Submission failed. Keeping modal open.');
+			                setIsSubmitting(false);
+			            }
+			        } catch (error) {
+			            console.error('Error during submission:', error);
+			            setIsSubmitting(false);
+			        }
+				},
+				class: '',
+				display: true
+			},	
+		];
+
+		return {
+      profile: profileOptions,
+      social: socialOptions,
+      home: homeOptions,
+      macros: macrosOptions,
+      map: mapOptions,
+      calendar: calendarOptions,
+      createPost: createPostOptions
+    };
+	}, [current, isSubmitting, sectionClass]);
 	
-	const currentRef = React.useRef(current);
-	const [activeSection, setActiveSection] = React.useState(2);
-	const [optionsGroup, setOptionsGroup] = React.useState([
-		profileOptions, 
-		socialOptions, 
-		homeOptions, 
-		macrosOptions,
-		mapOptions,
-		calendarOptions,
-		createPostOptions
-	]);
-	const activeGroup = optionsGroup[activeSection];
-	const [optionsOpen, setOptionsOpen] = React.useState(false);
+	
+	// const [activeSection, setActiveSection] = React.useState(2);
+	// const [optionsGroup, setOptionsGroup] = React.useState([
+	// 	profileOptions, 
+	// 	socialOptions, 
+	// 	homeOptions, 
+	// 	macrosOptions,
+	// 	mapOptions,
+	// 	calendarOptions,
+	// 	createPostOptions
+	// ]);
+	// const activeGroup = optionsGroup[activeSection];
 
+	const activeKey = React.useMemo(()=> {
+		if (current.map) return 'map';
+    if (current.calendar) return 'calendar';
+    if (current.createPost) return 'createPost';
+    if (current.section === 'profile' || current.section === 'User') return 'profile';
+    if (current.section === 'social') return 'social';
+    if (current.section === 'macros') return 'macros';
+    return 'home';
+	}, [current]);
+
+	const filteredActiveGroup = React.useMemo(() => {
+    return (allGroups[activeKey] || []).filter(item => item.display === true);
+  }, [allGroups, activeKey]);
+
+	const currentRef = React.useRef(current);
+	const [optionsOpen, setOptionsOpen] = React.useState(false);
+	const [activeClasses, setActiveClasses] = React.useState({});
 	const [mapClassToggle, setMapClassToggle] = React.useReducer(state => !state, true);
 
 	const hajime = new Date();
 
-	const launchOptions = () => {
+	// const closeMenu = () => {
+	// 	const newOptionsGroup = optionsGroup.map((group, index) => {
+	// 		if(index == activeSection) {
+	// 			const classifiedGroup = group.map((item, index) => ({
+	// 				...item,
+	// 				class: ""
+	// 			}));
+	// 			return classifiedGroup;
+	// 		}
+	// 		return group;
+	// 	})
+	// 	setOptionsGroup(newOptionsGroup);
+	// 	setOptionsOpen(false);
+	// }
 
-		if(optionsOpen == false) {
+	// const launchOptions = () => {
 
-			setOptionsOpen(true);
+	// 	if(optionsOpen == false) {
 
-			const newOptionsGroup = optionsGroup.map((group, index) => {
-				if(index == activeSection) {
-					const classifiedGroup = group.map((item, index) => ({
-						...item,
-						class: `active${index+1}`
-					}));
-					return classifiedGroup;
-				}
-				return group;
-			})
+	// 		setOptionsOpen(true);
+	// 		console.log(current.section);
 
-			let delay = setTimeout(()=> {
-				setOptionsGroup(newOptionsGroup);
-			}, 100)
+	// 		const newOptionsGroup = optionsGroup.map((group, index) => {
+	// 			if(index == activeSection) {
+	// 				const classifiedGroup = group.filter(item => item.display === true)
+	// 				.map((item, index) => ({
+	// 					...item,
+	// 					class: `${item.class} active${index+1}`
+	// 				}));
+	// 				return classifiedGroup;
+	// 			}
+	// 			return group;
+	// 		})
+
+	// 		let delay = setTimeout(()=> {
+	// 			setOptionsGroup(newOptionsGroup);
+	// 		}, 100)
 			
-		}
-		else if(optionsOpen == true) {
-			const newOptionsGroup = optionsGroup.map((group, index) => {
-				if(index == activeSection) {
-					const classifiedGroup = group.map((item, index) => ({
-						...item,
-						class: ""
-					}));
-					return classifiedGroup;
-				}
-				return group;
-			})
-			setOptionsGroup(newOptionsGroup);
-			setOptionsOpen(false);
-		}
-	}
+	// 	}
+	// 	else if(optionsOpen == true) {
+	// 		const newOptionsGroup = optionsGroup.map((group, index) => {
+	// 			if(index == activeSection) {
+	// 				const classifiedGroup = group.map((item, index) => ({
+	// 					...item,
+	// 					class: ""
+	// 				}));
+	// 				return classifiedGroup;
+	// 			}
+	// 			return group;
+	// 		})
+	// 		setOptionsGroup(newOptionsGroup);
+	// 		setOptionsOpen(false);
+	// 	}
+	// }
+
+	const closeMenu = () => {
+    setActiveClasses({});
+    setOptionsOpen(false);
+  };
+
+	const launchOptions = () => {
+    if (!optionsOpen) {
+      setOptionsOpen(true);
+      // Trigger staggered entrance classes safely
+      setTimeout(() => {
+        const classes = {};
+        filteredActiveGroup.forEach((item, index) => {
+          classes[item.name] = `active${index + 1}`;
+        });
+        setActiveClasses(classes);
+      }, 50);
+    } else {
+      setActiveClasses({});
+      setOptionsOpen(false);
+    }
+  };
 
 	// Profile = 0, Social = 1, Home = 2, Macros = 3, Map = 4
 	// there will be more for other pages: Post, UserProfile, Global, etc
 	// Changes the activeGroup value based on current.section 
-	React.useEffect(()=> {
-		if(current.section == 'profile') {
-			setActiveSection(0)
-		}
-		else if(current.section == 'social') {
-			setActiveSection(1)
-		}
-		else if(current.section == 'home') {
-			setActiveSection(2)
-		}
-		else if(current.section == 'macros') {
-			setActiveSection(3)
-		}
-		if(current.map == true) {
-			setActiveSection(4)
-		}
-		if(current.calendar == true) {
-			setActiveSection(5)
-		}
-		if(current.createPost == true) {
-			setActiveSection(6)
-		}
-		if(current.createPost == false && current.section == 'home') {
-			setActiveSection(2);
-		}
-	}, [current])
+	// React.useEffect(()=> {
+	// 	if(current.section == 'profile' || current.section == 'User') {
+	// 		setActiveSection(0)
+	// 	}
+	// 	else if(current.section == 'social') {
+	// 		setActiveSection(1)
+	// 	}
+	// 	else if(current.section == 'home') {
+	// 		setActiveSection(2)
+	// 	}
+	// 	else if(current.section == 'macros') {
+	// 		setActiveSection(3)
+	// 	}
+	// 	if(current.map == true) {
+	// 		setActiveSection(4)
+	// 	}
+	// 	if(current.calendar == true) {
+	// 		setActiveSection(5)
+	// 	}
+	// 	if(current.createPost == true) {
+	// 		setActiveSection(6)
+	// 	}
+	// 	if(current.createPost == false && current.section == 'home') {
+	// 		setActiveSection(2);
+	// 	}
+	// }, [current])
 
 
 	return (
@@ -631,8 +715,9 @@ export default function OptionsButton({
 
 			{optionsOpen &&
 				<ul id="options">
-					{activeGroup.map(option => (
-						<li className={`${option.class}`} key={option.name}>
+					{filteredActiveGroup.map(option => (
+						// <li className={`${option.class}`} key={option.name}>
+						<li className={activeClasses[option.name] || ""} key={option.name}>
 							<button className={`buttonDefault`}
 									onClick={option.function}>{option.name}</button>
 						</li>
@@ -644,7 +729,5 @@ export default function OptionsButton({
 				{logo}
 			</button>
 		</div>
-
-		
 	)
 } 

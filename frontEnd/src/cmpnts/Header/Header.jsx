@@ -1,21 +1,43 @@
 /* * * V i t a l s * * */
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom'; 
+import { useUIC } from '../../UIcontext';
 
 import './Header.css';
 
 
-function ReturnElement ({}) {
+function ReturnElement ({current, setCurrent, isSubPage}) {
 
 	let navigate = useNavigate();
 	let [ifLeave, setLeave] = React.useState(false);
+	let { baseRef, prevSection } = useUIC();
 
 	let goBack = () => {
 		/* function to return one step backwards using router history */
+		let baseElement = baseRef.current;
+
 		setLeave(true)
 		setTimeout(()=> {
+			baseElement.classList.add('leave');
+		}, 300);
+
+
+		setTimeout(()=> {
+			if(isSubPage) {
+				console.log('is a subpage')
+				setCurrent({
+					...current,
+					section: `${prevSection}`
+				})
+			}
 			navigate(-1)
-		}, 575);
+			baseElement.classList.add('return');
+		}, 850);
+
+		setTimeout(()=> {
+			baseElement.classList.remove('return');
+			baseElement.classList.remove('leave');
+		}, 1400);
 	}
 
 	return (
@@ -38,7 +60,7 @@ function ReturnElement ({}) {
 	)
 }
 
-function LogoButton ({}) {
+function LogoButton ({isSubPage}) {
 
 	let navigate = useNavigate();
 
@@ -65,6 +87,7 @@ function LogoButton ({}) {
 			height="40.784" 
 			viewBox="0 0 33.089 40.784"
 			onClick={globalOrHome}
+			className={`${isSubPage ? 'subpageAdjust' : ''}`}
 			id="logo">
 			  <g id="Group_563" data-name="Group 563" transform="translate(1383.376 3479.325)">
 			    <g id="Path_36" data-name="Path 36" transform="translate(-1383.376 -3479.325)" fill="none">
@@ -139,7 +162,9 @@ export default function Header ({
 	siteLocation,
 	isVisible,
 	children,
-	isSubPage
+	isSubPage,
+	current,
+	setCurrent
 }) {
 
 	// let [returnable, setReturnable] = React.useState(isReturnable);
@@ -151,10 +176,13 @@ export default function Header ({
 
 			<div id="headerWrapper">
 				{isSubPage &&
-					<ReturnElement />
+					<ReturnElement 
+						current={current} 
+						setCurrent={setCurrent}
+						isSubPage={isSubPage}/>
 				}
 				
-				<LogoButton />
+				<LogoButton isSubPage={isSubPage}/>
 
 				<button id="notifToggle" onClick={setNotifList}>
 					{!isNotifList &&

@@ -1,6 +1,4 @@
 header {
-	/*display: flex;
-	justify-content: space-between;*/
 	display: flex;
 	flex-direction: column;
 	width: 98%;
@@ -10,9 +8,6 @@ header {
 	transform: translateX(-50%);
 		
 	font-family: 'Raleway';
-
-/*	border-bottom: 2px solid rgba(0, 0, 0, 0.1);*/
-/*	padding: 4px 0 16px;*/
 	background-color: white;
 	z-index: 10;
 	transition: 0.2s all ease-in-out;
@@ -37,6 +32,16 @@ header svg#logo {
 	left: 50%;
 	transform: translateX(-50%);
 	margin: 12px 0;
+}
+
+	header svg#logo.subpageAdjust {
+		left: auto;
+		transform: none;
+	}
+
+
+header svg#return {
+	margin-left: 8px;
 }
 
 

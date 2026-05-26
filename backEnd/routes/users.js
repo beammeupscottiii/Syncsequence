@@ -495,9 +495,11 @@ app.get('/user/:userID', async (req,res) => {
                 });
             }
             else {
+                let currentUser = await User.findById(mongoose.Types.ObjectId(_id));
                 let user = await User.findById(req.params.userID);
                 let isSubscribed = user.subscribers.includes(_id);
                 let isConnected = user.connections.includes(_id);
+                let hasSubscription = currentUser.subscriptions.includes(req.params.userID);
                 let posts = await Posts.find({ _id: {$in: user.pinnedPosts}}).sort({createdAt: -1});
                 let postCount = await Posts.countDocuments({
                     'owner': req.params.userID, 
@@ -521,7 +523,8 @@ app.get('/user/:userID', async (req,res) => {
                     // collections: collections,
                     postCount: postCount,
                     isConnected: isConnected,
-                    isSubscribed: isSubscribed
+                    isSubscribed: isSubscribed,
+                    hasSubscription: hasSubscription
                 });
             }
         }

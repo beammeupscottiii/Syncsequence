@@ -70,7 +70,7 @@ svg#return {
 	position: relative;
 	top: 4px;
 	transition: all 0.3s ease-in-out;
-	margin-right: -240px;
+/*	margin-right: -240px;*/
 }
 
 svg#return polyline {
@@ -95,7 +95,7 @@ svg#return polyline#bottom {
 			right: 0%;
 		}
 		100% {
-			right: 50px;
+			right: 70px;
 		}
 	}
 

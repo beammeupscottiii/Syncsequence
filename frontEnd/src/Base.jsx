@@ -103,7 +103,7 @@ function Home({
   userTopics,
   setUserTopics,
   sectionClass,
-  setSectionClass
+  setSectionClass,
 }) {
 
   const navigate = useNavigate();
@@ -230,7 +230,9 @@ function Home({
           setNotifList={setNotifList} 
           unreadCount={unreadCount}
           isVisible={headerVisible}
-          isSubPage={isSubPage}> 
+          isSubPage={isSubPage}
+          current={current}
+          setCurrent={setCurrent}> 
       
           <Navbar current={current} 
                   setCurrent={setCurrent}/>
@@ -491,7 +493,6 @@ export default function Main() {
   let userID = sessionStorage.getItem('userID');
   
 
-
   /***
    * S O C K E T  S T U F F
   ***/
@@ -512,7 +513,7 @@ export default function Main() {
    */
   React.useEffect(()=> {
     if(authed == true) {
-      setSocketURL(`ws:///172.17.243.173:3333/?${userID}`);
+      setSocketURL(`ws:////172.18.12.138:3333/?${userID}`);
       getUnreadCount();
     }
   }, [authed])
@@ -717,7 +718,10 @@ export default function Main() {
     transition: false, //for components mounted dependant on this stateVar, indicates before unmount
     gallery: [], //for dragslider. should be an array of links
     log: 0,
-    navmenu: false
+    navmenu: false,
+    isConnected: null,
+    isSubscribed: null,
+    hasSubscription: null,
   });
 
   const cal = CalInfo();

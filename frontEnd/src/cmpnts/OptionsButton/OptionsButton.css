@@ -46,6 +46,10 @@ div#optionsButtonWrapper ul#options li {
 	transition-delay: 0.1s;
 }
 
+	div#optionsButtonWrapper ul#options li.hide {
+		display: none;
+	}
+
 	div#optionsButtonWrapper ul#options li.active1 {
 		opacity: 1;
 		bottom: 60px;

@@ -2,6 +2,90 @@
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
 
+### 05. 26. 2025
+@1540 <optionsButton> list now shows up as it should for each section
+
+To Do Next:
+- routing functionality to <OptionsButton> for <User> for 
+	- adding connections, subscriptions
+		- automatic or request for subs, based on viewedUser's profile privacy settings
+	- removing connections, subscriptions
+	- routing confirmations through <Instants>
+
+should look up what the process is for submitting posts to have an idea where to start
+
+### 05. 25. 2025
+@1610 Gem's update to <OptionsButton> fixed the issue within 'profile' and 'user' sections, but now it's not opening for the other ones. 
+
+### 05. 24. 2026
+@1300 aaaand current.section isn't being discerned as true on initial load anymore...
+
+aaaaand making the array a state array fixed the issue....
+the wrong options are showing up tho
+
+Nope, actually nothing is wrong right still
+
+### 05. 23. 2026
+@1005 current.section as user is being discerned as true in the array by
+the time the launchOptions function runs. So, issue fixed?
+
+Need to discern between whether a viewedUser is connected or a subscription.
+
+if they are a subscriber, request connect and request subscribe are still
+optional, which should be true is connected & subscription is false.
+
+Ah, but you should be able to remove ones own subscribers too...
+
+
+Also, need to look into animationComplete for the to viewedUser <Profile> transitions
+thats in both socialSection, ManageConnections & header...
+
+### 05. 22. 2026
+@1905 Trying to get profileOptions in <optionsButton> to hide / show properly
+component is reading current.section === 'User' as false, when it should be true
+
+have display value be string, filter in launch options function?
+still need to discern for whether viewedUser is connected or not
+
+### 05. 21. 2026
+@0240 going to a viewedUser's profile changes the nav button to say 'user'
+back button from profile to previous page also changes nav button back to 'user'
+
+Interestingly, navmenu doesn't work while subpage is active...
+I believe I did intend to disable it for subpages anyhow...
+
+### 05. 20. 2026
+@0150 Pinnedposts issue fixed (T- T)
+
+### 05. 18. 2026
+@0350 Pinned Posts arent showing up in <Profile>
+for some reason, user's pinnedPosts in their state is only the id, not the whole post
+
+### 05. 08. 2026
+@1505 need to adjust link process for connections -> userProfile
+if userProfile doesnt load before section#body returns
+
+Work on optionsButton changing to userProfile options
+check on options for whether viewedUser is connected to currentUser
+data.isConnected, data.isSubscribed
+
+### 05. 05. 2026
+@1205 should find out at what level I can have state info that persists across reloads.
+fixed css in header when backButton is included
+added animations for backButton being clicked
+
+placed 'isSubpage' check within <Profile> 
+can use it to toggle userProfile specific classes
+
+To Do Next:
+	- current.section needs to be set to 'profile', ✔️
+  	- need a check to show userProfile specific options in optionsButton
+	- userProfile css fix ✔️
+		- profile isnt scrolling ✔️
+	- working on connections/subbing functionality
+  	- connecting functions to optionsButton and Instants 
+
+
 ### 05. 04. 2026
 @1445 connections subsection now shows real connections + onClick options
 
@@ -12,12 +96,16 @@ profile component needs some css adjustments when it's for userProfile
 
 could use a state var from the link? i dunno, ask Gem...
 
+header backbutton flow ✔️
+	baseref anim
+	navigate back
+	baseref anim
 
 ### 05. 03. 2026
 @1305 goToProfile animations added to function in <ManageConnections>
 
 next,
-- header css fix
+- header css fix ✔️
 	- add animations to return button (can navigate while its gone as it wont dismount)
 - userProfile css fix
 	- profile isnt scrolling
@@ -43,7 +131,7 @@ we COULD keep track of it???
 @1225 
 To Do Next:
 	- css fix up of viewedUser profile showing up
-	- fix header with back button added
+	- fix header with back button added ✔️
 	- manageConnections goToProfile animations ✔️
 	- profile doesn't scroll
 	- return button animation

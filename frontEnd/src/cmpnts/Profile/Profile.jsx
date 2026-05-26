@@ -4,6 +4,8 @@ import APIaccess from '../../apiaccess';
 import {useNavigate, useLocation, useLoaderData, useParams} from 'react-router-dom';
 import Log from '../Log/Log';
 
+import { useUIC } from '../../UIcontext';
+
 import './Profile.css';
 
 let accessAPI = APIaccess();
@@ -27,6 +29,7 @@ export default function Profile({
 	const dataData = useLoaderData();
 
 	const { userid } = useParams();
+	const { prevSection, setPrevSection } = useUIC();
 
 	const [data, setData] = React.useState();
 	const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -34,9 +37,13 @@ export default function Profile({
 	const [posts, setPosts] = React.useState();
 	const [collections, setCollections] = React.useState();
 
-	console.log(userid);
+	const isSubPage = location.pathname.includes('/post/') ||
+                    location.pathname.includes('/macros') ||
+                    location.pathname.includes('/user');
 
 	const updateProfilePage = async() => {
+
+		console.log(userid)
 
 		//for currentUser's profile
 		if(userid == undefined) {
@@ -48,8 +55,9 @@ export default function Profile({
 			let connectedUsers = data.user.connections.length + data.user.subscribers.length + data.user.subscriptions.length;
 			setData({
 				...data,
-				connectedUsers: connectedUsers
+				connectedUsers: connectedUsers,
 			})
+
 			/*
 				Get user's posts and their pinned posts,
 				add pinned Posts to top of user array,
@@ -71,13 +79,15 @@ export default function Profile({
 			//let allPosts = await accessAPI.pullUserLog({type: 'customLog', logNumber: current.log})
 			let allPosts = await accessAPI.pullUserLog({type: 'user'});
 
-			if(data.pinnedPosts < 1) {
+			console.log(data.pinnedPosts.length)
+			if(data.pinnedPosts.length > 0) {
 				const pinnedPostIDs = new Set(data.pinnedPosts.map(p => p._id));
 
 				const processedPinned = data.pinnedPosts.map(post => ({
 					...post,
 					isPinned: true
 				}));
+				console.log(processedPinned);
 
 				const processedAllPosts = allPosts
 				.filter(post => !pinnedPostIDs.has(post._id))
@@ -109,10 +119,18 @@ export default function Profile({
 				connectedUsers: connectedUsers
 			});
 
+			setCurrent({
+				...current,
+				isConnected: dataData.isConnected,
+				isSubscribed: dataData.isSubscribed,
+				hasSubscription: dataData.hasSubscription,
+				section: 'User'
+			})
+
 			let allPosts = await accessAPI.pullUserLog({type: 'user', userID: userid});
 
 			//if viewedUser has pinned posts
-			if(dataData.pinnedPosts > 1) {
+			if(dataData.pinnedPosts.length > 0) {
 				const pinnedPostIDs = new Set(data.pinnedPosts.map(p => p._id) || []);
 				const processedPinned = data.pinnedPosts.map(post => ({
 					...post,
@@ -143,14 +161,35 @@ export default function Profile({
 
 	React.useEffect(()=> {
 
+		if(userid) {
+
+			setPrevSection(current.section);
+			console.log(current.section);
+
+			setCurrent({
+				...current,
+				section: 'User'
+			})
+		}
+
 		document.title = 'Syncseq.xyz/profile'
 
 		updateProfilePage()
+
+		return ()=> {
+			setCurrent({
+				...current,
+				isConnected: null,
+				isSubscribed: null,
+				hasSubscription: null
+			})
+		};
 	}, [])
+
 
 	if(dataLoaded) {
 		return (
-			<div id="profile" className={ `${sectionClass.home}` } ref={refe}>
+			<div id="profile" className={ `${sectionClass.home} ${isSubPage ? 'subpageAdjust' : ''}` } ref={refe}>
 
 
 				{/*{data.profileHeader &&
@@ -177,11 +216,12 @@ export default function Profile({
 				</ul>
 
 				{/*B I O*/}
-				{userInfo.bio &&
-					<div id="bio">
-						<p id="bio">{userInfo.bio}</p>							
-					</div>
-				}
+				
+				<div id="bio">
+					{userInfo.bio &&
+						<p id="bio">{userInfo.bio}</p>
+					}							
+				</div>
 
 
 				{/*U S E R  S T A T S*/}
@@ -225,36 +265,37 @@ export default function Profile({
 
 
 				{/* P I N N E D  M E D I A */}
-				<div id="pinnedMedia">
+				{userInfo.pinnedMedia.length > 1 &&
+					<div id="pinnedMedia">
 
-					<h2>Pinned Media</h2>
-					{userInfo.pinnedMedia.length < 1 &&
-						<h2 className="none">None</h2>
-					}
+						<h2>Pinned Media</h2>
 
-					{userInfo.pinnedMedia.length > 0 && 
-						<ul>
-							{userInfo.pinnedMedia.map((data, index) => (
-								<li key={index}>
-									<img src={data.url} onClick={(e)=> {
-										e.stopPropagation();
+							{/*<h2 className="none">None</h2>*/} 
 
-										let gallery = userInfo.pinnedMedia.map(data => ({
-		  										content: data.url,
-		  										postID: data.postID,
-		  										type: 'media'
-		  									}));
+						{userInfo.pinnedMedia.length > 0 && 
+							<ul>
+								{userInfo.pinnedMedia.map((data, index) => (
+									<li key={index}>
+										<img src={data.url} onClick={(e)=> {
+											e.stopPropagation();
 
-										setCurrent({
-											...current,
-											gallery: gallery
-										})
-									}}/>
-								</li>	
-							))}
-						</ul>
-					}
-				</div>
+											let gallery = userInfo.pinnedMedia.map(data => ({
+			  										content: data.url,
+			  										postID: data.postID,
+			  										type: 'media'
+			  									}));
+
+											setCurrent({
+												...current,
+												gallery: gallery
+											})
+										}}/>
+									</li>	
+								))}
+							</ul>
+						}
+					</div>
+				}
 
 
 				{/*U S E R  P O S T S*/}

@@ -196,6 +196,9 @@ export function UIContextProvider({ children }) {
 
     const baseRef = React.useRef(null);
 
+    //this may need to be set to sessionStorage in case of page reload
+	const [prevSection, setPrevSection] = React.useState('')
+
    	const UIC = {
    		authed,
 	    setAuth,
@@ -206,7 +209,9 @@ export function UIContextProvider({ children }) {
 	    closePopup,
 	    _login,
 	    logout,
-	    baseRef
+	    baseRef,
+	    prevSection,
+	    setPrevSection
    	}
 
 	return <uiContext.Provider value={UIC}>
