@@ -566,19 +566,6 @@ export default function OptionsButton({
       createPost: createPostOptions
     };
 	}, [current, isSubmitting, sectionClass]);
-	
-	
-	// const [activeSection, setActiveSection] = React.useState(2);
-	// const [optionsGroup, setOptionsGroup] = React.useState([
-	// 	profileOptions, 
-	// 	socialOptions, 
-	// 	homeOptions, 
-	// 	macrosOptions,
-	// 	mapOptions,
-	// 	calendarOptions,
-	// 	createPostOptions
-	// ]);
-	// const activeGroup = optionsGroup[activeSection];
 
 	const activeKey = React.useMemo(()=> {
 		if (current.map) return 'map';
@@ -601,61 +588,6 @@ export default function OptionsButton({
 
 	const hajime = new Date();
 
-	// const closeMenu = () => {
-	// 	const newOptionsGroup = optionsGroup.map((group, index) => {
-	// 		if(index == activeSection) {
-	// 			const classifiedGroup = group.map((item, index) => ({
-	// 				...item,
-	// 				class: ""
-	// 			}));
-	// 			return classifiedGroup;
-	// 		}
-	// 		return group;
-	// 	})
-	// 	setOptionsGroup(newOptionsGroup);
-	// 	setOptionsOpen(false);
-	// }
-
-	// const launchOptions = () => {
-
-	// 	if(optionsOpen == false) {
-
-	// 		setOptionsOpen(true);
-	// 		console.log(current.section);
-
-	// 		const newOptionsGroup = optionsGroup.map((group, index) => {
-	// 			if(index == activeSection) {
-	// 				const classifiedGroup = group.filter(item => item.display === true)
-	// 				.map((item, index) => ({
-	// 					...item,
-	// 					class: `${item.class} active${index+1}`
-	// 				}));
-	// 				return classifiedGroup;
-	// 			}
-	// 			return group;
-	// 		})
-
-	// 		let delay = setTimeout(()=> {
-	// 			setOptionsGroup(newOptionsGroup);
-	// 		}, 100)
-			
-	// 	}
-	// 	else if(optionsOpen == true) {
-	// 		const newOptionsGroup = optionsGroup.map((group, index) => {
-	// 			if(index == activeSection) {
-	// 				const classifiedGroup = group.map((item, index) => ({
-	// 					...item,
-	// 					class: ""
-	// 				}));
-	// 				return classifiedGroup;
-	// 			}
-	// 			return group;
-	// 		})
-	// 		setOptionsGroup(newOptionsGroup);
-	// 		setOptionsOpen(false);
-	// 	}
-	// }
-
 	const closeMenu = () => {
     setActiveClasses({});
     setOptionsOpen(false);
@@ -677,37 +609,6 @@ export default function OptionsButton({
       setOptionsOpen(false);
     }
   };
-
-	// Profile = 0, Social = 1, Home = 2, Macros = 3, Map = 4
-	// there will be more for other pages: Post, UserProfile, Global, etc
-	// Changes the activeGroup value based on current.section 
-	// React.useEffect(()=> {
-	// 	if(current.section == 'profile' || current.section == 'User') {
-	// 		setActiveSection(0)
-	// 	}
-	// 	else if(current.section == 'social') {
-	// 		setActiveSection(1)
-	// 	}
-	// 	else if(current.section == 'home') {
-	// 		setActiveSection(2)
-	// 	}
-	// 	else if(current.section == 'macros') {
-	// 		setActiveSection(3)
-	// 	}
-	// 	if(current.map == true) {
-	// 		setActiveSection(4)
-	// 	}
-	// 	if(current.calendar == true) {
-	// 		setActiveSection(5)
-	// 	}
-	// 	if(current.createPost == true) {
-	// 		setActiveSection(6)
-	// 	}
-	// 	if(current.createPost == false && current.section == 'home') {
-	// 		setActiveSection(2);
-	// 	}
-	// }, [current])
-
 
 	return (
 

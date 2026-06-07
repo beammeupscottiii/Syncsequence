@@ -2,6 +2,57 @@
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
 
+### 06. 07. 2026
+
+@1425
+from what I understand from reading the code,
+<Instants> is triggered with triggerPopup({}),
+	with object values including:
+		message, onConfirm and onInteract
+
+onConfirm would be where we attach the function...
+
+it's possible that InstantsContext isn't necessary to keep around,
+as it doesn't seem to be referenced anywhere else relevant to the 
+popUp - it's just between UIcontext and Instants
+
+so, function in <Profile> is mainly for organization,
+it triggers popup, including the api call to remove the connection,
+and then the succeeding popup call after a successful response, 
+and then refreshes the page data
+
+this is then passed to optionsButton using the ref process described below
+
+
+@1325 process...
+
+the 'remove, connect' function is within <Profile> but is passed up
+into a ref within <Base> so that it can be triggered the <optionsButton>
+
+so we have a ref in <Base>
+the function in question in <Profile>
+and then a useLayoutEffect() in <Profile> which pushes the function
+	into the refs
+the ref is pass down as prop into <OptionsButton>
+	and the function is ran by calling the current version of the ref:
+	let drafting = await triggerDraftRef.current();
+
+in the useLayoutEffect:
+	if (triggerSubmitRef) {
+	  triggerSubmitRef.current = handleSubmit;
+	}
+
+for cleanup:
+	return () => {
+	  if (triggerSubmitRef) triggerSubmitRef.current = null;
+	}
+
+Remove Connect toggles <Instants> however,
+the confirm button being within the pop up
+
+
+
+
 ### 05. 26. 2025
 @1540 <optionsButton> list now shows up as it should for each section
 
@@ -12,7 +63,8 @@ To Do Next:
 	- removing connections, subscriptions
 	- routing confirmations through <Instants>
 
-should look up what the process is for submitting posts to have an idea where to start
+should look up what the process is for submitting posts to have an idea where to start.
+Start with that, then layout what new process should be
 
 ### 05. 25. 2025
 @1610 Gem's update to <OptionsButton> fixed the issue within 'profile' and 'user' sections, but now it's not opening for the other ones. 

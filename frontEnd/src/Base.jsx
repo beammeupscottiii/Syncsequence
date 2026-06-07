@@ -513,7 +513,7 @@ export default function Main() {
    */
   React.useEffect(()=> {
     if(authed == true) {
-      setSocketURL(`ws:////172.18.12.138:3333/?${userID}`);
+      setSocketURL(`ws://172.27.140.231:3333/?${userID}`);
       getUnreadCount();
     }
   }, [authed])
