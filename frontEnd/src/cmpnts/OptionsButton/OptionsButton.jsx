@@ -118,6 +118,9 @@ export default function OptionsButton({
   triggerDraftRef,
   draftsList,
   setDraftsList,
+  removeConnectionRef,
+	requestConnectionRef,
+	subscriptionRequestRef
 }) {
 
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -172,7 +175,10 @@ export default function OptionsButton({
 			},
 			{
 				name: 'Remove, Connect',
-				function: null,
+				function: ()=> {
+					removeConnectionRef.current();
+					closeMenu();
+				},
 				class: ``,
 				display: current.section === 'User' && current.isConnected
 			},

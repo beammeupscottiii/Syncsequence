@@ -1,7 +1,7 @@
 /* * * V i t a l s * * */
 import * as React from 'react';
 import APIaccess from '../../apiaccess';
-import {useNavigate, useLocation, useLoaderData, useParams} from 'react-router-dom';
+import {useNavigate, useLocation, useLoaderData, useParams, useOutletContext } from 'react-router-dom';
 import Log from '../Log/Log';
 
 import { useUIC } from '../../UIcontext';
@@ -27,9 +27,10 @@ export default function Profile({
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dataData = useLoaderData();
+	const { removeConnectionRef, requestConnectionRef, subscriptionRequestRef } = useOutletContext();
 
 	const { userid } = useParams();
-	const { prevSection, setPrevSection } = useUIC();
+	const { prevSection, setPrevSection, triggerPopup } = useUIC();
 
 	const [data, setData] = React.useState();
 	const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -157,6 +158,129 @@ export default function Profile({
 	}
 
 	const goToUserSettings = () => {}
+
+
+
+	const removeConnection = (e) => {
+		
+		// e.preventDefault();
+
+		triggerPopup({
+			message: `Are you sure you wish to remove @${userInfo.userName}?`,
+			onConfirm: async()=> {
+
+				let remove = await accessAPI.removeConnection(userid);
+				if(remove == true) {
+					updateProfilePage();
+
+					triggerPopup({
+						message: `@${userInfo.userName} removed`
+					})
+				}
+			}
+		})
+
+		return true;
+	}
+
+	const requestConnection = async(e) => {
+
+		e.preventDefault();
+
+		let notif = {
+			type: 'request',
+			senderID: userID,
+			senderUsername: username,
+			recipients: [userid],
+			recipientUsername: userInfo.userName,
+			message: 'connectionRequestSent'
+		}
+
+		await accessAPI.newInteraction(notif).then((request)=> {
+
+			if(request.confirmation == false) {
+
+				triggerPopup({
+					message: `You have already sent @${notif.recipientUsername} this kind of request`
+				})
+
+			}
+			else if(request.message == 'connectionRequestSent') {
+
+				triggerPopup({
+					message: `Connection Request sent to @${userInfo.userName}`
+				})
+
+			}
+			else if(request.message == 'connectionAcceptedSent') {
+
+				updateProfilePage();
+
+				triggerPopup({
+					message: `You and @${userInfo.userName} are now connected!`
+				})
+			}
+		})
+	}
+
+	const subscriptionRequest = async(e) => {
+
+		e.preventDefault();
+
+		let notif = {
+			type: 'request', //type is request initially, switches to confirmation
+			senderID: userID,
+			senderUsername: username,
+			recipients: [userid],
+			recipientUsername: userInfo.userName,
+			message: userInfo.privacySetting == 'Off' ? 'subscribed' : 'subscriptionRequestSent'
+		}
+
+		await accessAPI.newInteraction(notif).then((request)=> { 
+
+			if(request.message == 'subscribed') {
+
+				updateProfilePage();
+
+				triggerPopup({
+					message: `You are now subscribed to @${userInfo.userName}`
+				})
+			}
+
+			else if(request.message == 'subscriptionRequestSent') {
+				triggerPopup({
+					message: `Subscription request sent to @${userInfo.userName}`
+				})
+			}
+		})
+	}
+
+
+	React.useLayoutEffect(() => {
+	    // Register Submit Logic
+	    if (removeConnectionRef) {
+	        removeConnectionRef.current = removeConnection;
+	    }
+
+	    // Register Draft Logic
+	    if (requestConnectionRef) {
+	        requestConnectionRef.current = requestConnection;
+	    }
+
+	    if(subscriptionRequestRef) {
+	    	subscriptionRequestRef.current = subscriptionRequest;
+	    }
+
+	    // Cleanup both on unmount
+	    return () => {
+
+	       	if (removeConnectionRef) removeConnection.current = null;
+			if (requestConnectionRef) requestConnection.current = null;
+			if (subscriptionRequestRef) subscriptionRequest.current = null;
+	    };
+	}, [removeConnectionRef, requestConnectionRef, subscriptionRequestRef,
+		removeConnection, requestConnection, subscriptionRequest ]);
+
 
 
 	React.useEffect(()=> {

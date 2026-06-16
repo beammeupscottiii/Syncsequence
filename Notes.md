@@ -2,8 +2,16 @@
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
 
-### 06. 07. 2026
+### 06. 13. 2026
+@1100 removeConnection process from <Profile> to <OptionsButton> to <Instants> popUp works, 
+			BUT: 
+			- updateProfile didnt work ?
+			- popUp confirming disconnection didnt appear
+			- going to <User> from <ManageConnections> doesn't change header,
+				so I couldnt see if the options updated as Sanbanbaka isn't on connections
+				anymore
 
+### 06. 07. 2026
 @1425
 from what I understand from reading the code,
 <Instants> is triggered with triggerPopup({}),

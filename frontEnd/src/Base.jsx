@@ -211,6 +211,13 @@ function Home({
   const triggerDraftRef = React.useRef(null);
 
 
+  //for connection functions in <Profile>
+  const profileContext = React.createContext(null);
+  const removeConnectionRef = React.useRef(null);
+  const requestConnectionRef = React.useRef(null);
+  const subscriptionRequestRef = React.useRef(null);
+
+
   //Conditionals for whether the Header displays the back button
   const isSubPage = location.pathname.includes('/post/') ||
                     location.pathname.includes('/macros') ||
@@ -269,7 +276,7 @@ function Home({
         {/*
             M A I N   S E C T I O N   W R A P P E R
         */}
-        <Outlet />
+        <Outlet context={{ removeConnectionRef, requestConnectionRef, subscriptionRequestRef }}/>
 
         <SectionWrapper onScrollDelta={handleScroll}>
           {current.section == 'profile' &&
@@ -399,6 +406,9 @@ function Home({
             triggerDraftRef={triggerDraftRef}
             draftsList={draftsList}
             setDraftsList={setDraftsList}
+            removeConnectionRef={removeConnectionRef}
+            requestConnectionRef={requestConnectionRef}
+            subscriptionRequestRef={subscriptionRequestRef}
         />
 
 
@@ -513,7 +523,7 @@ export default function Main() {
    */
   React.useEffect(()=> {
     if(authed == true) {
-      setSocketURL(`ws://172.27.140.231:3333/?${userID}`);
+      setSocketURL(`ws://172.17.247.110:3333/?${userID}`);
       getUnreadCount();
     }
   }, [authed])
