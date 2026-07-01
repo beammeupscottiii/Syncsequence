@@ -2,6 +2,75 @@
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
 
+### 06. 29. 2026
+@2200
+
+To Do Next:
+- add and route 'request connection' functionality from <Profile> to <OptionsButton>
+- ensure <Instant> popup appears after connection functions on <Profile>
+
+
+This is the most recent list I could find of remaining additions + changes to make for
+Alpha1.0
+
+F o r
+A l p h a 1.0
+	- update <Macros> section to have same drawer functionality as <Socials>
+	- update / redesign <Post> page
+	- Redesign(?) <Macrospage> page 
+	- update styling for <userProfile> for other users
+	- <Interactions> to be updated, restyled based off of designs -
+	-  Revamp all interactions which have notifs, so they appear within user's interactions
+		 list and their notifications list
+	- <Messages> to be *added*
+	- <EditProfile> to be *added*
+		- connect to settings option too	
+	- Color Scheme options in Settings
+	- Transition from openMaps to mapbox
+
+Smaller Things:
+	- add popups for error responses in <createPost>
+  - add popup with info or link on to how to set location
+  - create design for ManageConnections ✔️
+  - add manageConnections modal
+  - Fix / restyle <Post> page
+
+
+### 06. 28. 2026
+@ll40 baseElement return after link change now done WITHIN linked component,
+done for <Profile> (profile, userProfile)
+the arrival isn't as smooth as I would like however, but it is continuous and reliable
+
+@1130 alright so we've made headway with <Profile> reliably appearing after link click
+
+next well try adding to it a conditional within a useEffect
+that checks whether it's being loaded via url change
+and returns the base element.
+otherwise, it just load itself.
+
+
+### 06. 26. 2026
+@2340 can modify goToProfile function to take username and userID as params
+as to not need the backend call. Based on how it seems to be set up in <Profile>
+that data call really isn't necessary.
+Gem's suggestion is to have the base.element animations be triggered by
+navigation state - we can set the check within <home>, set the classes to
+be ternarys based on navigation states...
+
+### 06. 25. 2026
+@0640 Going from <ManageConnections> to <User> now updates current.state correctly.
+Issue was updating current in link function within component - we created an independent
+manageConnections state, didn't need to update current as <Profile> adjusts it based on
+whether it's in subpage / <User> mode.
+
+<goToProfile> button not working for results options in <ManageConnections> tho (T- T)
+Ok nvm, it just didnt load before.
+
+Need to change the link function so that it waits for the data to load then
+continues with the animation
+Will ask Gemini for aid
+
+
 ### 06. 13. 2026
 @1100 removeConnection process from <Profile> to <OptionsButton> to <Instants> popUp works, 
 			BUT: 
@@ -10,6 +79,7 @@
 			- going to <User> from <ManageConnections> doesn't change header,
 				so I couldnt see if the options updated as Sanbanbaka isn't on connections
 				anymore
+
 
 ### 06. 07. 2026
 @1425

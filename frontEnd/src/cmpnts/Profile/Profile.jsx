@@ -30,7 +30,7 @@ export default function Profile({
 	const { removeConnectionRef, requestConnectionRef, subscriptionRequestRef } = useOutletContext();
 
 	const { userid } = useParams();
-	const { prevSection, setPrevSection, triggerPopup } = useUIC();
+	const { prevSection, setPrevSection, triggerPopup, baseRef } = useUIC();
 
 	const [data, setData] = React.useState();
 	const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -103,7 +103,6 @@ export default function Profile({
 			else {
 				setPosts(allPosts);
 			}
-			
 
 			setDataLoaded(true);
 		}
@@ -154,12 +153,21 @@ export default function Profile({
 
 			//final check
 			setDataLoaded(true);
+
+			let baseElement = baseRef.current; 
+
+			let delay1 = setTimeout(()=> {
+		      baseElement.classList.remove('leave');
+		    }, 300)
+
+
+		    let delay2 = setTimeout(()=> {
+		      baseElement.classList.add('enter');
+		    }, 600)
 		}
 	}
 
 	const goToUserSettings = () => {}
-
-
 
 	const removeConnection = (e) => {
 		

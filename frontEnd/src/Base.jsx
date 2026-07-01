@@ -6,6 +6,7 @@ import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
+  useNavigation,
   useLocation,
   Outlet
 } from "react-router-dom";
@@ -225,7 +226,43 @@ function Home({
 
   // For when UserProfile loads, to update OptionsButton options
   // can be  conn, subbed or subber
-  const [viewedUserConnStatus, setViewedUserConnStatus] = React.useState('')
+  const [viewedUserConnStatus, setViewedUserConnStatus] = React.useState('');
+
+  // for page navigation requiring <Home> to fade in and out
+  const navigation = useNavigation();
+  const isNavigating = navigation.state === "loading";
+  const nextLocation = navigation.location?.pathname;
+  const isGoingToProfile = nextLocation?.includes('/user/');
+
+  React.useEffect(()=> {
+    if(isNavigating){
+      element.classList.remove('enter');
+      element.classList.add('leave');
+    }
+
+    //for going to a user's profile
+    if(location.pathname.includes('/user')){
+
+      
+      if(manageConnectionsToggle) {
+        setSectionClass({ 
+          ...sectionClass, 
+          manageConnections: '' 
+        });
+        setManageConnectionsToggle();
+      }
+
+      // let delay1 = setTimeout(()=> {
+      //   element.classList.remove('leave');
+      // }, 300)
+
+
+      // let delay2 = setTimeout(()=> {
+      //   element.classList.add('enter');
+      // }, 600)
+    }
+
+  }, [navigation.state])
 
   return (
     <section id="BASE" ref={baseRef} className={`${enter == true ? '_enter' : ''}`}>  
@@ -276,7 +313,13 @@ function Home({
         {/*
             M A I N   S E C T I O N   W R A P P E R
         */}
-        <Outlet context={{ removeConnectionRef, requestConnectionRef, subscriptionRequestRef }}/>
+        <Outlet 
+          context={{ 
+            removeConnectionRef, 
+            requestConnectionRef, 
+            subscriptionRequestRef 
+          }}
+          key={location.pathname}/>
 
         <SectionWrapper onScrollDelta={handleScroll}>
           {current.section == 'profile' &&
@@ -523,7 +566,7 @@ export default function Main() {
    */
   React.useEffect(()=> {
     if(authed == true) {
-      setSocketURL(`ws://172.17.247.110:3333/?${userID}`);
+      setSocketURL(`ws://172.23.167.184:3333/?${userID}`);
       getUnreadCount();
     }
   }, [authed])
@@ -881,8 +924,17 @@ export default function Main() {
         {
           path: '/user/:username/:userid',
           loader: async({ params }) => {
-            let data = await accessAPI.getSingleUser(params.userid);
-            return data;
+            // let data = await accessAPI.getSingleUser(params.userid);
+            // return data;
+            try {
+              console.log("Loader running for user ID:", params.userid);
+              const data = await accessAPI.getSingleUser(params.userid);
+              return data;
+            } catch (error) {
+              console.error("CRITICAL ROUTE LOADER ERROR:", error);
+              // Return a fallback object so the component still mounts and you can debug it
+              return { error: true, message: error.message };
+            }
           },
           element: 
             // <UserProfile

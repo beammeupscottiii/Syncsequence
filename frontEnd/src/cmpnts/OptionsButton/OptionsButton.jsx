@@ -202,11 +202,11 @@ export default function OptionsButton({
 				function: ()=> {
 					setManageConnectionsToggle();
 
-					setCurrent({
-						...current,
-						section: 'social',
-						manageConnections: true
-					})
+					// setCurrent({
+					// 	...current,
+					// 	section: 'social',
+					// 	manageConnections: true
+					// })
 
 					setOptionsOpen(false);
 				},

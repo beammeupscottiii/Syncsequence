@@ -297,31 +297,12 @@ export default function SocialSection({
 		}, 600)
 	}
 
-	let goToProfile = async(userid) => {
-
-		let baseElement = baseRef.current;
-
-		let data = await accessAPI.getSingleUser(userid);
-
-		
-		baseElement.classList.add('leave');
-
-		let delay1 = setTimeout(()=> {
-			navigate(`/user/${data.user.userName}/${data.user._id}`);
-		}, 600)
-
-		let delay2 = setTimeout(()=> {
-			baseElement.classList.add('return');
-		}, 800)
-
-		let delay3 = setTimeout(()=> {
-			baseElement.classList.remove('return');
-			baseElement.classList.remove('leave');
-		}, 1400)
+	let goToProfile = async(userid, username) => {
+		navigate(`/user/${username}/${userid}`);
 	}
 
 	React.useEffect(()=> {
-		updateTaggedPosts();
+		// updateTaggedPosts();
 	 	updateConnections();
 	}, [])
 
@@ -418,7 +399,7 @@ export default function SocialSection({
 							{/* Options Wrapper */}
 							<div id="optionsWrapper">
 								<button className={`buttonDefault`}
-										onClick={()=> {goToProfile(connect._id)}}>
+										onClick={()=> {goToProfile(connect._id, connect.userName)}}>
 									Profile
 								</button>
 								<button className={`buttonDefault`}

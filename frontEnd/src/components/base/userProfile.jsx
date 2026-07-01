@@ -31,6 +31,8 @@ export default function UserProfile({
     current,
     setCurrent
 }) {
+
+	console.log("--- PROFILE COMPONENT RUNNING ---");
 	/* Component Function Related*/
 	const userID = sessionStorage.getItem('userID');
 	const username = sessionStorage.getItem('userName');

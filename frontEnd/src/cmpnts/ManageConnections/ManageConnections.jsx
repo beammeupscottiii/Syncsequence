@@ -215,33 +215,82 @@ export default function ManageConnections({
 	    return () => window.removeEventListener('click', handleClickOutside);
 	}, []);
 
-	let goToProfile = async(userid) => {
+	// let goToProfile = async(userid) => {
 
-		let modalCurrent = modal.current;
-		let data = await accessAPI.getSingleUser(userid);
-		navigate(`/user/${data.user.userName}/${data.user._id}`);
-		baseElement.classList.add('leave');
+	// 	let modalCurrent = modal.current;
+	// 	let data = await accessAPI.getSingleUser(userid);
+	// 	navigate(`/user/${data.user.userName}/${data.user._id}`);
+	// 	baseElement.classList.add('leave');
 
-		let delay1 = setTimeout(()=> {
-			modalCurrent.style.display = 'none';
-			baseElement.classList.add('return');
-		}, 600)
+	// 	let delay1 = setTimeout(()=> {
+	// 		modalCurrent.style.display = 'none';
+	// 		baseElement.classList.add('return');
+	// 	}, 600)
 
-		let delay = setTimeout(()=> {
-			baseElement.classList.remove('return');
-			baseElement.classList.remove('leave');
-			setCurrent({
-				...current,
-				manageConnections: false,
-			})
+	// 	let delay = setTimeout(()=> {
+	// 		baseElement.classList.remove('return');
+	// 		baseElement.classList.remove('leave');
+	// 		// setCurrent({
+	// 		// 	...current,
+	// 		// 	manageConnections: false,
+	// 		// })
 			
-			setSectionClass({
-				...sectionClass,
-				manageConnections: ''
-			})
+	// 		setSectionClass({
+	// 			...sectionClass,
+	// 			manageConnections: ''
+	// 		})
 
-			setManageConnectionsToggle();
-		}, 1100)
+	// 		setManageConnectionsToggle();
+	// 	}, 1100)
+	// }
+
+	// let goToProfile = async(userid) => {
+	//     let modalCurrent = modal.current;
+	    
+	//     // 1. START THE LEAVE ANIMATION IMMEDIATELY 
+	//     // This gives the user instant visual feedback while the network loads
+	//     baseElement.classList.add('leave');
+
+	//     try {
+	//         // 2. KICK OFF THE API FETCH (Runs concurrently while the screen animates)
+	//         const dataPromise = accessAPI.getSingleUser(userid);
+	        
+	//         // 3. CREATE A GUARANTEED MINIMUM TIMER PROMISE (e.g., 600ms for your leave animation)
+	//         const animationPromise = new Promise(resolve => setTimeout(resolve, 600));
+
+	//         // 4. WAIT FOR BOTH: The data MUST be loaded AND the 600ms animation must finish
+	//         const [data] = await Promise.all([dataPromise, animationPromise]);
+
+	//         // 5. DATA IS LOADED & ANIMATION IS DONE -> UPDATE URL
+	//         navigate(`/user/${data.user.userName}/${data.user._id}`);
+
+	//         // 6. SWAP STYLES RIGHT away (No extra timeout needed!)
+	//         modalCurrent.style.display = 'none';
+	//         baseElement.classList.add('return');
+
+	//         // 7. FINAL CLEANUP DELAY (The remaining 500ms for the return animation)
+	//         setTimeout(() => {
+	//             baseElement.classList.remove('return');
+	//             baseElement.classList.remove('leave');
+	            
+	//             setSectionClass({
+	//                 ...sectionClass,
+	//                 manageConnections: ''
+	//             });
+
+	//             setManageConnectionsToggle();
+	//         }, 500); // 1100ms total - 600ms elapsed = 500ms left
+
+	//     } catch (error) {
+	//         console.error("Failed to load profile data:", error);
+	//         // Error fallback: clean up class names so the UI doesn't get permanently frozen
+	//         baseElement.classList.remove('leave');
+	//     }
+	// };
+
+	let goToProfile = (userID, username) => {
+
+		navigate(`/user/${username}/${userID}`);
 	}
 
 	let filter_byType = () => {
@@ -340,7 +389,7 @@ export default function ManageConnections({
 									
 									<div id="optionsWrapper">
 										<button className={`buttonDefault`}
-												onClick={()=> {goToProfile(user._id)}}>
+												onClick={()=> {goToProfile(user._id, user.userName)}}>
 											Profile
 										</button>
 										<button className={`buttonDefault`}
