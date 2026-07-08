@@ -1,3 +1,4 @@
+/* OLD VERSION */
 import * as React from 'react';
 import APIaccess from '../../apiaccess';
 import CalInfo from '../calInfo'
@@ -32,7 +33,6 @@ export default function UserProfile({
     setCurrent
 }) {
 
-	console.log("--- PROFILE COMPONENT RUNNING ---");
 	/* Component Function Related*/
 	const userID = sessionStorage.getItem('userID');
 	const username = sessionStorage.getItem('userName');

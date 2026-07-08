@@ -15,7 +15,7 @@ export default function NotificationList({setNotifList, unreadCount, setUnreadCo
 	let username = sessionStorage.getItem('userName');
 	let userID = sessionStorage.getItem('userID');
 	let navigate = useNavigate();
-	const { logout } = useUIC();
+	const { logout, triggerPopup } = useUIC();
 
 	console.log(username);
 
@@ -37,7 +37,7 @@ export default function NotificationList({setNotifList, unreadCount, setUnreadCo
 		setNotifs(data);
 	}
 
-	let interact = async(arg, ID, username, postID, notif) => {
+	let interact = async(arg, notif, postID) => {
 
 		/* 
 			set middle two arguments as 'undefined' when using
@@ -46,29 +46,40 @@ export default function NotificationList({setNotifList, unreadCount, setUnreadCo
 
 		if(arg == 'accept') {
 
+			//07. 04. 2026
+			//updating this now even though component needs to be redone
+			console.log('running accept request...')
+			console.log(notif);
+
 			let sm = {
 				type: 'request',
-				recipients: [userID],
-				senderID: ID,
-				senderUsername: username,
+				recipients: [notif.sender],
 				message: 'connectionAcceptedSent',
 				originalNotif: notif._id
 			};
-			setSocketMessage(sm);
+			console.log(sm);
+			// setSocketMessage(sm);
+
+			let request = await accessAPI.newInteraction(sm);
+			if(request.confirm == true) {
+				triggerPopup({
+					message: `You are now connected`
+				})
+			}
 		} 
 		else if(arg == 'markRead') {
 
 				let sm = {
 					type: 'markRead',
-					notifID: ID,
-					userID: userID,
-					senderUsername: username
+					notifID: notif._id,
 				};
-				let request = await accessAPI.newInteraction(sm);
+				let request = await accessAPI.newInteraction(sm)
 
-				let delay = setTimeout(()=> {
-					updateList()
-				}, 200)
+				if(request) {
+					let delay = setTimeout(()=> {
+						updateList();
+					}, 200)
+				}		
 		}
 		else if(arg == 'accessGranted') {
 
@@ -214,50 +225,47 @@ export default function NotificationList({setNotifList, unreadCount, setUnreadCo
 				}
 
 				<div id="body">
-					{(notif.type == 'request' && notif.message == 'connectionRequestSent') &&
+					{(notif.message == 'connectionRequestSent') &&
 						<p>You sent {notif.recipientUsernames[0]} a request !</p>
 					}
-					{(notif.type == 'request' && notif.message == 'connectionRequestRecieved') &&
+					{(notif.message == 'connectionRequestRecieved') &&
 						<p>You recieved a connection request from {notif.senderUsername}</p>
 					}
-					{(notif.type == 'request' && notif.message == 'connectionAcceptedSent') &&
+					{(notif.message == 'connectionAcceptedSent') &&
 						<p>You and {notif.senderUsername} are now connected!</p>
 					}
-					{(notif.type == 'request' && notif.message == 'connectionAcceptedRecieved') &&
+					{(notif.message == 'connectionAcceptedRecieved') &&
 						<p>You and {notif.recipientUsernames[0]} are now connected!</p>
 					}
-					{(notif.type == 'comment' && notif.message == 'initial') &&
+					{(notif.message == 'initial') &&
 						<p>{notif.senderUsername} left a comment on your post "{postTitle}"</p>
 					}
-					{(notif.type == 'comment' && notif.message == 'response') &&
+					{(notif.message == 'response') &&
 						<p>{notif.senderUsername} responded to your comment on "{postTitle}"</p>
 					}
-					{(notif.type == 'tagging' && notif.message == 'recieved') &&
+					{(notif.message == 'recieved') &&
 						<p>{notif.senderUsername} tagged you in a post "{postTitle}"</p>
 					}
-					{(notif.type == 'request' && notif.message == 'accessRequested') &&
+					{(notif.message == 'accessRequested') &&
 						<p>{notif.senderUsername} is requesting access to "{notif.details.groupName}"</p>
 					}
-					{(notif.type == 'request' && notif.message == 'subscriptionRequest') &&
+					{(notif.message == 'subscriptionRequest') &&
 						<p>You requested subscription to @{notif.recipientUsernames[0]}</p>
 					}
-					{(notif.type == 'request' && notif.message == 'subscriptionRequested') &&
+					{(notif.message == 'subscriptionRequested') &&
 						<p>{notif.senderUsername} wishes to subscribe</p>
 					}
-					{(notif.type == 'request' && notif.message == 'subscriptionAccepted') &&
+					{(notif.message == 'subscriptionAccepted') &&
 						<p>{notif.recipientUsernames[0]} is now a subscriber!</p>
 					}
-					{/*{(notif.type == 'request' && notif.message == 'subscribed') &&
-						<p>@{notif.senderUsername} is now subscribed to you!</p>
-					}*/}
-					{(notif.type == 'confirmation' && notif.message == 'subscribed') &&
+					{(notif.message == 'subscribed') &&
 						<p>You are now subscribed to @{notif.senderUsername}</p>
 					}
-					{(notif.type == 'request' && notif.message == 'accessGranted') &&
+					{(notif.message == 'accessGranted') &&
 						<p>{notif.senderUsername} has granted you access to "{notif.details.groupName}"</p>
 					}
 
-					{notif.type == 'comment' && 
+					{notif.message == 'comment' && 
 						<div className="options">
 							<button className="buttonDefault" onClick={(e)=> {
 								e.preventDefault()
@@ -270,7 +278,7 @@ export default function NotificationList({setNotifList, unreadCount, setUnreadCo
 						</div>
 					}
 
-					{notif.type == 'tagging' &&
+					{notif.message == 'tagging' &&
 						<div className="options">
 							<button className="buttonDefault" onClick={()=> {
 								goToPost(notif.url)
@@ -285,83 +293,86 @@ export default function NotificationList({setNotifList, unreadCount, setUnreadCo
 						</div>
 					}
 
-					{(notif.type == 'request' && notif.message == 'connectionRequestRecieved') &&
+					{(notif.message == 'connectionRequestRecieved') &&
 						<div className="options">
 							<button className="buttonDefault" 
 									onClick={()=> {
-										interact('accept', notif.sender, notif.senderUsername, undefined, notif)
-										interact('markRead', notif._id )
+										interact('accept', notif)
+										interact('markRead', notif)
 									}}>
 								Accept
 							</button>
 							<button className="buttonDefault" 
-									onClick={()=> {interact('markRead', notif._id)}}>
+									onClick={()=> {interact('markRead', notif)}}>
 								Ignore
 							</button>
 						</div>
 					}
-					{(notif.type == 'request' && notif.message == 'connectionRequestSent') &&
+					{(notif.message == 'connectionRequestSent') &&
 						<div className="options">
 							<button className="buttonDefault"
-									onClick={()=> {interact('markRead', notif._id )}}>
+									onClick={()=> {interact('markRead', notif )}}>
 								Mark Read
 							</button>
 						</div>
 					}
-					{(notif.type == 'request' && notif.message == 'connectionAcceptedSent') &&
+
+					{(notif.message == 'connectionAcceptedSent') &&
 						<div className="options">
 							<button className="buttonDefault"
-									onClick={()=> {interact('markRead', notif._id )}}>
+									onClick={()=> {interact('markRead', notif )}}>
 								Mark Read
 							</button>
 						</div>
 					}
-					{(notif.type == 'request' && notif.message == 'connectionAcceptedRecieved') &&
+
+					{(notif.message == 'connectionAcceptedRecieved') &&
 						<div className="options">
 							<button className="buttonDefault"
-									onClick={()=> {interact('markRead', notif._id )}}>
+									onClick={()=> {interact('markRead', notif )}}>
 								Mark Read
 							</button>
 						</div>
 					}
-					{(notif.type == 'request' && notif.message == 'accept') &&
+
+					{(notif.message == 'accept') &&
 						<div className="options">
 							<button className="buttonDefault"
-									onClick={()=> {interact('markRead', notif._id )}}>
+									onClick={()=> {interact('markRead', notif )}}>
 								Mark Read
 							</button>
 						</div>
 					}
-					{(notif.type == 'request' && notif.message == 'accessGranted') &&
+					{(notif.message == 'accessGranted') &&
 						<div className="options">
 							<button className="buttonDefault"
 									onClick={()=> {goToMacrosPage(notif.details.groupID, notif.details.groupName)}}>
 								Go To Macro
 							</button>
 							<button className="buttonDefault"
-									onClick={()=> {interact('markRead', notif._id )}}>
+									onClick={()=> {interact('markRead', notif )}}>
 								Mark Read
 							</button>
 						</div>
 					}
-					{(notif.type == 'request' && notif.message == 'accessRequested') &&
+					{(notif.message == 'accessRequested') &&
 						<div className="options">
 							<button className="buttonDefault" 
 									onClick={()=> {
 										console.log(notif)
-										interact('accessGranted', undefined, undefined, undefined, notif)}}>
+										interact('accessGranted', notif)}}>
 								Give Access
 							</button>
 							<button className="buttonDefault" 
 									onClick={()=> {
 										console.log(notif)
-										interact('markRead', notif._id)
+										interact('markRead', notif )
 									}}>
 								Ignore
 							</button>
 						</div>
 					}
-					{(notif.type == 'request' && notif.message == 'subscriptionRequested') &&
+					{(notif.message == 'subscriptionRequested') &&
 						<div className="options">
 							<button className="buttonDefault" 
 									onClick={()=> {
@@ -372,18 +383,18 @@ export default function NotificationList({setNotifList, unreadCount, setUnreadCo
 							<button className="buttonDefault" 
 									onClick={()=> {
 										console.log(notif)
-										interact('markRead', notif._id)
+										interact('markRead', notif )
 									}}>
 								Ignore
 							</button>
 						</div>
 					}
-					{(notif.message == 'subscribed' || notif.message == 'subscriptionAccepted') &&
+					{(notif.message == 'subscriptionAccepted') &&
 						<div className="options">
 							<button className="buttonDefault" 
 									onClick={()=> {
 										console.log(notif)
-										interact('markRead', notif._id)
+										interact('markRead', notif )
 									}}>
 								Mark Read
 							</button>

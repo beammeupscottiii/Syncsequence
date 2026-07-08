@@ -62,7 +62,6 @@ export default function ManageConnections({
 		  [connections, setConnections] = React.useState([]),
 		  [searchQuery, setSearchQuery] = React.useState(''),	
 		  [searchResults, setSearchResults] = React.useState([]),
-		  // [searchFocus, setSearchFocus] = React.useReducer(state => !state, false),
 		  [searchFocus, setSearchFocus] = React.useState(false),
 		  [results, toggleResults] = React.useReducer(state => !state, false),
 		  [showFilter, setShowFilter] = React.useReducer(state => !state, false),

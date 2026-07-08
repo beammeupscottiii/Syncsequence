@@ -27,7 +27,7 @@ export default function Profile({
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dataData = useLoaderData();
-	const { removeConnectionRef, requestConnectionRef, subscriptionRequestRef } = useOutletContext();
+	const { removeConnectionRef, requestConnectionRef, subscriptionRequestRef } = useOutletContext() || {};
 
 	const { userid } = useParams();
 	const { prevSection, setPrevSection, triggerPopup, baseRef } = useUIC();
@@ -43,8 +43,6 @@ export default function Profile({
                     location.pathname.includes('/user');
 
 	const updateProfilePage = async() => {
-
-		console.log(userid)
 
 		//for currentUser's profile
 		if(userid == undefined) {
@@ -109,30 +107,31 @@ export default function Profile({
 
 		//for viewedUser's profile
 		else {
-			setData(dataData);
 			setUserInfo(dataData.user);
-			setCollections(dataData.collections);
 			let connectedUsers = 
 				dataData.user.connections.length + dataData.user.subscribers.length + dataData.user.subscriptions.length;
 			setData({
-				...data,
+				...dataData,
 				connectedUsers: connectedUsers
 			});
+			setCollections(dataData.collections);
+			
+			
 
-			setCurrent({
-				...current,
+			setCurrent(prev => ({
+				...prev,
 				isConnected: dataData.isConnected,
 				isSubscribed: dataData.isSubscribed,
 				hasSubscription: dataData.hasSubscription,
 				section: 'User'
-			})
+			}));
 
 			let allPosts = await accessAPI.pullUserLog({type: 'user', userID: userid});
 
 			//if viewedUser has pinned posts
-			if(dataData.pinnedPosts.length > 0) {
-				const pinnedPostIDs = new Set(data.pinnedPosts.map(p => p._id) || []);
-				const processedPinned = data.pinnedPosts.map(post => ({
+			if(dataData.pinnedPosts && dataData.pinnedPosts.length > 0) {
+				const pinnedPostIDs = new Set(dataData.pinnedPosts.map(p => p._id) || []);
+				const processedPinned = dataData.pinnedPosts.map(post => ({
 					...post,
 					isPinned: true
 				}));
@@ -193,12 +192,10 @@ export default function Profile({
 
 	const requestConnection = async(e) => {
 
-		e.preventDefault();
+		// e.preventDefault();
 
 		let notif = {
 			type: 'request',
-			senderID: userID,
-			senderUsername: username,
 			recipients: [userid],
 			recipientUsername: userInfo.userName,
 			message: 'connectionRequestSent'
@@ -213,7 +210,7 @@ export default function Profile({
 				})
 
 			}
-			else if(request.message == 'connectionRequestSent') {
+			else if(request.confirmation == true) {
 
 				triggerPopup({
 					message: `Connection Request sent to @${userInfo.userName}`
@@ -263,29 +260,33 @@ export default function Profile({
 		})
 	}
 
+	//07. 04. 2026
+	//Need to add 'removeSubscriber' and 'removeSubscription'
+
 
 	React.useLayoutEffect(() => {
-	    // Register Submit Logic
-	    if (removeConnectionRef) {
-	        removeConnectionRef.current = removeConnection;
+	    if(current.section == 'User') {
+	    	if (removeConnectionRef) {
+		        removeConnectionRef.current = removeConnection;
+		    }
+
+		    // Register Draft Logic
+		    if (requestConnectionRef) {
+		        requestConnectionRef.current = requestConnection;
+		    }
+
+		    if(subscriptionRequestRef) {
+		    	subscriptionRequestRef.current = subscriptionRequest;
+		    }
+
+		    // Cleanup both on unmount
+		    return () => {
+
+		       	if (removeConnectionRef) removeConnection.current = null;
+				if (requestConnectionRef) requestConnection.current = null;
+				if (subscriptionRequestRef) subscriptionRequest.current = null;
+		    };
 	    }
-
-	    // Register Draft Logic
-	    if (requestConnectionRef) {
-	        requestConnectionRef.current = requestConnection;
-	    }
-
-	    if(subscriptionRequestRef) {
-	    	subscriptionRequestRef.current = subscriptionRequest;
-	    }
-
-	    // Cleanup both on unmount
-	    return () => {
-
-	       	if (removeConnectionRef) removeConnection.current = null;
-			if (requestConnectionRef) requestConnection.current = null;
-			if (subscriptionRequestRef) subscriptionRequest.current = null;
-	    };
 	}, [removeConnectionRef, requestConnectionRef, subscriptionRequestRef,
 		removeConnection, requestConnection, subscriptionRequest ]);
 
@@ -309,12 +310,12 @@ export default function Profile({
 		updateProfilePage()
 
 		return ()=> {
-			setCurrent({
-				...current,
+			setCurrent(prev => ({
+				...prev,
 				isConnected: null,
 				isSubscribed: null,
 				hasSubscription: null
-			})
+			}));
 		};
 	}, [])
 

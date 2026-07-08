@@ -162,7 +162,10 @@ export default function OptionsButton({
 			},
 			{
 				name: 'Request, Connect',
-				function: null,
+				function: ()=> {
+					requestConnectionRef.current();
+					closeMenu();
+				},
 				class: ``,
 				//
 				display: (current.section === 'User' && (!current.isConnected && !current.isSubscribed))

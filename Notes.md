@@ -2,19 +2,104 @@
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
 
+### 07. 08. 2026
+@0515 it works!
+
+- need to get names read correctly within notifications
+- way to refresh pages when <optionsButton> or <notifsList> is opened or closed
+	- im thinking a new variable within current, or even within home, which once 
+		toggled causes the page to update it's data. current is already passed down
+		to all the pages already
+- need to get websockets working again. may be need to be restructured?
+
+### 07. 07. 2026
+@0740 a confirmation notif was sent, but connection didn't happen.
+had to switch the acceptance notificiations.
+will come back to fix later...
+
+@0730 frontEnd messages still need to include 'type:request'
+
+@0715 fixed issue with the way notifs were nested. no double array read in the 'markRead'
+or other sub subroutes now
+
+The requestTwo notification I wrote is not the one thats sent or saved. doesn't include
+senderID for whatever reason...
+
+@0625 removed notifications array from all user docs, replaced with empty one in
+admin and Sanbanbaka. left without one in the rest, including testerTwo.
+
+Does senderID need to be included in the req.body? isn't the sender who ever sends
+the API request?
+
+
+### 07. 06. 2026
+@1224 next day
+
+fixed both issues. Now can get back to actual original task (T- T)
+
+@2235 
+New issues:
+ - going to <userProfile> that has pinnedPosts causes crash, cant read them (fixed)
+ - adding optionality to connectionRefs with '|| {}' prevents site from switching sections
+   out of Profile. it's stuck on profile (fixed)
+ - not sure if accepting a connectionRequest works from within notifsList
+
+@2120 Were gonna focus on redoing 'connectionRequestSent' & '...accepted';
+
+Starts in <Profile> with func:requestConnection,
+sends info to api.
+API gets both users, adds relavent notif to both of their collections
+
+### 07. 04. 2026
+@2110
+I may have to do the whole request system on the backend over from scratch.
+It's currently too convoluted...
+
+Have to map which interactions trigger a NOTIF to be sent to RECIEVER
+and or ACTION added to interactionsList (which is in user profile's)
+
+For requests:
+ - request adds NOTIF to RECIEVER & ACTION to USER
+ 		- live popUp for RECIEVER
+ - accepting adds NOTIF to REQUESTER & ACTION to BOTH
+ 		- live popUp for REQUESTER
+
+on back end, requests always need to get both sender/requester and reciever live
+should change variable name to senderOrRequester as it gets switched. the initial
+requester becomes a reciever after...
+
+
+@2100
+<notifList> Interact func -> arg == accept -> senderID should be accepter (current user)
+and recipients should be userID that sent the original request...
+
+
+
+@2045 
+InteractionsList is outdated, yet is the current way to accept requests.
+
+Need to reintegrate the webSocket functionality for live notifications between users
+Not even sure how to that rn, probably should be included within <Instants>...
+
+Currently editting old <notifsList> to accept requests...
+
+
 ### 06. 29. 2026
 @2200
 
 To Do Next:
-- add and route 'request connection' functionality from <Profile> to <OptionsButton>
+- add and route 'request connection' functions from <Profile> to <OptionsButton>
 - ensure <Instant> popup appears after connection functions on <Profile>
 
+- need to fix popUp notifications on entry
 
 This is the most recent list I could find of remaining additions + changes to make for
 Alpha1.0
 
 F o r
 A l p h a 1.0
+	- reconnecting websockets
+		- is restructuring necessary?
 	- update <Macros> section to have same drawer functionality as <Socials>
 	- update / redesign <Post> page
 	- Redesign(?) <Macrospage> page 

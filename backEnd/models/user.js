@@ -96,7 +96,7 @@ const UserSchema = new mongoose.Schema({
       }
     },
     notifications: [{
-      type: [NotificationSchema]
+      type: NotificationSchema
     }],
     connections: [{
         type: mongoose.Schema.Types.ObjectID,
