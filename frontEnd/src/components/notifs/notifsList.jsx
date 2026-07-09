@@ -9,7 +9,17 @@ import './notifs.css';
 let accessAPI = APIaccess();
 
 
-export default function NotificationList({setNotifList, unreadCount, setUnreadCount, setSocketMessage, socketMessage, accessID, setAccessID}) {
+export default function NotificationList({
+	setNotifList, 
+	unreadCount, 
+	setUnreadCount, 
+	setSocketMessage, 
+	socketMessage, 
+	accessID, 
+	setAccessID,
+	current,
+	setCurrent
+}) {
 
 	let [notifs, setNotifs] = React.useState([]);
 	let username = sessionStorage.getItem('userName');
@@ -202,6 +212,13 @@ export default function NotificationList({setNotifList, unreadCount, setUnreadCo
 
 	React.useEffect(()=> {
 		updateList();
+
+		return ()=> {
+			setCurrent(prev => ({
+				...prev,
+				updateToggle: prev.updateToggle ? false : true
+			}));
+		}
 	}, [])
 
 	React.useEffect(()=> {
@@ -226,16 +243,16 @@ export default function NotificationList({setNotifList, unreadCount, setUnreadCo
 
 				<div id="body">
 					{(notif.message == 'connectionRequestSent') &&
-						<p>You sent {notif.recipientUsernames[0]} a request !</p>
+						<p>You sent @{notif.recipientUsernames[0]} a request !</p>
 					}
 					{(notif.message == 'connectionRequestRecieved') &&
 						<p>You recieved a connection request from {notif.senderUsername}</p>
 					}
 					{(notif.message == 'connectionAcceptedSent') &&
-						<p>You and {notif.senderUsername} are now connected!</p>
+						<p>You and @{notif.recipientUsernames[0]} are now connected!</p>
 					}
 					{(notif.message == 'connectionAcceptedRecieved') &&
-						<p>You and {notif.recipientUsernames[0]} are now connected!</p>
+						<p>You and @{notif.senderUsername} are now connected!</p>
 					}
 					{(notif.message == 'initial') &&
 						<p>{notif.senderUsername} left a comment on your post "{postTitle}"</p>

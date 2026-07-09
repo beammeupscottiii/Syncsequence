@@ -3,6 +3,44 @@
 ----------------------------------------------------------------------------------------
 
 ### 07. 08. 2026
+@2325
+Names are now being read correctly within the notifs (need to fix a popUp notif tho)
+refreshing the page data on notifList unmount via current.updateToggle also works well:
+
+return ()=> {
+	setCurrent(prev => ({
+		...prev,
+		updateToggle: prev.updateToggle ? false : true
+	}));
+}
+
+Will take a look at webSockets, maybe I could just plug it back in. Otherwise...
+Originally we were working on the <SocialSection>...
+
+I say we move to updating / renovating <Post> so that we can have the 2/3rds of the
+notifications that'd be sent. 
+
+the groundwork is present for allowing other users access to private collections,
+the request needs to include the group owner's ID, and the requester's ID
+user sends request,
+owner's acceptance is first api request, (includes their ID and requester's ID)
+then second api request is notif of confirmation 
+
+ANYHOW, for now
+ - <Post> is next...
+ 		- first move to new cmpnts folder
+ 		- returning using back button from <Post>, <Home> doesn't load??
+ 			macrospage will need this code in it's base useEffect function too
+
+ 			setPrevSection(current.section);
+			console.log(current.section);
+
+			setCurrent({
+				...current,
+				section: 'Macro'
+			})
+
+
 @0515 it works!
 
 - need to get names read correctly within notifications
@@ -105,8 +143,8 @@ A l p h a 1.0
 	- Redesign(?) <Macrospage> page 
 	- update styling for <userProfile> for other users
 	- <Interactions> to be updated, restyled based off of designs -
-	-  Revamp all interactions which have notifs, so they appear within user's interactions
-		 list and their notifications list
+		-  Revamp all interactions which have notifs, so they appear within user's 								interactionslist and their notifications list
+		- username variables need to be switched, do as we go along updating them
 	- <Messages> to be *added*
 	- <EditProfile> to be *added*
 		- connect to settings option too	

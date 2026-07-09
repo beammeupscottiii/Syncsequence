@@ -295,7 +295,7 @@ export default function Profile({
 	React.useEffect(()=> {
 
 		if(userid) {
-
+			//catches the current section BEFORE updating it to 'User'
 			setPrevSection(current.section);
 			console.log(current.section);
 
@@ -318,6 +318,10 @@ export default function Profile({
 			}));
 		};
 	}, [])
+
+	React.useEffect(()=> {
+		updateProfilePage()
+	}, [current.updateToggle])
 
 
 	if(dataLoaded) {

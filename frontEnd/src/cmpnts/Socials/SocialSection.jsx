@@ -306,6 +306,11 @@ export default function SocialSection({
 	 	updateConnections();
 	}, [])
 
+	React.useEffect(()=> {
+		updateConnections();
+		// updateTaggedPosts();
+	}, [current.updateToggle])
+
 
 	let selectConnection = (id) => {
 

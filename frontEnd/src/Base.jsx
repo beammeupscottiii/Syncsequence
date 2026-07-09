@@ -305,7 +305,9 @@ function Home({
             socketMessage={socketMessage}
             accessID={accessID}
             setAccessID={setAccessID}
-            setUserSettings={setUserSettings}/>
+            setUserSettings={setUserSettings}
+            current={current}
+            setCurrent={setCurrent}/>
         }
 
 
@@ -775,6 +777,7 @@ export default function Main() {
     isConnected: null,
     isSubscribed: null,
     hasSubscription: null,
+    updateToggle: false
   });
 
   const cal = CalInfo();

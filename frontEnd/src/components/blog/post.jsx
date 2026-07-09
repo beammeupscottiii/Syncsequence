@@ -13,6 +13,7 @@ import NotificationsList from '../../components/notifs/notifsList';
 import FullList from '../../components/base/fullList';
 import DragSlider from '../../components/base/dragSlider';
 
+import { useUIC } from '../../UIcontext';
 const accessAPI = APIaccess(); 
 
 export function EditPost({ postData }) {
@@ -49,6 +50,8 @@ export default function Post({
 	const { postID } = useParams();
 	const location = useLocation();
 	const navigate = useNavigate();
+	const { prevSection, setPrevSection, triggerPopup, baseRef } = useUIC();
+
 	const [postData, setPostData] = React.useState(data);
 	const [comments, setComments] = React.useState([]);
 	const [commentCount, setCommentCount] = React.useState('');
@@ -448,6 +451,15 @@ export default function Post({
 
 
 	React.useEffect(()=> {
+
+		setPrevSection(current.section);
+		console.log(current.section);
+
+		setCurrent({
+			...current,
+			section: 'Post'
+		})
+
 		refreshPost()
 		pinPost('check')
 		
@@ -460,6 +472,17 @@ export default function Post({
 			})
 			console.log('true');
 		}
+
+		let baseElement = baseRef.current; 
+
+		let delay1 = setTimeout(()=> {
+		  baseElement.classList.remove('leave');
+		}, 300)
+
+
+		let delay2 = setTimeout(()=> {
+		  baseElement.classList.add('enter');
+		}, 600)
 	}, [])
 
 

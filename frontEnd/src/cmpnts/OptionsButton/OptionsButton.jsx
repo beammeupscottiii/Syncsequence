@@ -600,6 +600,11 @@ export default function OptionsButton({
 	const closeMenu = () => {
     setActiveClasses({});
     setOptionsOpen(false);
+
+    setCurrent(prev => ({
+    	...prev,
+    	updateToggle: prev.updateToggle ? false : true
+    }))
   };
 
 	const launchOptions = () => {
