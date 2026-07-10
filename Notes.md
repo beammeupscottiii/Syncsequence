@@ -2,6 +2,76 @@
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
 
+### 07. 10. 2026
+@1320
+updating webSocket flow:
+
+first, can we move all webSocket stuff into UIC, so we can pass down 'sendMessage'
+through it? if not...
+
+STEPS:
+move socketMessage, setSocketMessage into UIC (not really necessary, but helpful)
+update useWebSocket so it sets socketMessage with recieved data.
+useEffect reads socketMessage, 
+ triggers popup on RECIEVED messages
+ triggers sendMessage on SEND messages
+
+so when func triggers a new interaction, like leaving comment or requests,
+also send same message to socketMessage
+
+backend checks the recipients array in a message to discern who to send messages to,
+so we could send the exact same message through both. 
+could make an extra field, SMT (socketMessageType) which is only read by the 
+useEffect.
+
+
+@1250
+original instants process:
+first reads socketMessage.message,
+triggers function based on .message,
+and then the popUp is a func with response options that runs off of socketMessage as
+an argument. 
+
+useWebSocket, 
+on recieving a message, it runs subroutes based on the message.
+We can just have it change the message, and have components useEffect watch for
+the change...
+
+sending a message happens within those makeNotif_ funcs in <Instant> using sendMessage
+
+So, user1 sendMessage
+user2 recieves message at socketMessage change 
+	- we edit useWebSocket function to update socketMessage with recieved message
+
+popUp should occur no matter where user is,
+so we can place it within <Home>, have a useEffect watch for socketMessage change
+and launch it appropiately from there
+
+response or interact functions, like sending an acceptance, would have to be written
+within the useEffect and passed to triggerPopUp tho.
+
+
+
+
+### 07. 08. 2026
+@1055
+Current To Do:
+  - see what's up with webSockets
+  - update <Post> design, make sure it all works
+  - update / reconnect notification functionality
+
+  - then update <Macros> section to have same drawer functionality as <SocialSection>
+  - reAdd all <Macros> section options:
+  		- Create Tag
+  		- Delete Tags
+  		- Create Collection
+  		- Manage Collections
+  			- rename
+  			- delete
+  			- privatize
+  			  (? do people who had access no longer, or new people can't be added?)
+  - update <Macrospage> design
+
 ### 07. 08. 2026
 @2325
 Names are now being read correctly within the notifs (need to fix a popUp notif tho)
@@ -141,7 +211,7 @@ A l p h a 1.0
 	- update <Macros> section to have same drawer functionality as <Socials>
 	- update / redesign <Post> page
 	- Redesign(?) <Macrospage> page 
-	- update styling for <userProfile> for other users
+	- update styling for <userProfile> for other users ✔️
 	- <Interactions> to be updated, restyled based off of designs -
 		-  Revamp all interactions which have notifs, so they appear within user's 								interactionslist and their notifications list
 		- username variables need to be switched, do as we go along updating them
@@ -155,7 +225,7 @@ Smaller Things:
 	- add popups for error responses in <createPost>
   - add popup with info or link on to how to set location
   - create design for ManageConnections ✔️
-  - add manageConnections modal
+  - add manageConnections modal ✔️s
   - Fix / restyle <Post> page
 
 

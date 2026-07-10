@@ -251,17 +251,7 @@ function Home({
         });
         setManageConnectionsToggle();
       }
-
-      // let delay1 = setTimeout(()=> {
-      //   element.classList.remove('leave');
-      // }, 300)
-
-
-      // let delay2 = setTimeout(()=> {
-      //   element.classList.add('enter');
-      // }, 600)
     }
-
   }, [navigation.state])
 
   return (
@@ -557,11 +547,11 @@ export default function Main() {
     type: null,
     message: null
   });
-  const [accessID, setAccessID] = React.useState({})
-  const [isActive, setActive] = React.useState({
-    type: null,   //type of popUp notif to appear
-    state: null,  //set class for it to popUp 
-  })
+  // const [accessID, setAccessID] = React.useState({})
+  // const [isActive, setActive] = React.useState({
+  //   type: null,   //type of popUp notif to appear
+  //   state: null,  //set class for it to popUp 
+  // })
   /**
    * Connects to webSocket server upon verifying user log in
    * & gets unreadNotif count
