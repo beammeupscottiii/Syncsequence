@@ -77,17 +77,17 @@ function HomeOrEntry({ children }) {
 
 /* * * H O M E  C o m p o n e n t * * */
 function Home({
-  socketURL, 
-  socketMessage, 
-  setSocketMessage, 
-  sendMessage, 
-  isActive, 
-  setActive, 
-  accessID, 
-  setAccessID, 
-  unreadCount, 
-  setUnreadCount,
-  getUnreadCount,
+  // socketURL, 
+  // socketMessage, 
+  // setSocketMessage, 
+  // sendMessage, 
+  // isActive, 
+  // setActive, 
+  // accessID, 
+  // setAccessID, 
+  // unreadCount, 
+  // setUnreadCount,
+  // getUnreadCount,
   current,
   setCurrent,
   cal,
@@ -107,9 +107,19 @@ function Home({
   setSectionClass,
 }) {
 
+  const userID = sessionStorage.getItem('userID');
+  const username = sessionStorage.getItem('userName');
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout, baseRef } = useUIC();
+  const { 
+    logout, 
+    baseRef, 
+    unreadCount, 
+    getUnreadCount, 
+    setUnreadCount,
+    websocket,
+    triggerPopup 
+  } = useUIC();
   const [notifList, setNotifList] = React.useReducer(state => !state, false);
   const [userSettings, setUserSettings] = React.useReducer(state => !state, false);
   const [isLogout, setLogout] = React.useReducer(state => !state, false);
@@ -122,7 +132,6 @@ function Home({
 
   const [enter, setEnter] = React.useReducer(state => !state, true);
   
-  // let el = React.useRef();
   let element = baseRef.current;
 
   React.useEffect(()=> {
@@ -131,14 +140,6 @@ function Home({
       setEnter();
     }
   }, [element]);
-
-  React.useEffect(()=> {
-      let topics = sessionStorage.getItem('topicsAsString');
-      topics = topics.split(', ');
-      setUserTopics(topics);
-
-      document.title = 'Syncseq.xyz/home'
-  }, [])
 
   /* 
     09. 16. 2025
@@ -151,8 +152,13 @@ function Home({
   } 
 
   React.useEffect(()=> {
-    updateLog()
-    document.title = 'Syncseq.xyz/home'
+      let topics = sessionStorage.getItem('topicsAsString');
+      topics = topics.split(', ');
+      setUserTopics(topics);
+
+      document.title = 'Syncseq.xyz/home';
+      updateLog();
+      getUnreadCount();
   }, [])
 
   /*
@@ -205,8 +211,6 @@ function Home({
     }
   }
 
-
-
   // For Prompting Post and Draft Submission in <CreatePost>
   const triggerSubmitRef = React.useRef(null);
   const triggerDraftRef = React.useRef(null);
@@ -254,6 +258,84 @@ function Home({
     }
   }, [navigation.state])
 
+
+  /*
+    W e b 
+    S o c k e t s
+  */
+  React.useEffect(()=> {
+
+    const acceptRequest = async(originalSender) => {
+
+      let notif = {
+        type: 'request',
+        senderID: userID,
+        senderUsername: username,
+        recipients: [originalSender],
+        message: 'connectionAcceptedSent',
+        SMT: 'sent'
+      }
+
+      websocket.send(JSON.stringify(notif));
+      let request = await accessAPI.newInteraction(notif);
+
+      if(request.confirm == true) {
+
+        let delay = setTimeout(()=> {
+          triggerPopup({
+            message: `You are now connected`
+          })
+        }, 300)
+      }
+    }
+
+    //SMT Socket Message Type
+    // null, RECIEVED or SENT
+    if(websocket.message.SMT != null) {
+
+      if(websocket.message.SMT == 'recieved' && 
+        websocket.message.message == 'connectionRequestSent') {
+
+        triggerPopup({
+          message: `You recieved a connection request from ${websocket.message.senderUsername}`,
+          interactMessage: 'Accept',
+          onInteract: ()=> {
+            acceptRequest(websocket.message.senderID);
+          }
+        });
+
+      }
+
+      else if(websocket.message.SMT == 'recieved' && 
+        websocket.message.message == 'connectionAcceptedSent') {
+
+        triggerPopup({
+          message: `You and ${websocket.message.senderUsername} are now connected`
+        });
+
+      }
+
+      else if (websocket.message == 'connectionAcceptedRecieved') {}
+      else if(websocket.message == 'initial-recieved') {} //for comment on post
+      else if(websocket.message == 'response-recieved') {} //for reply to comment
+      else if(websocket.message == 'recieved') {} //being tagged
+      else if(websocket.message == 'subscriptionRequestRecieved') {}
+      else if(websocket.message == 'subscriptionAccepted') {}
+      else if(websocket.message == 'subscribed') {}
+      else if(websocket.SMT == 'updateNotifs') {
+        getUnreadCount();
+
+        websocket.setMessage({
+          type: 'simpleNotif',
+          message: `New notifications!`
+        })
+      }
+    }
+    
+  }, [websocket.message])
+
+
+
   return (
     <section id="BASE" ref={baseRef} className={`${enter == true ? '_enter' : ''}`}>  
 
@@ -289,12 +371,6 @@ function Home({
         {notifList &&
           <NotificationList 
             setNotifList={setNotifList} 
-            unreadCount={unreadCount}
-            setUnreadCount={setUnreadCount}
-            setSocketMessage={setSocketMessage}
-            socketMessage={socketMessage}
-            accessID={accessID}
-            setAccessID={setAccessID}
             setUserSettings={setUserSettings}
             current={current}
             setCurrent={setCurrent}/>
@@ -320,8 +396,6 @@ function Home({
               setCurrent={setCurrent}
               sectionClass={sectionClass}
               refe={profileRef}
-              accessID={accessID}
-              setAccessID={setAccessID}
               log={log}
               setLog={setLog}/>
           }
@@ -363,10 +437,6 @@ function Home({
                 setCurrent={setCurrent}
                 sectionClass={sectionClass}
                 refe={settingsRef}
-                accessID={accessID}
-                setAccessID={setAccessID}
-                socketMessage={socketMessage}
-                setSocketMessage={setSocketMessage}
                 isLogout={isLogout}
                 setLogout={setLogout}/>
 
@@ -377,7 +447,6 @@ function Home({
         {manageConnectionsToggle &&
           <ManageConnections current={current} 
                              setCurrent={setCurrent} 
-                             setSocketMessage={setSocketMessage}
                              manageConnectionsToggle={manageConnectionsToggle}
                              setManageConnectionsToggle={setManageConnectionsToggle}
                              sectionClass={sectionClass}
@@ -397,8 +466,6 @@ function Home({
         {createPostToggle &&
           <CreatePostt setCurrent={setCurrent}
                       current={current} 
-                      socketMessage={socketMessage}
-                      setSocketMessage={setSocketMessage} 
                       selectedDate={selectedDate}
                       setSelectedDate={setSelectedDate}
                       createPostToggle={createPostToggle}
@@ -415,8 +482,7 @@ function Home({
         {(!current.map &&( current.modal && current.section == 'macros')) &&
           <ManageMacros current={current} 
                         setCurrent={setCurrent} 
-                        socketMessage={socketMessage}
-                        setSocketMessage={setSocketMessage}/>
+          />
         }
 
 
@@ -472,15 +538,12 @@ function Home({
             setSelectedDate={setSelectedDate}
             cal={cal}
             sectionClass={sectionClass}
-            setSectionClass={setSectionClass}
-            setSocketMessage={setSocketMessage}/>
+            />
         }
         {current.customizer &&
           <CustomLogEditor
             current={current}
             setCurrent={setCurrent} 
-            setSocketMessage={setSocketMessage}
-            socketMessage={setSocketMessage}
           />
         }
 
@@ -502,18 +565,6 @@ function Home({
                 </div>
             </div>
           }
-
-
-        {/*<Instant 
-          socketMessage={socketMessage} 
-          setSocketMessage={setSocketMessage}
-          sendMessage={sendMessage}
-          isActive={isActive}
-          setActive={setActive}
-          accessID={accessID}
-          setAccessID={setAccessID}
-          getUnreadCount={getUnreadCount}
-        />*/}
         
     </section>
   )
@@ -534,208 +585,9 @@ export default function Main() {
    * A n d
    * N o t i f i c a t i o n s
    */
-  const { authed } = useUIC();
+  const { authed, unreadCount, setUnreadCount, getUnreadCount } = useUIC();
   let userID = sessionStorage.getItem('userID');
-  
-
-  /***
-   * S O C K E T  S T U F F
-  ***/
-  const [socketURL, setSocketURL] = React.useState(``);
-  const {sendMessage, lastMessage, readyState} = useWebSocket(socketURL);
-  const [socketMessage, setSocketMessage] = React.useState({
-    type: null,
-    message: null
-  });
-  // const [accessID, setAccessID] = React.useState({})
-  // const [isActive, setActive] = React.useState({
-  //   type: null,   //type of popUp notif to appear
-  //   state: null,  //set class for it to popUp 
-  // })
-  /**
-   * Connects to webSocket server upon verifying user log in
-   * & gets unreadNotif count
-   */
-  React.useEffect(()=> {
-    if(authed == true) {
-      setSocketURL(`ws://172.31.249.155:3333/?${userID}`);
-      getUnreadCount();
-    }
-  }, [authed])
-
-
-  // need to implement reconnect redundancy here
-  React.useEffect(() => { 
-    if(readyState === ReadyState.OPEN) {
-      console.log('Websocket connection established')
-    } else if (readyState === ReadyState.CLOSED) {
-      console.log('socket connection has closed')
-    }
-  }, [readyState])
-
-
-  /**
-   * when socket connection R E C I E V E S messages
-   */
-  useWebSocket(socketURL, {
-    onMessage: (e)=> {
-      let data = JSON.parse(e.data);
-      let details;
-      if(data.details) {
-        details = JSON.parse(data.details)
-      }
-      console.log(data);
-
-      // if(data.recipients.includes(userID) {
-        //need to implement
-      // })
-
-      if(data.type == 'request' && data.message == 'connectionRequestRecieved') {
-        setSocketMessage(data);
-        setAccessID({
-          ...accessID,
-          accept: data.senderID,
-          notifID: data.originalID,
-        });
-        setActive({
-          type: 3,
-          state: true
-        })
-        console.log(data);
-        console.log(accessID);
-      }
-
-      else if (data.type == 'request' && data.message == 'connectionAcceptedRecieved') {
-        setSocketMessage({
-          senderUsername: data.senderUsername,
-          type: 'request',
-          message: 'connectionAcceptedRecieved'
-        });
-        setActive({
-          type: 1,
-          state: true
-        })
-      }
-
-      else if(data.type == 'comment' && data.message == 'initial-recieved') {
-        setSocketMessage({
-          senderUsername: data.senderUsername,
-          type: 'comment',
-          message: 'initial-recieved',
-          postTitle: data.postTitle,
-        });
-        setActive({
-          type: 2,
-          state: true
-        })
-        // setAccessID({ postURL: data.postURL, notifID: data._id, commentID: details.commentID });
-        setAccessID({ postURL: data.postURL, notifID: data._id });
-        console.log(data);
-      }
-
-      else if(data.type == 'comment' && data.message == 'response-recieved') {
-        setSocketMessage({
-          senderUsername: data.senderUsername,
-          type: 'comment',
-          message: 'response-recieved',
-          postTitle: data.postTitle,
-        });
-        setActive({
-          type: 2,
-          state: true
-        })
-        // setAccessID({ postURL: data.postURL, notifID: data._id, commentID: details.commentID });
-        setAccessID({ postURL: data.postURL, notifID: data._id });
-        console.log(data);
-      }
-
-      else if(data.type == 'tagging' && data.message == 'recieved') {
-        setSocketMessage(data)
-        setActive({
-          type: 2,
-          state: true
-        })
-        setAccessID({ postURL: data.url, notifID: data._id });
-      }
-
-      else if(data.type == 'request' && data.message == 'subscriptionRequestRecieved') {
-        setSocketMessage({
-          //create text in instants for subscription request notif
-          //need requester username, message type and message...
-          senderUsername: data.senderUsername,
-          message: 'subscriptionRequestRecieved',
-          type: 'request',
-          data: data
-        })
-
-        setAccessID({
-          ...accessID,
-          accept: data.senderID,
-          notifID: data.originalID,
-        });
-
-        setActive({
-          type: 3,
-          state: true
-        })
-      }
-
-      else if(data.type == 'request' && data.message == 'subscriptionAccepted') {
-        setSocketMessage({
-          //create text in instants for subscription request notif
-          //need requester username, message type and message...
-          senderUsername: data.senderUsername,
-          message: 'subscriptionAccepted',
-          type: 'request'
-        })
-
-        setAccessID({
-          ...accessID,
-          accept: data.senderID,
-          notifID: data.originalID,
-        });
-
-        setActive({
-          type: 1,
-          state: true
-        })
-      }
-
-      else if(data.type == 'request' && data.message == 'subscribed') {
-        setSocketMessage({
-          //create text in instants for subscription request notif
-          //need requester username, message type and message...
-          senderUsername: data.senderUsername,
-          message: 'subscribed',
-          type: 'request'
-        })
-
-        setAccessID({
-          ...accessID,
-          accept: data.senderID,
-          notifID: data.originalID,
-        });
-
-        setActive({
-          type: 1,
-          state: true
-        })
-      }
-
-      else if(data.type == 'updateNotifs') {
-        getUnreadCount();
-
-        setSocketMessage({
-          type: 'simpleNotif',
-          message: `New notifications!`
-        })
-      }
-    },
-    shouldReconnect: (event) => true,
-    reconnectAttempts: 10,
-  })
-
-  
+    
   const [sectionClass, setSectionClass] = React.useState({
       profile: 'enter',
       social: 'enter',
@@ -748,7 +600,6 @@ export default function Main() {
       createPost: '',
       manageConnections: '',
   })
-  
   const [current, setCurrent] = React.useState({
     section: 'home', //0, 1, 2, 3, 4
     social: false, //true, false or social
@@ -783,7 +634,6 @@ export default function Main() {
   })
 
 
-
   const [mapData, setMapData] = React.useState({
     currentCity: 'NY',
     currentState: 'NYC'
@@ -792,7 +642,6 @@ export default function Main() {
 
   let [initialLogin, setInitialLogin] = React.useState(true);
   if(initialLogin == true) {
-
     setCurrent({
         ...current,
         section: 'home'
@@ -800,22 +649,7 @@ export default function Main() {
     setInitialLogin(false);
   }
 
-  const [unreadCount, setUnreadCount] = React.useState('');
-  /**
-   * Fetches unread count of interactions on initial load
-   * and when new interactions occur
-   */
-  let getUnreadCount = async() => {
-    let count = await accessAPI.getInteractions('count');
-    if (count > 99) {
-      count = '99';
-    }
-    setUnreadCount(count);
-  }
-
-  React.useEffect(()=> {
-    getUnreadCount();
-  }, [socketMessage])
+  // 
 
   /*
     Top level state array to house log of posts
@@ -833,7 +667,10 @@ export default function Main() {
   const [userTopics, setUserTopics] = React.useState([]);
 
   
-
+  /*
+    R O U T E R
+        O B J E C T
+  */
   const routerObject = createBrowserRouter([
     
     // E N T R Y 
@@ -849,18 +686,18 @@ export default function Main() {
         <HomeOrEntry>
             <Home 
               // socket & notif stuff
-              socketURL={socketURL}
-              socketMessage={socketMessage}
-              setSocketMessage={setSocketMessage}
-              sendMessage={sendMessage}
-              isActive={isActive}
-              setActive={setActive}
-              accessID={accessID}
-              setAccessID={setAccessID}
-              unreadCount={unreadCount}
-              setUnreadCount={setUnreadCount}
-              getUnreadCount={getUnreadCount}
-              lastMessage={lastMessage}
+              // socketURL={socketURL}
+              // socketMessage={socketMessage}
+              // setSocketMessage={setSocketMessage}
+              // sendMessage={sendMessage}
+              // isActive={isActive}
+              // setActive={setActive}
+              // accessID={accessID}
+              // setAccessID={setAccessID}
+              // unreadCount={unreadCount}
+              // setUnreadCount={setUnreadCount}
+              // getUnreadCount={getUnreadCount}
+              // lastMessage={lastMessage}
               // socket & notif stuff
               cal={cal}
               current={current}
@@ -893,18 +730,18 @@ export default function Main() {
           element:
               <Post 
                 // socket stuff
-                socketURL={socketURL}
-                socketMessage={socketMessage}
-                setSocketMessage={setSocketMessage}
-                sendMessage={sendMessage}
-                isActive={isActive}
-                setActive={setActive}
-                accessID={accessID}
-                setAccessID={setAccessID}
-                unreadCount={unreadCount}
-                setUnreadCount={setUnreadCount}
-                getUnreadCount={getUnreadCount}
-                lastMessage={lastMessage}
+                // socketURL={socketURL}
+                // socketMessage={socketMessage}
+                // setSocketMessage={setSocketMessage}
+                // sendMessage={sendMessage}
+                // isActive={isActive}
+                // setActive={setActive}
+                // accessID={accessID}
+                // setAccessID={setAccessID}
+                // unreadCount={unreadCount}
+                // setUnreadCount={setUnreadCount}
+                // getUnreadCount={getUnreadCount}
+                // lastMessage={lastMessage}
                 current={current}
                 setCurrent={setCurrent}
                      
@@ -955,8 +792,8 @@ export default function Main() {
               setCurrent={setCurrent}
               sectionClass={sectionClass}
               // refe={profileRef}
-              accessID={accessID}
-              setAccessID={setAccessID}
+              // accessID={accessID}
+              // setAccessID={setAccessID}
               log={log}
               setLog={setLog}/>
         },
@@ -992,18 +829,18 @@ export default function Main() {
           element: 
               <Macrospage
                 // socket stuff
-                socketURL={socketURL}
-                socketMessage={socketMessage}
-                setSocketMessage={setSocketMessage}
-                sendMessage={sendMessage}
-                isActive={isActive}
-                setActive={setActive}
-                accessID={accessID}
-                setAccessID={setAccessID}
-                unreadCount={unreadCount}
-                setUnreadCount={setUnreadCount}
-                getUnreadCount={getUnreadCount}
-                lastMessage={lastMessage}
+                // socketURL={socketURL}
+                // socketMessage={socketMessage}
+                // setSocketMessage={setSocketMessage}
+                // sendMessage={sendMessage}
+                // isActive={isActive}
+                // setActive={setActive}
+                // accessID={accessID}
+                // setAccessID={setAccessID}
+                // unreadCount={unreadCount}
+                // setUnreadCount={setUnreadCount}
+                // getUnreadCount={getUnreadCount}
+                // lastMessage={lastMessage}
                 current={current}
                 setCurrent={setCurrent}
                 // socket stuff
@@ -1025,18 +862,18 @@ export default function Main() {
         <HomeOrEntry>
             <Home 
               // socket & notif stuff
-              socketURL={socketURL}
-              socketMessage={socketMessage}
-              setSocketMessage={setSocketMessage}
-              sendMessage={sendMessage}
-              isActive={isActive}
-              setActive={setActive}
-              accessID={accessID}
-              setAccessID={setAccessID}
-              unreadCount={unreadCount}
-              setUnreadCount={setUnreadCount}
-              getUnreadCount={getUnreadCount}
-              lastMessage={lastMessage}
+              // socketURL={socketURL}
+              // socketMessage={socketMessage}
+              // setSocketMessage={setSocketMessage}
+              // sendMessage={sendMessage}
+              // isActive={isActive}
+              // setActive={setActive}
+              // accessID={accessID}
+              // setAccessID={setAccessID}
+              // unreadCount={unreadCount}
+              // setUnreadCount={setUnreadCount}
+              // getUnreadCount={getUnreadCount}
+              // lastMessage={lastMessage}
               // socket & notif stuff
               cal={cal}
               current={current}
@@ -1069,18 +906,18 @@ export default function Main() {
           element:
               <Post 
                 // socket stuff
-                socketURL={socketURL}
-                socketMessage={socketMessage}
-                setSocketMessage={setSocketMessage}
-                sendMessage={sendMessage}
-                isActive={isActive}
-                setActive={setActive}
-                accessID={accessID}
-                setAccessID={setAccessID}
-                unreadCount={unreadCount}
-                setUnreadCount={setUnreadCount}
-                getUnreadCount={getUnreadCount}
-                lastMessage={lastMessage}
+                // socketURL={socketURL}
+                // socketMessage={socketMessage}
+                // setSocketMessage={setSocketMessage}
+                // sendMessage={sendMessage}
+                // isActive={isActive}
+                // setActive={setActive}
+                // accessID={accessID}
+                // setAccessID={setAccessID}
+                // unreadCount={unreadCount}
+                // setUnreadCount={setUnreadCount}
+                // getUnreadCount={getUnreadCount}
+                // lastMessage={lastMessage}
                 current={current}
                 setCurrent={setCurrent}
                      
@@ -1099,18 +936,18 @@ export default function Main() {
           element: 
             <UserProfile
                   // socket stuff
-                  socketURL={socketURL}
-                  socketMessage={socketMessage}
-                  setSocketMessage={setSocketMessage}
-                  sendMessage={sendMessage}
-                  isActive={isActive}
-                  setActive={setActive}
-                  accessID={accessID}
-                  setAccessID={setAccessID}
-                  unreadCount={unreadCount}
-                  setUnreadCount={setUnreadCount}
-                  getUnreadCount={getUnreadCount}
-                  lastMessage={lastMessage}
+                  // socketURL={socketURL}
+                  // socketMessage={socketMessage}
+                  // setSocketMessage={setSocketMessage}
+                  // sendMessage={sendMessage}
+                  // isActive={isActive}
+                  // setActive={setActive}
+                  // accessID={accessID}
+                  // setAccessID={setAccessID}
+                  // unreadCount={unreadCount}
+                  // setUnreadCount={setUnreadCount}
+                  // getUnreadCount={getUnreadCount}
+                  // lastMessage={lastMessage}
                   current={current}
                   setCurrent={setCurrent}
                   // socket stuff
@@ -1150,18 +987,18 @@ export default function Main() {
           element: 
               <Macrospage
                 // socket stuff
-                socketURL={socketURL}
-                socketMessage={socketMessage}
-                setSocketMessage={setSocketMessage}
-                sendMessage={sendMessage}
-                isActive={isActive}
-                setActive={setActive}
-                accessID={accessID}
-                setAccessID={setAccessID}
-                unreadCount={unreadCount}
-                setUnreadCount={setUnreadCount}
-                getUnreadCount={getUnreadCount}
-                lastMessage={lastMessage}
+                // socketURL={socketURL}
+                // socketMessage={socketMessage}
+                // setSocketMessage={setSocketMessage}
+                // sendMessage={sendMessage}
+                // isActive={isActive}
+                // setActive={setActive}
+                // accessID={accessID}
+                // setAccessID={setAccessID}
+                // unreadCount={unreadCount}
+                // setUnreadCount={setUnreadCount}
+                // getUnreadCount={getUnreadCount}
+                // lastMessage={lastMessage}
                 current={current}
                 setCurrent={setCurrent}
                 // socket stuff
@@ -1186,233 +1023,6 @@ export default function Main() {
       element: 
         <AboutPage />
     }
-
-    // O L D 
-    // R O O T
-    // {
-    //   path: "/",
-    //   element:
-    //     <HomeOrEntry>
-    //       <Home 
-    //               // socket & notif stuff 
-    //               socketURL={socketURL}
-    //               socketMessage={socketMessage}
-    //               setSocketMessage={setSocketMessage}
-    //               sendMessage={sendMessage}
-    //               isActive={isActive}
-    //               setActive={setActive}
-    //               accessID={accessID}
-    //               setAccessID={setAccessID}
-    //               unreadCount={unreadCount}
-    //               setUnreadCount={setUnreadCount}
-    //               getUnreadCount={getUnreadCount}
-    //               lastMessage={lastMessage}
-    //               // socket & notif stuff
-    //               cal={cal}
-    //               current={current}
-    //               setCurrent={setCurrent}
-    //               selectedDate={selectedDate}
-    //               setSelectedDate={setSelectedDate}
-
-    //               mapData={mapData}
-    //               setMapData={setMapData}
-
-    //               log={log}
-    //               setLog={setLog}
-    //               tags={tags}
-    //               setTags={setTags}
-    //               userTopics={userTopics}
-    //               setUserTopics={setUserTopics}
-
-    //               sectionClass={sectionClass}
-    //               setSectionClass={setSectionClass}
-    //       />
-    //     </HomeOrEntry>
-    //   ,
-    // },
-    // H O M E
-    // {
-    //   path: '/home',
-    //   element:
-    //     <HomeOrEntry>
-    //         <Home 
-    //               // socket & notif stuff
-    //               socketURL={socketURL}
-    //               socketMessage={socketMessage}
-    //               setSocketMessage={setSocketMessage}
-    //               sendMessage={sendMessage}
-    //               isActive={isActive}
-    //               setActive={setActive}
-    //               accessID={accessID}
-    //               setAccessID={setAccessID}
-    //               unreadCount={unreadCount}
-    //               setUnreadCount={setUnreadCount}
-    //               getUnreadCount={getUnreadCount}
-    //               lastMessage={lastMessage}
-    //               // socket & notif stuff
-    //               cal={cal}
-    //               current={current}
-    //               setCurrent={setCurrent}
-    //               selectedDate={selectedDate}
-    //               setSelectedDate={setSelectedDate}
-
-    //               mapData={mapData}
-    //               setMapData={setMapData}
-
-    //               log={log}
-    //               setLog={setLog}
-    //               tags={tags}
-    //               setTags={setTags}
-    //               userTopics={userTopics}
-    //               setUserTopics={setUserTopics}
-
-    //               sectionClass={sectionClass}
-    //               setSectionClass={setSectionClass}
-    //         />
-    //     </HomeOrEntry>
-    // },
-    // P O S T
-    // {
-    //   path: '/post/:postID',
-    //   loader: async({ params }) => {
-    //     let request = await accessAPI.getBlogPost(params.postID);
-    //     return request;
-    //   },
-    //   element:
-    //     <HomeOrEntry>
-    //       <Post 
-    //         // socket stuff
-    //               socketURL={socketURL}
-    //               socketMessage={socketMessage}
-    //               setSocketMessage={setSocketMessage}
-    //               sendMessage={sendMessage}
-    //               isActive={isActive}
-    //               setActive={setActive}
-    //               accessID={accessID}
-    //               setAccessID={setAccessID}
-    //               unreadCount={unreadCount}
-    //               setUnreadCount={setUnreadCount}
-    //               getUnreadCount={getUnreadCount}
-    //               lastMessage={lastMessage}
-    //               current={current}
-    //               setCurrent={setCurrent}
-                 
-    //               selectedDate={selectedDate}
-    //               setSelectedDate={setSelectedDate}
-    //       />
-    //     </HomeOrEntry>
-    // },
-    // M A C R O S P A G E
-    // {
-    //   path: '/macros/:macroname/:macroid',
-    //   loader: async({ params }) => {
-    //     let macroInfo = await accessAPI.getTagData(params.macroid, params.macroname);
-    //     let macroPosts = await accessAPI.groupPosts({action: 'getPosts', groupID: params.macroid, groupName: params.macroname});
-         
-    //     let doesHaveAccess;
-    //     if(macroInfo.response == 'topic') {
-    //       macroInfo.userHasAccess = macroInfo.hasAccess;
-    //       // macroInfo._id = 'topic';
-    //     }
-    //     // else if(macroInfo.hasAccess) {
-    //     else {
-    //       doesHaveAccess = macroInfo.hasAccess.filter(el => el == userID);
-    //       doesHaveAccess = doesHaveAccess.length > 0 ? true : false;
-    //       macroInfo.userHasAccess = doesHaveAccess;
-    //     }
-         
-    //     macroInfo.name = macroInfo.name ? macroInfo.name : params.macroname;
-    //     macroInfo.ownerUsername = macroInfo.adminUsernames ? macroInfo.adminUsernames[0] : null;
-    //     macroInfo.ownerID = macroInfo.admins ? macroInfo.admins[0] : null;
-    //     macroInfo.type = macroInfo.type == undefined ? 'topic' : macroInfo.type;
-    //     macroInfo.userCount = macroInfo.hasAccess ? macroInfo.hasAccess.length : null;
-    //     macroInfo.postCount = macroPosts.length ? macroPosts.length : 0
-
-    //     return {macroInfo, macroPosts}
-    //   },
-    //   element: 
-    //     <HomeOrEntry>
-    //       <Macrospage
-    //               // socket stuff
-    //               socketURL={socketURL}
-    //               socketMessage={socketMessage}
-    //               setSocketMessage={setSocketMessage}
-    //               sendMessage={sendMessage}
-    //               isActive={isActive}
-    //               setActive={setActive}
-    //               accessID={accessID}
-    //               setAccessID={setAccessID}
-    //               unreadCount={unreadCount}
-    //               setUnreadCount={setUnreadCount}
-    //               getUnreadCount={getUnreadCount}
-    //               lastMessage={lastMessage}
-    //               current={current}
-    //               setCurrent={setCurrent}
-    //               // socket stuff
-    //               selectedDate={selectedDate}
-    //               setSelectedDate={setSelectedDate}
-    //               tags={tags}
-    //               setTags={setTags}
-    //               userTopics={userTopics}
-    //               setUserTopics={setUserTopics}
-    //       />
-    //     </HomeOrEntry>
-    // },
-    // U S E R  P R O F I L E
-    // {
-    //   path: '/user/:username/',
-    //   loader: async({ params }) => {
-    //     let data = await accessAPI.getSingleUser(params.userid);
-    //     return data;
-    //   },
-    //   element: 
-    //     <HomeOrEntry>
-    //       <UserProfile
-    //               // socket stuff
-    //               socketURL={socketURL}
-    //               socketMessage={socketMessage}
-    //               setSocketMessage={setSocketMessage}
-    //               sendMessage={sendMessage}
-    //               isActive={isActive}
-    //               setActive={setActive}
-    //               accessID={accessID}
-    //               setAccessID={setAccessID}
-    //               unreadCount={unreadCount}
-    //               setUnreadCount={setUnreadCount}
-    //               getUnreadCount={getUnreadCount}
-    //               lastMessage={lastMessage}
-    //               current={current}
-    //               setCurrent={setCurrent}
-    //               // socket stuff
-    //               selectedDate={selectedDate}
-    //               setSelectedDate={setSelectedDate}
-    //       />
-    //     </HomeOrEntry>
-    // },
-    // U S E R  S E T T I N G S
-    // {
-    //   path: '/:username/settings',
-    //   loader: async({ params }) => {
-    //     let data = await accessAPI.userSettings({option: 'getUserSettings'});
-    //     return data;
-    //   },
-    //   element: 
-    //     <HomeOrEntry>
-    //       <UserSettings
-    //               setSocketMessage={setSocketMessage}
-    //               socketURL={socketURL}
-    //               socketMessage={socketMessage}
-    //               sendMessage={sendMessage}
-    //               isActive={isActive}
-    //               setActive={setActive}
-    //               setAccessID={setAccessID}
-    //               accessID={accessID}
-    //               getUnreadCount={getUnreadCount}
-    //               current={current}
-    //               setCurrent={setCurrent}
-    //       />
-    //     </HomeOrEntry>
-    // },
   ])
 
   return (

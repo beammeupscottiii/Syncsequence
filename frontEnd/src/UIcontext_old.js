@@ -3,7 +3,6 @@
  * accessible by any nested component, 
  */
 import * as React from "react";
-import useWebSocket, {ReadyState} from 'react-use-websocket';
 import Instant from './cmpnts/Instants/Instants'
 
 import APIaccess from './apiaccess';
@@ -61,84 +60,6 @@ export function UIContextProvider({ children }) {
 			})
 	}
 
-
-
-	/*
-		W e b 
-		S o c k e t s	
-	*/
-	const userID = sessionStorage.getItem('userID');
-	const [socketURL, setSocketURL] = React.useState(null); // Initialize as null to prevent premature connection
-  const [socketMessage, setSocketMessage] = React.useState({ 
-  	type: '', 
-  	message: ''
-  });
-	const [unreadCount, setUnreadCount] = React.useState('');
-	const { sendMessage, lastMessage, readyState } = useWebSocket(socketURL, {
-	    onMessage: (e) => {
-	      try {
-	        let data = JSON.parse(e.data);
-
-	        //do we actually need this??
-	        if (data.details && typeof data.details === 'string') {
-	          data.details = JSON.parse(data.details);
-	        }
-	        console.log("WebSocket Recieved Data:", data);
-	        setSocketMessage(data);
-	        
-	        // 💡 Pro Tip: 
-	        //Automatically increment unreadCount if a new notif hits real-time
-	        // this should be in every conditional which also has notif
-	        // setUnreadCount(prev => prev + 1);
-	   
-	      } catch (err) {
-	        console.error("Error parsing WebSocket packet:", err);
-	      }
-	    },
-	    shouldReconnect: (closeEvent) => true, // Automatic reconnection layer
-	    reconnectAttempts: 10,
-	    reconnectInterval: 3000,
-	});
-
-	let getUnreadCount = async() => {
-    let count = await accessAPI.getInteractions('count');
-    if (count > 99) {
-      count = '99';
-    }
-    setUnreadCount(count);
-	}
-
-	// 3. Connect to Server upon successful log in verification
-  React.useEffect(() => {
-    if (authed && userID) {
-      setSocketURL(`ws://127.0.0.1:3333/?${userID}`);
-      getUnreadCount();
-    } else {
-      setSocketURL(null); // Tear down the connection immediately if logged out
-    }
-  }, [authed, userID]);
-
-  //update unreadCount everyTime messages are sent or recieved
-  React.useEffect(()=> {
-    getUnreadCount();
-  }, [socketMessage])
-
-  //Track connectivity
-  React.useEffect(() => {
-    if (readyState === ReadyState.OPEN) {
-      console.log('🌐 Global Context WebSocket connection established');
-    } else if (readyState === ReadyState.CLOSED) {
-      console.log('❌ Global Context WebSocket connection has closed');
-    }
-  }, [readyState]);
-
-  //Group whats necessary into an object to pass down
-  const websocket = {
-  	message: socketMessage,
-  	setMessage: setSocketMessage,
-  	send: sendMessage
-  }
-
 	const [colorScheme, setColorScheme] = React.useState({
         bg: null, 
         headings: null, 
@@ -156,7 +77,7 @@ export function UIContextProvider({ children }) {
         interactMessage: ''
     });
 
-  const triggerPopup = (config) => {
+    const triggerPopup = (config) => {
 
     	console.log('Instants triggered');
 
@@ -168,9 +89,9 @@ export function UIContextProvider({ children }) {
             onInteract: config.onInteract || null,
             interactMessage: config.interactMessage || ""
         });
-  };
+    };
 
-  const closePopup = () => {
+    const closePopup = () => {
 
     	setPopup(prev => (
 	    	{ ...prev, 
@@ -184,9 +105,9 @@ export function UIContextProvider({ children }) {
 	    		isOpenClass: false }
 	    	));
     	}, 350)
-  }
+    }
 
-  const baseRef = React.useRef(null);
+    const baseRef = React.useRef(null);
 
     //this may need to be set to sessionStorage in case of page reload
 	const [prevSection, setPrevSection] = React.useState('')
@@ -203,11 +124,7 @@ export function UIContextProvider({ children }) {
 	    logout,
 	    baseRef,
 	    prevSection,
-	    setPrevSection,
-	    websocket,
-	    unreadCount,
-	    setUnreadCount,
-	    getUnreadCount
+	    setPrevSection
    	}
 
 	return <uiContext.Provider value={UIC}>

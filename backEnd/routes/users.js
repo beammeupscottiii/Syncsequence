@@ -715,7 +715,7 @@ app.post('/notif/:type', verify, async(req, res)=> {
           let notifs = user.notifications;
           let count = 0;
           for(let i = 0; i < notifs.length; i++) {
-            if(notifs.isRead == false) {
+            if(notifs[i].isRead == false) {
                 count++;
             }
           }
@@ -750,7 +750,7 @@ app.post('/notif/:type', verify, async(req, res)=> {
                 username: sender.userName,
                 id: _id
             }
-            console.log(sender);
+            // console.log(sender);
 
             let recipient = await User.findById(mongoose.Types.ObjectId(req.body.recipients[0]))
             recipient = {
@@ -797,7 +797,7 @@ app.post('/notif/:type', verify, async(req, res)=> {
                             [{upsert: true}, {useFindandModify: false}],
                         ).then((res) => {
                             if(res) {
-                                console.log("notification of connection request added to sender's list")
+                                console.log(`notification of connection request added to ${sender.username} list`)
                             }
                         });
 
@@ -807,7 +807,7 @@ app.post('/notif/:type', verify, async(req, res)=> {
                             [{upsert: true}, {useFindandModify: false}],
                         ).then((res) => {
                             if(res) {
-                                console.log("notification of connection request added to recipient's list")
+                                console.log(`notification of connection request added to ${recipient.username} list`)
                             }
                         });
                     })();

@@ -2,6 +2,122 @@
 #### Project Notes & Planning
 ----------------------------------------------------------------------------------------
 
+### Complete To Do for 1.0A completion
+- update <Post> design
+- Update <NotificationList> design
+- Update <Macros> section
+	- same drawer functionality as <Socials>
+	- new <Macros> section options:
+  	- Create Tag
+  	- Delete Tags
+  	- Create Collection
+  	- Manage Collections
+  		- rename
+  		- delete
+  		- privatize
+- Update <Macrospage> design
+- <Messages> to be *added*
+- <EditProfile> to be *added*
+- Color Scheme options in Settings
+- Transition from openMaps to mapbox
+
+S m a l l  A d d s  &  F i x e s
+- add popups for error responses in <createPost>
+- add popup with info or link on to how to set location
+
+
+### 09. 14. 2026
+@1255
+Removing connection whilst on their <Profile> page, and then returning to previous page,
+works fine 0( 0
+The issue may have indeed been updating current.section... 
+
+Other issue concerning the popUp confirming sending connection also works fine now
+
+
+### 09. 13. 2026
+@2110
+two months to the day since I've worked on this (T- T)
+
+Removing connection on <Profile>, confirm pop up came and went too fast,
+	added timeouts to space out the effects
+Going back to the previous page after this, however, confuses app once again.
+
+After connection removal, shouldnt need to update the page entirely...
+just modify setCurrent so <OptionsButton> knows to change options...
+
+But, wouldn't updating the page mess up returning to previous one regardless?
+
+Anyhoo - accepting connection requests via popUp works!
+But again, need to space out triggerPopups with timeouts.
+
+I believe we are working on socket stuff as it becomes relevant, so no need to
+write anything else currently
+
+
+To Do Next, quick tangent:
+ - Lets see what's going on with connection removal then returning to previous page
+ - accepting connection, pop up with confirmation
+
+Then:
+ -  Assess remaining list of things to do for 1.0A
+
+### 07. 13. 2026
+@1915
+websocket messaging works!
+when sending websockets,
+websocket.send(JSON.stringify(data));
+
+unreadCount now read properly.
+frontEnd goes back from <UserProfile> to <Home> just fine so long as nothing crashes
+
+To Do Next:
+ - test accepting request from popUp notification ✔️
+
+@1750
+sanbanbaka didnt recieved notification for latest connectionRequest
+unreadCount isn't being read properly
+
+@1620 removing a user from connections causes the app to forget.
+moved updating current & initial load animation to external func,
+triggered only if current.section hasn't changed to 'user' yet. so only the first time
+well see if that makes a difference.
+
+Notifs should always include sender ID and username
+in subroute, sender is identified via the header JWT, so it's always accurate
+sender info in notif is for websocket
+
+### 07. 11. 2026
+@1635 webSockets updated to being in UIC. It works as intended!
+Logging in and out, it works perfectly fine also!
+
+F I R S T:
+- add in webSockets for popUp concerning adding connections
+	- websocket useEffect in <Home> triggers popUp on message, must write api notif funcs
+		within it ✔️
+	- socket message and api message are same, just include SMT field
+
+Current To Do:
+  - see what's up with webSockets ✔️
+  - update <Post> design, make sure it all works
+  - update / reconnect notification functionality
+
+  - then update <Macros> section to have same drawer functionality as <SocialSection>
+  - create new <Macros> section options:
+  		- Create Tag
+  		- Delete Tags
+  		- Create Collection
+  		- Manage Collections
+  			- rename
+  			- delete
+  			- privatize
+  			  (? do people who had access no longer, or new people can't be added?)
+  - update <Macrospage> design
+
+
+@0830 phase out old socket code and make new UIcontext file with socket included.
+use Gem's suggestions, see if they work
+
 ### 07. 10. 2026
 @1320
 updating webSocket flow:
@@ -56,7 +172,7 @@ within the useEffect and passed to triggerPopUp tho.
 ### 07. 08. 2026
 @1055
 Current To Do:
-  - see what's up with webSockets
+  - see what's up with webSockets ✔️
   - update <Post> design, make sure it all works
   - update / reconnect notification functionality
 
@@ -206,11 +322,10 @@ Alpha1.0
 
 F o r
 A l p h a 1.0
-	- reconnecting websockets
-		- is restructuring necessary?
-	- update <Macros> section to have same drawer functionality as <Socials>
+	- reconnecting websockets ✔️
+	- Redesign(?) <Macrospage> page
+		- update <Macros> section to have same drawer functionality as <Socials>
 	- update / redesign <Post> page
-	- Redesign(?) <Macrospage> page 
 	- update styling for <userProfile> for other users ✔️
 	- <Interactions> to be updated, restyled based off of designs -
 		-  Revamp all interactions which have notifs, so they appear within user's 								interactionslist and their notifications list
@@ -225,7 +340,7 @@ Smaller Things:
 	- add popups for error responses in <createPost>
   - add popup with info or link on to how to set location
   - create design for ManageConnections ✔️
-  - add manageConnections modal ✔️s
+  - add manageConnections modal ✔️
   - Fix / restyle <Post> page
 
 

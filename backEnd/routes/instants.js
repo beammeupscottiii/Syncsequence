@@ -1,6 +1,10 @@
 /*
       Route Dedicated to Events utilizing Web Sockets
       for instant updates on front & back end
+
+      07. 13. 2026
+      SMT: null, sent or recieved
+      a sent message, returns a recieved message
 */
 
 const express = require('express'),
@@ -41,30 +45,58 @@ app.ws('/', (ws, req)=> {
                         notif.type = 'updateNotifs';
                         connections[user].send(JSON.stringify(notif));
                     }
-                    else if(data.type == 'request' && data.message == 'connectionRequestRecieved') {
-                        let notif = JSON.stringify({
-                            type: 'request',
-                            senderID: data.senderID,
-                            senderUsername: data.senderUsername,
-                            recipient: data.recipients[0],
-                            recipientUsername: data.recipientUsername,
-                            message: 'connectionRequestRecieved',
-                            originalID: data.originalID,
-                        })
-                        connections[user].send(notif)
-                        console.log(notif);
+
+                    // else if(data.type == 'request' && data.message == 'connectionRequestRecieved') {
+                    //     let notif = JSON.stringify({
+                    //         type: 'request',
+                    //         senderID: data.senderID,
+                    //         senderUsername: data.senderUsername,
+                    //         recipient: data.recipients[0],
+                    //         recipientUsername: data.recipientUsername,
+                    //         message: 'connectionRequestRecieved',
+                    //         originalID: data.originalID,
+                    //     })
+                    //     connections[user].send(notif)
+                    //     console.log(notif);
+                    // }
+
+                    else if(data.SMT == 'sent' && data.message == 'connectionRequestSent') {
+
+                        //data should be
+                        // type: 'request',
+                        // senderID: userID,
+                        // senderUsername: username,
+                        // recipients: [userid],
+                        // recipientUsername: userInfo.userName,
+                        // message: 'connectionRequestSent',
+                        // SMT: 'sent'
+
+                        data.SMT = 'recieved';
+                        connections[user].send(JSON.stringify(data));
                     }
-                    else if (data.type == 'request' && data.message == 'connectionAcceptedRecieved') {
-                        let notif = JSON.stringify({
-                            type: 'request',
-                            senderUsername: data.senderUsername,
-                            message: 'connectionAcceptedRecieved',
-                            senderID: data.senderID,
-                            recipients: data.recipients,
-                        })
-                        connections[user].send(notif);
-                        console.log(notif);
+
+                    // else if (data.type == 'request' && data.message == 'connectionAcceptedRecieved') {
+                    //     let notif = JSON.stringify({
+                    //         type: 'request',
+                    //         senderUsername: data.senderUsername,
+                    //         message: 'connectionAcceptedRecieved',
+                    //         senderID: data.senderID,
+                    //         recipients: data.recipients,
+                    //     })
+                    //     connections[user].send(notif);
+                    //     console.log(notif);
+                    // }
+
+                    else if(data.SMT == 'sent' && data.message == 'connectionAcceptedSent') {
+                        data.SMT = 'recieved';
+                        connections[user].send(JSON.stringify(data));
                     }
+
+
+
+
+                    // 09.13.2026
+                    // all below need to be redone like the ones above
                     else if(data.type == 'request' && data.message == 'subscriptionRequestRecieved') {
                         let notif = JSON.stringify(data);
                             // type: 'request',
@@ -75,6 +107,7 @@ app.ws('/', (ws, req)=> {
                             // message: 'subscriptionRequestRecieved'
                         connections[user].send(notif);
                     }
+
                     else if(data.type == 'request' && data.message == 'subscriptionAccepted') {
                         let notif = JSON.stringify({
                             type: 'request',
@@ -85,6 +118,7 @@ app.ws('/', (ws, req)=> {
                         })
                         connections[user].send(notif);
                     }
+
                     else if(data.type == 'request' && data.message == 'subscribed') {
                         let notif = JSON.stringify({
                             type: 'request',
@@ -95,18 +129,21 @@ app.ws('/', (ws, req)=> {
                         })
                         connections[user].send(notif);
                     }
+
                     else if(data.type == 'comment' && data.message == 'initial') {
                         let notif = data;
                         notif.message = 'initial-recieved';
                         connections[user].send(JSON.stringify(notif));
                         console.log(notif);
                     }
+
                     else if(data.type == 'comment' && data.message == 'response') {
                         let notif = data;
                         notif.message = 'response-recieved';
                         connections[user].send(JSON.stringify(notif));
                         console.log(notif);
                     }
+
                     else if(data.type == 'tagging') {
                         let notif = data;
                         notif.message = 'recieved';

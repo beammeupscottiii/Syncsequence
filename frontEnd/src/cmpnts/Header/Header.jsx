@@ -158,7 +158,6 @@ function LogoButton ({isSubPage}) {
 export default function Header ({ 
 	isReturnable, 
 	setNotifList, 
-	unreadCount, 
 	siteLocation,
 	isVisible,
 	children,
@@ -169,6 +168,7 @@ export default function Header ({
 
 	// let [returnable, setReturnable] = React.useState(isReturnable);
 	let [isNotifList, setIsNotifList] = React.useState(false);
+	const { unreadCount, setUnreadCount } = useUIC();
 
 	return (
 		<header className={`${isVisible ? 'return' : 'retreat'}`}>

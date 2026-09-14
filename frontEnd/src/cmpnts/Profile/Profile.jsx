@@ -30,7 +30,13 @@ export default function Profile({
 	const { removeConnectionRef, requestConnectionRef, subscriptionRequestRef } = useOutletContext() || {};
 
 	const { userid } = useParams();
-	const { prevSection, setPrevSection, triggerPopup, baseRef } = useUIC();
+	const { 
+		prevSection, 
+		setPrevSection, 
+		triggerPopup, 
+		baseRef,
+		websocket 
+	} = useUIC();
 
 	const [data, setData] = React.useState();
 	const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -41,6 +47,29 @@ export default function Profile({
 	const isSubPage = location.pathname.includes('/post/') ||
                     location.pathname.includes('/macros') ||
                     location.pathname.includes('/user');
+
+
+    const onInitialLoad = () => {
+    	setCurrent(prev => ({
+			...prev,
+			isConnected: dataData.isConnected,
+			isSubscribed: dataData.isSubscribed,
+			hasSubscription: dataData.hasSubscription,
+			section: 'User'
+		}));
+
+		let baseElement = baseRef.current; 
+
+		let delay1 = setTimeout(()=> {
+	      baseElement.classList.remove('leave');
+	    }, 300)
+
+
+	    let delay2 = setTimeout(()=> {
+	      baseElement.classList.add('enter');
+	    }, 600)
+    }
+
 
 	const updateProfilePage = async() => {
 
@@ -118,13 +147,13 @@ export default function Profile({
 			
 			
 
-			setCurrent(prev => ({
-				...prev,
-				isConnected: dataData.isConnected,
-				isSubscribed: dataData.isSubscribed,
-				hasSubscription: dataData.hasSubscription,
-				section: 'User'
-			}));
+			// setCurrent(prev => ({
+			// 	...prev,
+			// 	isConnected: dataData.isConnected,
+			// 	isSubscribed: dataData.isSubscribed,
+			// 	hasSubscription: dataData.hasSubscription,
+			// 	section: 'User'
+			// }));
 
 			let allPosts = await accessAPI.pullUserLog({type: 'user', userID: userid});
 
@@ -153,42 +182,26 @@ export default function Profile({
 			//final check
 			setDataLoaded(true);
 
-			let baseElement = baseRef.current; 
+			if(current.section != 'User') {
+				onInitialLoad();
+			}
 
-			let delay1 = setTimeout(()=> {
-		      baseElement.classList.remove('leave');
-		    }, 300)
+			//this may need to be moved to an initial load useEffect instead
+			// let baseElement = baseRef.current; 
+
+			// let delay1 = setTimeout(()=> {
+		    //   baseElement.classList.remove('leave');
+		    // }, 300)
 
 
-		    let delay2 = setTimeout(()=> {
-		      baseElement.classList.add('enter');
-		    }, 600)
+		    // let delay2 = setTimeout(()=> {
+		    //   baseElement.classList.add('enter');
+		    // }, 600)
 		}
 	}
 
 	const goToUserSettings = () => {}
 
-	const removeConnection = (e) => {
-		
-		// e.preventDefault();
-
-		triggerPopup({
-			message: `Are you sure you wish to remove @${userInfo.userName}?`,
-			onConfirm: async()=> {
-
-				let remove = await accessAPI.removeConnection(userid);
-				if(remove == true) {
-					updateProfilePage();
-
-					triggerPopup({
-						message: `@${userInfo.userName} removed`
-					})
-				}
-			}
-		})
-
-		return true;
-	}
 
 	const requestConnection = async(e) => {
 
@@ -196,9 +209,12 @@ export default function Profile({
 
 		let notif = {
 			type: 'request',
+			senderID: userID,
+			senderUsername: username,
 			recipients: [userid],
 			recipientUsername: userInfo.userName,
-			message: 'connectionRequestSent'
+			message: 'connectionRequestSent',
+			SMT: 'sent'
 		}
 
 		await accessAPI.newInteraction(notif).then((request)=> {
@@ -216,6 +232,7 @@ export default function Profile({
 					message: `Connection Request sent to @${userInfo.userName}`
 				})
 
+				websocket.send(JSON.stringify(notif));
 			}
 			else if(request.message == 'connectionAcceptedSent') {
 
@@ -226,6 +243,42 @@ export default function Profile({
 				})
 			}
 		})
+	}
+
+	const removeConnection = (e) => {
+		
+		// e.preventDefault();
+
+		triggerPopup({
+			message: `Are you sure you wish to remove @${userInfo.userName}?`,
+			onConfirm: async()=> {
+
+				let remove = await accessAPI.removeConnection(userid);
+				if(remove == true) {
+
+					let delay = setTimeout(()=> {
+						//updateProfilePage();
+						setCurrent(prev => ({
+							...prev,
+							isConnected: false
+						}));
+
+						triggerPopup({
+							message: `@${userInfo.userName} removed`
+						})
+					}, 300)
+
+					let delay2 = setTimeout(()=> {
+
+						triggerPopup({
+							message: `@${userInfo.userName} removed`
+						})
+					}, 600)
+				}
+			}
+		})
+
+		return true;
 	}
 
 	const subscriptionRequest = async(e) => {
@@ -260,9 +313,9 @@ export default function Profile({
 		})
 	}
 
-	//07. 04. 2026
-	//Need to add 'removeSubscriber' and 'removeSubscription'
+	const removeSubscriber = async() => {}
 
+	const removeSubscription = async() => {}
 
 	React.useLayoutEffect(() => {
 	    if(current.section == 'User') {

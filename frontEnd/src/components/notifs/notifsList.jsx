@@ -11,12 +11,12 @@ let accessAPI = APIaccess();
 
 export default function NotificationList({
 	setNotifList, 
-	unreadCount, 
-	setUnreadCount, 
-	setSocketMessage, 
-	socketMessage, 
-	accessID, 
-	setAccessID,
+	// unreadCount, 
+	// setUnreadCount, 
+	// setSocketMessage, 
+	// socketMessage, 
+	// accessID, 
+	// setAccessID,
 	current,
 	setCurrent
 }) {
@@ -25,9 +25,10 @@ export default function NotificationList({
 	let username = sessionStorage.getItem('userName');
 	let userID = sessionStorage.getItem('userID');
 	let navigate = useNavigate();
-	const { logout, triggerPopup } = useUIC();
+	const { logout, triggerPopup, websocket, unreadCount, setUnreadCount } = useUIC();
+	//replace with new vars
 
-	console.log(username);
+	// console.log(username);
 
 	let updateList = async() => {
 		let data = await accessAPI.getInteractions(); 
@@ -38,11 +39,7 @@ export default function NotificationList({
 	            count++;
 	        }
 	      }
-	    // if(count < 10) {
-	    //   count = '0' + count;
-	    // } else if (count > 99) {
-	    //   count = '99';
-	    // }
+
 	    setUnreadCount(count);
 		setNotifs(data);
 	}
@@ -63,12 +60,14 @@ export default function NotificationList({
 
 			let sm = {
 				type: 'request',
+				senderID: userID,
+				senderUsername: username,
 				recipients: [notif.sender],
 				message: 'connectionAcceptedSent',
-				originalNotif: notif._id
+				SMT: 'sent'
 			};
-			console.log(sm);
-			// setSocketMessage(sm);
+			
+			websocket.send(JSON.stringify(sm));
 
 			let request = await accessAPI.newInteraction(sm);
 			if(request.confirm == true) {
@@ -105,11 +104,10 @@ export default function NotificationList({
 			}).then(data=> {
 				if(data.confirmation) {
 					updateList();
-					setSocketMessage({
-						// message: `Access granted to @${macroInfo.ownerUsername}`,
-						recipients: [notif.sender],
-						action: 'updateNotifs'
-					})
+					// setSocketMessage({
+					// 	recipients: [notif.sender],
+					// 	action: 'updateNotifs'
+					// })
 				}
 			})
 
@@ -137,7 +135,7 @@ export default function NotificationList({
 				};
 			let request = await accessAPI.newInteraction(sm)
 
-			setSocketMessage(body);
+			// setSocketMessage(body);
 			console.log(body);
 
 			let delay = setTimeout(()=> {
@@ -223,7 +221,7 @@ export default function NotificationList({
 
 	React.useEffect(()=> {
 		updateList();
-	}, [socketMessage])
+	}, [websocket?.message])
 
 
 
