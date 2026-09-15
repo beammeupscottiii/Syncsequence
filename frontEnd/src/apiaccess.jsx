@@ -9,7 +9,6 @@ export default function APIaccess(key) {
 
 	const apiAddr = "http://127.0.0.1:3333";
 	let savedKey = sessionStorage.getItem('userKey')
-	// const userKey = savedKey ? savedKey : key;
 
 	return {
 

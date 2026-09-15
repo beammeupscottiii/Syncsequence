@@ -44,13 +44,14 @@ import AboutPage from './components/base/aboutPage';
 import Profile from './cmpnts/Profile/Profile';
 import SocialSection from './cmpnts/Socials/SocialSection';
 import UserLog from './cmpnts/Home/Home';
-import Macros from './components/sections//macros';
+import Macros from './components/sections/macros';
+import Macross from './cmpnts/Macros/macros';
 import Settings from './cmpnts/Settings/Settings';
 
 /*** Sub Sections ***/
 // import { CreatePost } from './components/sections/userLog';
-import CreatePostt from "./cmpnts/CreatePost/CreatePost";
 // import { ManageConnections } from './components/sections/socialLog';
+import CreatePostt from "./cmpnts/CreatePost/CreatePost";
 import ManageConnections from './cmpnts/ManageConnections/ManageConnections';
 import { ManageMacros } from './components/sections/macros';
 import Calendar from './cmpnts/Calendar/Calendar';
@@ -77,17 +78,6 @@ function HomeOrEntry({ children }) {
 
 /* * * H O M E  C o m p o n e n t * * */
 function Home({
-  // socketURL, 
-  // socketMessage, 
-  // setSocketMessage, 
-  // sendMessage, 
-  // isActive, 
-  // setActive, 
-  // accessID, 
-  // setAccessID, 
-  // unreadCount, 
-  // setUnreadCount,
-  // getUnreadCount,
   current,
   setCurrent,
   cal,
@@ -259,6 +249,8 @@ function Home({
   }, [navigation.state])
 
 
+
+
   /*
     W e b 
     S o c k e t s
@@ -420,7 +412,7 @@ function Home({
           }
 
           {current.section == 'macros' &&
-            <Macros  
+            <Macross
               current={current} 
               setCurrent={setCurrent}
               tags={tags}
@@ -428,7 +420,8 @@ function Home({
               userTopics={userTopics}
               setUserTopics={setUserTopics}
               sectionClass={sectionClass}
-              refe={macrosRef}/>
+              refe={macrosRef}
+              socialPaddingAdjust={socialPaddingAdjust}/>
           }
 
           {current.section == 'settings' &&

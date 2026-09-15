@@ -26,6 +26,14 @@ S m a l l  A d d s  &  F i x e s
 - add popup with info or link on to how to set location
 
 
+### 09. 15. 2026
+@0100
+working on updating <Macros> section, 
+need to add collections section next
+
+Then we work on section options
+
+
 ### 09. 14. 2026
 @1255
 Removing connection whilst on their <Profile> page, and then returning to previous page,

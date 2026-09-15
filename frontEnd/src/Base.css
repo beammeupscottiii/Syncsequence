@@ -273,7 +273,7 @@ div.log {
 div#HOMELOG,
 section#SOCIALS,
 div#groupsList,
-div#macros,
+section#MACROS,
 div#homeLog {
 	width: 98%;
 	height: 100%; /*needs to be fixed for animation */
@@ -291,13 +291,13 @@ div#HOMELOG {
 
 div#HOMELOG.enter,
 section#SOCIALS.enter,
-div#macros.enter {
+section#MACROS.enter {
 	animation: 0.5s ease-in-out forwards _return;
 }
 
 div#HOMELOG.leave,
 section#SOCIALS.leave,
-div#macros.leave {
+section#MACROS.leave {
 	animation: 0.5s ease-in-out forwards _recede;
 }
 

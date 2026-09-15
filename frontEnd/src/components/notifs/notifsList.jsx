@@ -10,13 +10,7 @@ let accessAPI = APIaccess();
 
 
 export default function NotificationList({
-	setNotifList, 
-	// unreadCount, 
-	// setUnreadCount, 
-	// setSocketMessage, 
-	// socketMessage, 
-	// accessID, 
-	// setAccessID,
+	setNotifList,
 	current,
 	setCurrent
 }) {

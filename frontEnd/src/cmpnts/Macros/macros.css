@@ -1,0 +1,157 @@
+section#MACROS {
+	width: 96%;
+	transition-duration: 0.2s;
+/*	margin: 16px auto;*/
+}
+	section#MACROS.up {
+		margin-top: -80px;
+	}
+
+div.section {
+	margin: 16px 0;
+}	
+
+div.section.open {
+	overflow-y: auto;
+	height: fit-content;
+}
+
+div.section.closed {
+	overflow-y: hidden;
+	max-height: 84px;
+}
+
+
+section#MACROS div.section div.headerWrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+section#MACROS div.section div.headerWrapper h2 {
+	font-family: "Raleway";
+	font-weight: 600;
+	font-size: 2.75em;
+	letter-spacing: 4px;
+	color: var(--greyscale-elements);
+	margin: 16px 0;
+}
+
+section#MACROS div.section div.headerWrapper button {
+	font-size: 3.5em;
+	font-weight: 100;
+	padding: 0 6px 0 8px;
+}
+
+div.section button#showMore {
+	display: block;
+	margin: 24px auto;
+	font-size: 1em;
+}
+
+
+/*
+	T A G S
+*/
+ul#tagsWrapper {
+	display: flex;
+	flex-wrap: wrap;
+	list-style-type: none;
+	padding-left: 0px;
+	width: 96%;
+	margin-left: auto;
+	margin-bottom: 0;
+}
+
+ul#tagsWrapper li {
+	display: block;
+    position: relative;
+    margin: 4px;
+    margin-top: 10px;
+}
+
+ul#tagsWrapper li button {
+	border: 2.5px solid var(--greyscale-details);
+    border-radius: 12px;
+    padding: 8px 10px;
+
+    font-family: "Raleway";
+    font-weight: 400;
+    font-size: 1em;
+    letter-spacing: 2px;
+    color: var(--greyscale-details);
+    background-color: transparent;
+    transition: all ease-in-out 0.3s;
+}
+
+	ul#tagsWrapper li button:hover {
+		background-color: var(--greyscale-icons);
+	    transform: scale(1.2);
+	    margin: 0 4px;
+	}
+
+	ul#tagsWrapper li button.topic {
+		border: none;
+		background-color: transparent;
+	}
+
+	ul#tagsWrapper li button.private {
+		/*slightly faded appearance	*/
+	}
+
+
+
+/*
+	P R I V A T E  
+	P O S T S
+*/
+div#privatePosts ul {
+	display: flex;
+	flex-direction: column;
+	list-style-type: none;
+	margin: 8px 0 0;
+	padding: 0;
+}
+
+div#privatePosts ul li {
+	margin: 16px 0 16px 16px;
+}
+
+div#privatePosts ul li h4 {
+	margin: 0;
+	font-family: 'Raleway';
+	font-weight: 300;
+	font-size: 1em;
+	letter-spacing: 1px;
+}
+
+div#privatePosts ul li h3 {
+	margin-top: 4px;
+	margin-bottom: 4px;
+	font-family: 'Raleway';
+	font-weight: 400;
+	font-size: 1.5em;
+	letter-spacing: 1px;
+	color: var(--greyscale-details);
+}
+
+div#privatePosts ul li ul.deets {
+	display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    margin: 8px 0 0 -8px;
+    padding: 0;
+}
+
+div#privatePosts ul li ul.deets li {
+	font-size: 0.9em;
+    letter-spacing: 1px;
+    margin: 0 8px;
+}
+
+
+
+/*
+	C O L L E C T I O N S
+*/
