@@ -155,3 +155,20 @@ div#privatePosts ul li ul.deets li {
 /*
 	C O L L E C T I O N S
 */
+div#collections ul {
+	list-style-type: none;
+/*	margin: 20px 0px 20px 16px;*/
+	margin-top: -8px;
+	margin-left: 16px;
+	padding: 0;
+}
+
+div#collections ul li {
+	font-family: 'Raleway';
+	font-weight: 400;
+	font-size: 1.25em;
+	letter-spacing: 1px;
+	color: var(--greyscale-details);
+
+	margin: 28px 0;
+}

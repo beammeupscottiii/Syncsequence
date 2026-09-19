@@ -44,7 +44,6 @@ import AboutPage from './components/base/aboutPage';
 import Profile from './cmpnts/Profile/Profile';
 import SocialSection from './cmpnts/Socials/SocialSection';
 import UserLog from './cmpnts/Home/Home';
-import Macros from './components/sections/macros';
 import Macross from './cmpnts/Macros/macros';
 import Settings from './cmpnts/Settings/Settings';
 
@@ -54,12 +53,13 @@ import Settings from './cmpnts/Settings/Settings';
 import CreatePostt from "./cmpnts/CreatePost/CreatePost";
 import ManageConnections from './cmpnts/ManageConnections/ManageConnections';
 import { ManageMacros } from './components/sections/macros';
+import ManageMacross from './cmpnts/ManageMacros/manageMacros';
 import Calendar from './cmpnts/Calendar/Calendar';
 import Mapp from './cmpnts/Map/Map';
 import DragSlider from './components/base/dragSlider';
-import './components/sections/sections.css';
 import CustomLogEditor from './components/base/customLogEditor/customLogEditor';
 
+import './components/sections/sections.css';
 
 /* * * I n i t i a l i z e * * */
 const accessAPI = APIaccess();
@@ -155,20 +155,47 @@ function Home({
       09. 19. 2025
       section refs should also be within UIC
       temporary placement
+      they are for UI purposes, enter/leaving animation
   */
   let homeRef = React.useRef();
   let macrosRef = React.useRef();
   let socialRef = React.useRef();
   let profileRef = React.useRef();
   let settingsRef = React.useRef();
+
+  //Home section
   const [createPostToggle, setCreatePostToggle] = React.useReducer(state => !state, false);
   const [draftsList, setDraftsList] = React.useReducer(state => !state, false);
 
+  // For Prompting Post and Draft Submission in <CreatePost>
+  const triggerSubmitRef = React.useRef(null);
+  const triggerDraftRef = React.useRef(null);
+
+  React.useEffect(()=> {
+    updateLog()
+  }, [createPostToggle, current.customizer])
+
+
+
+  //Social Section
   const [manageConnectionsToggle, setManageConnectionsToggle] = React.useReducer(state => !state, false);
 
-    React.useEffect(()=> {
-      updateLog()
-    }, [createPostToggle, current.customizer])
+  
+  //Macros Section
+  const [manageMacrosToggle, set_ManageMacrosToggle] = React.useReducer(state => !state, false);
+  const [createTagToggle, set_CreateTagToggle] = React.useReducer(state => !state, false);
+  const [deleteTagsToggle, set_DeleteTagsToggle] = React.useReducer(state => !state, false);
+  const [newCollectionToggle, set_NewCollectionToggle ] = React.useReducer(state => !state, false);
+  const [manageCollectionsToggle, set_ManageCollectionsToggle] = React.useReducer(state => !state, false);
+
+
+  //for connection functions in <Profile>
+  // const profileContext = React.createContext(null);
+  const removeConnectionRef = React.useRef(null);
+  const requestConnectionRef = React.useRef(null);
+  const subscriptionRequestRef = React.useRef(null);
+
+  //
 
   /* 
     09. 20. 2025
@@ -200,18 +227,6 @@ function Home({
       scrollAccumulator.current = 0;
     }
   }
-
-  // For Prompting Post and Draft Submission in <CreatePost>
-  const triggerSubmitRef = React.useRef(null);
-  const triggerDraftRef = React.useRef(null);
-
-
-  //for connection functions in <Profile>
-  const profileContext = React.createContext(null);
-  const removeConnectionRef = React.useRef(null);
-  const requestConnectionRef = React.useRef(null);
-  const subscriptionRequestRef = React.useRef(null);
-
 
   //Conditionals for whether the Header displays the back button
   const isSubPage = location.pathname.includes('/post/') ||
@@ -421,7 +436,8 @@ function Home({
               setUserTopics={setUserTopics}
               sectionClass={sectionClass}
               refe={macrosRef}
-              socialPaddingAdjust={socialPaddingAdjust}/>
+              socialPaddingAdjust={socialPaddingAdjust}
+              />
           }
 
           {current.section == 'settings' &&
@@ -440,6 +456,7 @@ function Home({
         {manageConnectionsToggle &&
           <ManageConnections current={current} 
                              setCurrent={setCurrent} 
+                             set_ManageMacrosToggle={set_ManageMacrosToggle}
                              manageConnectionsToggle={manageConnectionsToggle}
                              setManageConnectionsToggle={setManageConnectionsToggle}
                              sectionClass={sectionClass}
@@ -472,11 +489,30 @@ function Home({
                       setDraftsList={setDraftsList}/>
         }
 
-        {(!current.map &&( current.modal && current.section == 'macros')) &&
+        {/*{(!current.map &&( current.modal && current.section == 'macros')) &&
           <ManageMacros current={current} 
-                        setCurrent={setCurrent} 
+                        setCurrent={setCurrent}
+                        set_ManageMacrosToggle={set_ManageMacrosToggle}
+                        set_CreateTagToggle={set_CreateTagToggle}
+                        set_DeleteTagsToggle={set_DeleteTagsToggle}
+                        set_NewCollectionToggle={set_NewCollectionToggle}
+                        set_ManageCollectionsToggle={set_ManageCollectionsToggle} 
+          />
+        }*/}
+
+        {manageMacrosToggle &&
+          <ManageMacross current={current} 
+                         setCurrent={setCurrent}
+                         sectionClass={sectionClass}
+                         setSectionClass={setSectionClass}
+                         set_ManageMacrosToggle={set_ManageMacrosToggle}
+                         createTagToggle={createTagToggle}
+                         deleteTagsToggle={deleteTagsToggle}
+                         newCollectionToggle={newCollectionToggle}
+                         manageCollectionsToggle={manageCollectionsToggle} 
           />
         }
+        
 
 
          {/*
@@ -492,14 +528,20 @@ function Home({
 
             createPostToggle={createPostToggle}
             setCreatePostToggle={setCreatePostToggle}
-
-            manageConnectionsToggle={manageConnectionsToggle}
-            setManageConnectionsToggle={setManageConnectionsToggle}
-
             triggerSubmitRef={triggerSubmitRef}
             triggerDraftRef={triggerDraftRef}
             draftsList={draftsList}
             setDraftsList={setDraftsList}
+
+            manageConnectionsToggle={manageConnectionsToggle}
+            setManageConnectionsToggle={setManageConnectionsToggle}
+
+            set_ManageMacrosToggle={set_ManageMacrosToggle}
+            set_CreateTagToggle={set_CreateTagToggle}
+            set_DeleteTagsToggle={set_DeleteTagsToggle}
+            set_NewCollectionToggle={set_NewCollectionToggle}
+            set_ManageCollectionsToggle={set_ManageCollectionsToggle}
+
             removeConnectionRef={removeConnectionRef}
             requestConnectionRef={requestConnectionRef}
             subscriptionRequestRef={subscriptionRequestRef}
@@ -592,6 +634,7 @@ export default function Main() {
       calendar: '',
       createPost: '',
       manageConnections: '',
+      manageMacros: '',
   })
   const [current, setCurrent] = React.useState({
     section: 'home', //0, 1, 2, 3, 4
@@ -600,6 +643,7 @@ export default function Main() {
     map: false,
     createPost: false,
     manageConnections: false,
+    manageMacros: false,
     scrollTo: null,
     currentLog: null,
     modal: false, //for <UserProfile>, when user leaves page via a fullList, ensures modal is still up

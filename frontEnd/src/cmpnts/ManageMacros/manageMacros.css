@@ -1,0 +1,15 @@
+div#manageMacros {
+	position: absolute;
+    top: 50%;
+    /* right: 0; */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100vh;
+    z-index: 20;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 0px 12px;
+    overflow-y: scroll;
+    animation: 0.25s ease-in-out forwards _scaleFadeIn;
+}

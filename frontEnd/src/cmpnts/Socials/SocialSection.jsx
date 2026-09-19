@@ -359,7 +359,7 @@ export default function SocialSection({
 					<button className={`buttonDefault`} onClick={(e)=> {
 						e.preventDefault()
 						setFirstSection();
-					}}>+</button>
+					}}>{firstSection == true ? '-' : '+'}</button>
 				</div>
 
 				{/* Activity Button */}
@@ -434,7 +434,7 @@ export default function SocialSection({
 					<button className={`buttonDefault`} onClick={(e)=> {
 						e.preventDefault()
 						setSecondSection();
-					}}>+</button>
+					}}>{secondSection == true ? '-' : '+'}</button>
 				</div>
 
 				<ul className={``}>

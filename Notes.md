@@ -26,6 +26,28 @@ S m a l l  A d d s  &  F i x e s
 - add popup with info or link on to how to set location
 
 
+### 09. 18. 2026
+@1235
+worked on <ManageMacros> modal instead lol
+
+process for closing the modal:
+	- setOptionsOpen(false), 
+		setSectionClass manageMacros: 'leave', 
+		delayed 300 setCurrent manageMacros: false
+		delayed 600 setSectionClass manageMacros: '', 
+		and both manageMacrosToggle and specific section toggle
+<Macros> needs to update data when current changes, useEffect
+
+@2235
+collections added 
+
+To Do Next:
+- fix <Macrospage>, clicking on tags or collections currently doesnt work
+- add <Macros> section options
+	- is one sub component with multiple blocks, modal.active && modal.section
+	- reference syncseq 0.1 designs for modal blocks
+
+
 ### 09. 15. 2026
 @0100
 working on updating <Macros> section, 

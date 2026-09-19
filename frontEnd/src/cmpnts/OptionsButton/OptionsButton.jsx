@@ -120,7 +120,12 @@ export default function OptionsButton({
   setDraftsList,
   removeConnectionRef,
 	requestConnectionRef,
-	subscriptionRequestRef
+	subscriptionRequestRef,
+	set_ManageMacrosToggle,
+	set_CreateTagToggle,
+	set_DeleteTagsToggle,
+	set_newCollectionToggle,
+	set_manageCollectionsToggle
 }) {
 
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -306,7 +311,16 @@ export default function OptionsButton({
 		const macrosOptions = [
 			{
 				name: 'Create Tag',
-				function: null,
+				function: ()=> {
+
+					setCurrent({
+						...current,
+						manageMacros: true
+					})
+					set_ManageMacrosToggle();
+					set_CreateTagToggle();
+					setOptionsOpen(false);
+				},
 				class: '',
 				display: true
 			},
@@ -562,8 +576,16 @@ export default function OptionsButton({
 				},
 				class: '',
 				display: true
-			},	
+			},
 		];
+
+		const manageMacrosOptions = [
+			{
+				name: 'Close',
+				function: null,
+				display: true
+			}
+		]; 	
 
 		return {
       profile: profileOptions,
@@ -572,7 +594,8 @@ export default function OptionsButton({
       macros: macrosOptions,
       map: mapOptions,
       calendar: calendarOptions,
-      createPost: createPostOptions
+      createPost: createPostOptions,
+      manageMacros: manageMacrosOptions
     };
 	}, [current, isSubmitting, sectionClass]);
 

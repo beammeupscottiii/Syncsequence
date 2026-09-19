@@ -19,13 +19,6 @@ export default function Macross({
 
 	const userID = sessionStorage.getItem('userID');
 	const navigate = useNavigate();
-	let [modal, setModal] = React.useState({
-		active: false,
-		newTag: false,
-		deleteTag: false,
-		newCollection: false,
-		manageCollections: false
-	}); //set modal.active == true && modal.section
 
 	let [tagsSection, toggleTags] = React.useReducer(state => !state, true);
 
@@ -39,6 +32,10 @@ export default function Macross({
 	
 	const privatePosts_ShowMore = () => {
 		setPrivatePosts_visibleCount(prevCount => prevCount + 20);
+	}
+
+	const collections_ShowMore = () => {
+		collections_visibleCount(prevCount => prevCount + 20);
 	}
 
 	
@@ -95,7 +92,7 @@ export default function Macross({
 					<button className={`buttonDefault`} onClick={(e)=> {
 						e.preventDefault()
 						toggleTags();
-					}}>+</button>
+					}}>{tagsSection == true ? '-' : '+'}</button>
 				</div>
 
 				{/*T A G S  W R A P P E R*/}
@@ -121,7 +118,7 @@ export default function Macross({
 					<button className={`buttonDefault`} onClick={(e)=> {
 						e.preventDefault()
 						togglePrivatePosts()
-					}}>+</button>
+					}}>{privatePostsSection == true ? '-' : '+'}</button>
 				</div>
 
 				{/*P O S T S  L I S T*/}
@@ -170,6 +167,41 @@ export default function Macross({
 
 
 			{/*C O L L E C T I O N S*/}
+			<div id="collections" className={`section ${collectionsSection == true ? 'open' : 'closed'}`}>
+				
+				{/* H E A D E R */}
+				<div className={`headerWrapper`}>
+					<h2>Collections</h2>
+					<button className={`buttonDefault`} onClick={(e)=> {
+						e.preventDefault()
+						toggleCollections()
+					}}>{collectionsSection == true ? '-' : '+'}</button>
+				</div>
+
+				{/*L I S T*/}
+				<ul>
+					{collections.length > 0 &&
+						collections.map(item => {
+
+							return (
+								<li onClick={()=> {goToMacrosPage(item)}}>
+									{item.name}
+								</li>
+							)
+						})
+					}
+				</ul>
+
+				{/*E X P A N D  B U T T O N*/}
+				{collections_visibleCount < collections.length && (
+					<button id="showMore" 
+							className={`buttonDefault`}
+							onClick={collections_ShowMore}>
+						Show More
+					</button>
+				)}
+
+			</div>
 
 		</section>
 	)
