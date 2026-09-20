@@ -22,18 +22,18 @@ const accessAPI = APIaccess();
 
 
 export default function Macrospage({
-	socketURL,
-	socketMessage,
-    setSocketMessage,     
-    sendMessage,
-    isActive,
-    setActive,
-    accessID,
-    setAccessID,
-    unreadCount,
-    setUnreadCount,
-    getUnreadCount,
-    lastMessage,
+	// socketURL,
+	// socketMessage,
+    // setSocketMessage,     
+    // sendMessage,
+    // isActive,
+    // setActive,
+    // accessID,
+    // setAccessID,
+    // unreadCount,
+    // setUnreadCount,
+    // getUnreadCount,
+    // lastMessage,
     selectedDate,
     set_selectedDate,
     current,
@@ -93,120 +93,120 @@ export default function Macrospage({
 	let [ARRD, setARRD] = React.useState();
 	// let ARRD;
 
-	let addRemoveRequestDelete = async() => {
-		if(ARRD == 'delete') {
-			let request = await accessAPI.manageGroup('deleteGroup', {
-				type: 'tag',
-				groupID: macroInfo._id,
-			});
+	// let addRemoveRequestDelete = async() => {
+	// 	if(ARRD == 'delete') {
+	// 		let request = await accessAPI.manageGroup('deleteGroup', {
+	// 			type: 'tag',
+	// 			groupID: macroInfo._id,
+	// 		});
 
-			if(request.confirmation) {
-				navigate(-1);
-				let delay = setTimeout(()=> {
-					setSocketMessage({
-						type: 'simpleNotif',
-						message: `Deleted "${macroInfo.name}"`
-					})
-				}, 200)
-			}
-		}
+	// 		if(request.confirmation) {
+	// 			navigate(-1);
+	// 			let delay = setTimeout(()=> {
+	// 				setSocketMessage({
+	// 					type: 'simpleNotif',
+	// 					message: `Deleted "${macroInfo.name}"`
+	// 				})
+	// 			}, 200)
+	// 		}
+	// 	}
 
-		else if(ARRD == 'remove') {
+	// 	else if(ARRD == 'remove') {
 
-			if(macroInfo.type == 'topic') {
+	// 		if(macroInfo.type == 'topic') {
 
-				let request = await accessAPI.manageGroup('removeUser', {
-					topic: macroInfo.name
-				}).then((data) => {
-					if(data.confirmation == true) {
-						setARRD('add')
-					}
-				})
-				setSocketMessage({
-					type: 'simpleNotif',
-					message: `Removed "${macroInfo.name}" from your topics`
-				})
-			}
-			else {
-				let request = await accessAPI.manageGroup('removeUser', {
-					groupID: macroInfo._id,
-				}).then((data) => {
-					if(data.confirmation == true) {
-						if(macroInfo.isMacroPrivate) {
-							setARRD('request')
-							// ARRD = 'request'
-						}
-						else {
-							setARRD('add')
-							// ARRD = 'add'
-						}
-					}
-				})
-				setSocketMessage({
-					type: 'simpleNotif',
-					message: `Removed "${macroInfo.name}" to your tags`
-				})
-			}
-		}
+	// 			let request = await accessAPI.manageGroup('removeUser', {
+	// 				topic: macroInfo.name
+	// 			}).then((data) => {
+	// 				if(data.confirmation == true) {
+	// 					setARRD('add')
+	// 				}
+	// 			})
+	// 			setSocketMessage({
+	// 				type: 'simpleNotif',
+	// 				message: `Removed "${macroInfo.name}" from your topics`
+	// 			})
+	// 		}
+	// 		else {
+	// 			let request = await accessAPI.manageGroup('removeUser', {
+	// 				groupID: macroInfo._id,
+	// 			}).then((data) => {
+	// 				if(data.confirmation == true) {
+	// 					if(macroInfo.isMacroPrivate) {
+	// 						setARRD('request')
+	// 						// ARRD = 'request'
+	// 					}
+	// 					else {
+	// 						setARRD('add')
+	// 						// ARRD = 'add'
+	// 					}
+	// 				}
+	// 			})
+	// 			setSocketMessage({
+	// 				type: 'simpleNotif',
+	// 				message: `Removed "${macroInfo.name}" to your tags`
+	// 			})
+	// 		}
+	// 	}
 
-		else if(ARRD == 'request') {
+	// 	else if(ARRD == 'request') {
 
-			let request = accessAPI.newInteraction({
-				type: 'request',
-				message: 'accessRequested',
-				senderID: userID,
-				recipients: [macroInfo.ownerID],
-				recipientUsernames: macroInfo.ownerUsername,
-				groupID: macroID,
-				groupName: macroInfo.name
-			}).then(data => {
-				if(data.confirmation == true) {
-					console.log('request sent')
+	// 		let request = accessAPI.newInteraction({
+	// 			type: 'request',
+	// 			message: 'accessRequested',
+	// 			senderID: userID,
+	// 			recipients: [macroInfo.ownerID],
+	// 			recipientUsernames: macroInfo.ownerUsername,
+	// 			groupID: macroID,
+	// 			groupName: macroInfo.name
+	// 		}).then(data => {
+	// 			if(data.confirmation == true) {
+	// 				console.log('request sent')
 
-					setSocketMessage({
-						message: `Request for access sent to @${macroInfo.ownerUsername}`,
-						recipients: [macroInfo.ownerID],
-						action: 'updateNotifs'
-					})
-				}
-				else {
-					setSocketMessage({
-						type: 'error',
-						message: data.message
-					})
-				}
-			})
-		}
+	// 				setSocketMessage({
+	// 					message: `Request for access sent to @${macroInfo.ownerUsername}`,
+	// 					recipients: [macroInfo.ownerID],
+	// 					action: 'updateNotifs'
+	// 				})
+	// 			}
+	// 			else {
+	// 				setSocketMessage({
+	// 					type: 'error',
+	// 					message: data.message
+	// 				})
+	// 			}
+	// 		})
+	// 	}
 
-		else if(ARRD == 'add') {
-			if(macroInfo.type == 'topic') {
-				let request = await accessAPI.manageGroup('addUser', {
-					topic: macroInfo.name
-				}).then((data) => {
-					if(data.confirmation == true) {
-						setARRD('remove')
-					}
-				})
-				setSocketMessage({
-					type: 'simpleNotif',
-					message: `Added "${macroInfo.name}" to your topics`
-				})
-			}
-			else {
-				let request = accessAPI.manageGroup('addUser', {
-					groupID: macroInfo._id,
-				}).then((data) => {
-					if(data.confirmation == true) {
-						setARRD('remove')
-					}
-				})
-				setSocketMessage({
-					type: 'simpleNotif',
-					message: `Added "${macroInfo.name}" to your tags`
-				})
-			}
-		}
-	}
+	// 	else if(ARRD == 'add') {
+	// 		if(macroInfo.type == 'topic') {
+	// 			let request = await accessAPI.manageGroup('addUser', {
+	// 				topic: macroInfo.name
+	// 			}).then((data) => {
+	// 				if(data.confirmation == true) {
+	// 					setARRD('remove')
+	// 				}
+	// 			})
+	// 			setSocketMessage({
+	// 				type: 'simpleNotif',
+	// 				message: `Added "${macroInfo.name}" to your topics`
+	// 			})
+	// 		}
+	// 		else {
+	// 			let request = accessAPI.manageGroup('addUser', {
+	// 				groupID: macroInfo._id,
+	// 			}).then((data) => {
+	// 				if(data.confirmation == true) {
+	// 					setARRD('remove')
+	// 				}
+	// 			})
+	// 			setSocketMessage({
+	// 				type: 'simpleNotif',
+	// 				message: `Added "${macroInfo.name}" to your tags`
+	// 			})
+	// 		}
+	// 	}
+	// }
 
 	React.useEffect(()=> {
 

@@ -33,7 +33,6 @@ export default function Macross({
 	const privatePosts_ShowMore = () => {
 		setPrivatePosts_visibleCount(prevCount => prevCount + 20);
 	}
-
 	const collections_ShowMore = () => {
 		collections_visibleCount(prevCount => prevCount + 20);
 	}
@@ -75,6 +74,10 @@ export default function Macross({
 	React.useEffect(()=> {
 		updateMacros();
 	}, []);
+
+	React.useEffect(()=> {
+		updateMacros();
+	}, [current]);
 
 
 

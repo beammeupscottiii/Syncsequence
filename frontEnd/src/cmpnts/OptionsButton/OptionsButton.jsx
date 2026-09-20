@@ -579,13 +579,33 @@ export default function OptionsButton({
 			},
 		];
 
-		const manageMacrosOptions = [
-			{
-				name: 'Close',
-				function: null,
-				display: true
-			}
-		]; 	
+		// const manageMacrosOptions = [
+		// 	{
+		// 		name: 'Close',
+		// 		function: ()=> {
+		// 			setOptionsOpen(false);
+		// 			setSectionClass({
+		// 				...sectionClass,
+		// 				manageMacros: 'leave'
+		// 			});
+
+		// 			let delay = setTimeout(()=> {
+		// 				setCurrent({
+		// 					...current,
+		// 					manageMacros: false,
+		// 				})
+		// 			}, 300)
+		// 			let delay2 = setTimeout(()=> {
+		// 				setSectionClass({
+		// 					...sectionClass,
+		// 					manageMacros: ''
+		// 				})
+		// 				set_ManageMacrosToggle();
+		// 			}, 600)
+		// 		},
+		// 		display: true
+		// 	}
+		// ]; 	
 
 		return {
       profile: profileOptions,
@@ -595,7 +615,7 @@ export default function OptionsButton({
       map: mapOptions,
       calendar: calendarOptions,
       createPost: createPostOptions,
-      manageMacros: manageMacrosOptions
+      // manageMacros: manageMacrosOptions
     };
 	}, [current, isSubmitting, sectionClass]);
 
@@ -603,6 +623,7 @@ export default function OptionsButton({
 		if (current.map) return 'map';
     if (current.calendar) return 'calendar';
     if (current.createPost) return 'createPost';
+    // if (current.manageMacros) return 'manageMacros';
     if (current.section === 'profile' || current.section === 'User') return 'profile';
     if (current.section === 'social') return 'social';
     if (current.section === 'macros') return 'macros';

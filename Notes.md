@@ -6,7 +6,7 @@
 - update <Post> design
 - Update <NotificationList> design
 - Update <Macros> section
-	- same drawer functionality as <Socials>
+	- same drawer functionality as <Socials> ✔️
 	- new <Macros> section options:
   	- Create Tag
   	- Delete Tags
@@ -24,6 +24,49 @@
 S m a l l  A d d s  &  F i x e s
 - add popups for error responses in <createPost>
 - add popup with info or link on to how to set location
+
+
+### 09. 19. 2026
+@2050
+Yeah we'll just build a new <Macrospage> instead
+the options seem to be:
+- add (if public. tag, col.)
+- remove (not owner. tag, col.)
+- delete (if owner. tag, col)
+- request (other user is owner. tag, col)
+- share (is private. tag, col)
+
+running out of brain power needed to think about this further...
+Would need to discern in <OptionsButton> whether macro is owned or not
+
+I dont recall what the current logic is, but private macros aren't add-able
+by other users. I think. 
+Whats the difference between tags and collections then?
+
+Collections are personal, can add posts from other users
+Tags can be public and used by other people.
+Other users can't see private tags macrospage
+Private collections must request addition.
+_________________________________________________________
+
+Alright,
+Public Tags: others can see, add
+Private Tags: others can see via link, cannot add
+Public collections: others can see, add
+Private Collections: others can see via link, must request
+
+So we need to implement feature when a link includes access code for private tag or col.
+the logistics on this can get complicated tho...
+maybe for initial project version, private tags or collections simply cant be seen
+by any other user, at all.
+Or, even more simple, the macrospage post list is blank if it's private
+
+
+
+@2010
+Added exit button to <ManageMacros>
+old <ManageMacros> is fully built according to designs, so we'll
+just move the code to the new one.
 
 
 ### 09. 18. 2026

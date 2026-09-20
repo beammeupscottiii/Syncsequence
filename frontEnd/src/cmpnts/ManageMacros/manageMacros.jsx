@@ -6,6 +6,11 @@ let accessAPI = APIaccess();
 
 
 export default function ManageMacross({
+	current,
+	setCurrent,
+	sectionClass,
+	setSectionClass,
+	set_ManageMacrosToggle,
 	createTagToggle,
 	deleteTagsToggle,
 	newCollectionToggle,
@@ -13,21 +18,49 @@ export default function ManageMacross({
 }) {
 
 
-	// let [modal, setModal] = React.useState({
-	// 	active: false,
-	// 	newTag: false,
-	// 	deleteTag: false,
-	// 	newCollection: false,
-	// 	manageCollections: false
-	// });
+	const createTag = () => {
+		// let body = {
+	    //    type: "tag",
+	    //    name: newTagName,
+	    //    isPrivate: isPrivate,
+	    //    action: 'newTag'
+	    // }
+
+	    // let request = await accessAPI.newGroup(body);
+
+	    // if(request.alreadyExists) {
+
+	    //   setCreatingTag(false);
+
+	    //   triggerPopup({
+	    //       message: `A tag with the name ${newTagName} already exists`, 
+	    //   });
+	    // }
+	    // else if (request.confirm) {
+	    //     triggerPopup({
+	    //       message: `New Tag ${newTagName} created!` 
+	    //     })
+	}
+
+	const deleteTag = () => {
+
+	}
+
+	const createCollection = () => {
+
+	}
+
+	const manageCollection = () => {
+
+	}
 
 	React.useEffect(()=> {
 
-	})
+	}, [])
 
 
 	return (
-		<div id='manageMacros'>
+		<div id='manageMacros' className={`${sectionClass.manageMacros}`}>
 			
 			{createTagToggle &&
 				<div id="createTag">
@@ -52,6 +85,38 @@ export default function ManageMacross({
 					<h2>Manage Collections</h2>
 				</div>
 			}
+
+
+			{/*
+				E X I T  
+				B U T T O N
+			*/}
+			<div id="exitButtonWrapper">
+				<button id="exit" 
+						className={"buttonDefault"} 
+						onClick={(e)=> {
+					e.preventDefault();
+
+					setSectionClass({
+						...sectionClass,
+						manageMacros: 'leave'
+					});
+
+					let delay = setTimeout(()=> {
+						setCurrent({
+							...current,
+							manageMacros: false,
+						})
+					}, 300)
+					let delay2 = setTimeout(()=> {
+						setSectionClass({
+							...sectionClass,
+							manageMacros: ''
+						})
+						set_ManageMacrosToggle();
+					}, 600)	
+				}}>✕</button>
+			</div>
 		</div>
 	)
 }

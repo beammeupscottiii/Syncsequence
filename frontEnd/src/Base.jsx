@@ -188,6 +188,18 @@ function Home({
   const [newCollectionToggle, set_NewCollectionToggle ] = React.useReducer(state => !state, false);
   const [manageCollectionsToggle, set_ManageCollectionsToggle] = React.useReducer(state => !state, false);
 
+  React.useEffect(()=> {
+    if(!manageMacrosToggle) {
+
+      let delay = setTimeout(()=> {
+        if (createTagToggle) set_CreateTagToggle();
+        if (deleteTagsToggle) set_DeleteTagsToggle();
+        if (newCollectionToggle) set_NewCollectionToggle();
+        if (manageCollectionsToggle) set_ManageCollectionsToggle();
+      }, 400)
+
+    }
+  }, [manageMacrosToggle])
 
   //for connection functions in <Profile>
   // const profileContext = React.createContext(null);
@@ -489,7 +501,7 @@ function Home({
                       setDraftsList={setDraftsList}/>
         }
 
-        {/*{(!current.map &&( current.modal && current.section == 'macros')) &&
+        {manageMacrosToggle &&
           <ManageMacros current={current} 
                         setCurrent={setCurrent}
                         set_ManageMacrosToggle={set_ManageMacrosToggle}
@@ -498,9 +510,9 @@ function Home({
                         set_NewCollectionToggle={set_NewCollectionToggle}
                         set_ManageCollectionsToggle={set_ManageCollectionsToggle} 
           />
-        }*/}
+        }
 
-        {manageMacrosToggle &&
+        {/*{manageMacrosToggle &&
           <ManageMacross current={current} 
                          setCurrent={setCurrent}
                          sectionClass={sectionClass}
@@ -511,7 +523,7 @@ function Home({
                          newCollectionToggle={newCollectionToggle}
                          manageCollectionsToggle={manageCollectionsToggle} 
           />
-        }
+        }*/}
         
 
 
@@ -804,26 +816,6 @@ export default function Main() {
             }
           },
           element: 
-            // <UserProfile
-            //       // socket stuff
-            //       socketURL={socketURL}
-            //       socketMessage={socketMessage}
-            //       setSocketMessage={setSocketMessage}
-            //       sendMessage={sendMessage}
-            //       isActive={isActive}
-            //       setActive={setActive}
-            //       accessID={accessID}
-            //       setAccessID={setAccessID}
-            //       unreadCount={unreadCount}
-            //       setUnreadCount={setUnreadCount}
-            //       getUnreadCount={getUnreadCount}
-            //       lastMessage={lastMessage}
-            //       current={current}
-            //       setCurrent={setCurrent}
-            //       // socket stuff
-            //       selectedDate={selectedDate}
-            //       setSelectedDate={setSelectedDate}
-            // />
             <Profile
               current={current}
               setCurrent={setCurrent}
@@ -832,7 +824,8 @@ export default function Main() {
               // accessID={accessID}
               // setAccessID={setAccessID}
               log={log}
-              setLog={setLog}/>
+              setLog={setLog}
+            />
         },
 
         //Macrospage
