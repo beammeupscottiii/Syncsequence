@@ -358,7 +358,7 @@ export default function Profile({
 			})
 		}
 
-		document.title = 'Syncseq.xyz/profile'
+		document.title = `Resync'd | Profile`
 
 		updateProfilePage()
 

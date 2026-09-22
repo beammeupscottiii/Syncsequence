@@ -124,8 +124,8 @@ export default function OptionsButton({
 	set_ManageMacrosToggle,
 	set_CreateTagToggle,
 	set_DeleteTagsToggle,
-	set_newCollectionToggle,
-	set_manageCollectionsToggle
+	set_NewCollectionToggle,
+	set_ManageCollectionsToggle
 }) {
 
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -326,19 +326,45 @@ export default function OptionsButton({
 			},
 			{
 				name: 'Delete Tags',
-				function: null,
+				function: ()=> {
+
+					setCurrent({
+						...current,
+						manageMacros: true
+					})
+					set_ManageMacrosToggle();
+					set_DeleteTagsToggle();
+					setOptionsOpen(false);
+				},
 				class: '',
 				display: true
 			},
 			{
 				name: 'New Collection',
-				function: null,
+				function: ()=> {
+					setCurrent({
+						...current,
+						manageMacros: true
+					})
+					set_ManageMacrosToggle();
+					set_NewCollectionToggle();
+					setOptionsOpen(false);
+				},
 				class: '',
 				display: true
 			},
 			{
 				name: 'Manage Collections',
-				function: null,
+				function: ()=> {
+
+					setCurrent({
+						...current,
+						manageMacros: true
+					})
+					set_ManageCollectionsToggle();
+					set_CreateTagToggle();
+					setOptionsOpen(false);
+				},
 				class: '',
 				display: true
 			},
@@ -579,33 +605,15 @@ export default function OptionsButton({
 			},
 		];
 
-		// const manageMacrosOptions = [
-		// 	{
-		// 		name: 'Close',
-		// 		function: ()=> {
-		// 			setOptionsOpen(false);
-		// 			setSectionClass({
-		// 				...sectionClass,
-		// 				manageMacros: 'leave'
-		// 			});
+		const macrospageOptions = [
+			{
+				name: '',
+				function: null,
+				class: '',
+				display: true
+			},
+		];
 
-		// 			let delay = setTimeout(()=> {
-		// 				setCurrent({
-		// 					...current,
-		// 					manageMacros: false,
-		// 				})
-		// 			}, 300)
-		// 			let delay2 = setTimeout(()=> {
-		// 				setSectionClass({
-		// 					...sectionClass,
-		// 					manageMacros: ''
-		// 				})
-		// 				set_ManageMacrosToggle();
-		// 			}, 600)
-		// 		},
-		// 		display: true
-		// 	}
-		// ]; 	
 
 		return {
       profile: profileOptions,
@@ -615,6 +623,7 @@ export default function OptionsButton({
       map: mapOptions,
       calendar: calendarOptions,
       createPost: createPostOptions,
+      macrosPage: macrospageOptions,
       // manageMacros: manageMacrosOptions
     };
 	}, [current, isSubmitting, sectionClass]);

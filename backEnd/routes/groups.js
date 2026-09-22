@@ -124,7 +124,6 @@ app.post('/create', verify, async (req,res) => {
 
 
 
-
 app.use('/posts', verify, async (req,res) => {
 
     const auth = req.header('auth-token');
@@ -136,7 +135,7 @@ app.use('/posts', verify, async (req,res) => {
     const groupID = req.body.groupID;
     let postID = req.body.postID;
 
-
+    console.log(req.body)
     /**
      * needed vars:
      * groupsID
@@ -238,52 +237,54 @@ app.use('/posts', verify, async (req,res) => {
 
                     res.status(200).send(allPosts);
                 }
+
                 else {
                     
                     let group = await Groups.findOne({_id: groupID});
                     if(group.type == 'tag') {
 
-                    let group = await Groups.findOne({_id: groupID});
-                    let allPosts = await Posts.find({"tags.name": `${group.name}`, 'type': {$ne: "draft"}}).sort({createdAt: -1})
+                        let group = await Groups.findOne({_id: groupID});
+                        let allPosts = await Posts.find({"tags.name": `${group.name}`, 'type': {$ne: "draft"}}).sort({createdAt: -1})
 
-                    allPosts.filter(post => {
-                                if(post.owner != _id) {
+                        allPosts.filter(post => {
+                                    if(post.owner != _id) {
 
-                                    if(post.isPrivate == true) {
-                                        return null;
-                                    }
-                                    else if(post.privacyToggleable == 'On') {
-                                        return null;
-                                    }
-                                    else if(post.privacyToggleable == 'Half') {
-                                        if(user.connections.includes(post.owner) ||
-                                            user.subscriptions.includes(post.owner)) {
-                                            return post;
-                                        }
-                                        else {
+                                        if(post.isPrivate == true) {
                                             return null;
                                         }
+                                        else if(post.privacyToggleable == 'On') {
+                                            return null;
+                                        }
+                                        else if(post.privacyToggleable == 'Half') {
+                                            if(user.connections.includes(post.owner) ||
+                                                user.subscriptions.includes(post.owner)) {
+                                                return post;
+                                            }
+                                            else {
+                                                return null;
+                                            }
+                                        }
+                                        else {
+                                            return post;
+                                        }
                                     }
-                                    else {
-                                        return post;
-                                    }
-                                }
-                    })
+                        })
 
-                    allPosts.sort((a,b) => {
+                        allPosts.sort((a,b) => {
 
-                              const dateA = new Date(a.postedOn_year, a.postedOn_month, a.postedOn_day),
-                                    dateB = new Date(b.postedOn_year, b.postedOn_month, b.postedOn_day);
+                                  const dateA = new Date(a.postedOn_year, a.postedOn_month, a.postedOn_day),
+                                        dateB = new Date(b.postedOn_year, b.postedOn_month, b.postedOn_day);
 
-                              if (dateA > dateB) return -1;
-                              if (dateA < dateB) return 1;
-                              return 0;
-                    })
+                                  if (dateA > dateB) return -1;
+                                  if (dateA < dateB) return 1;
+                                  return 0;
+                        })
 
-                    res.status(200).send(allPosts);
+                        res.status(200).send(allPosts);
 
-                    console.log('here');
+                        console.log('here');
                     }
+
                     else if(group.type == 'collection' || group.type == 'groups') {
 
                         let group = await Groups.findOne({_id: groupID});
@@ -644,7 +645,7 @@ app.use('/posts', verify, async (req,res) => {
                     }
                 })
 
-                console.log(allTags)
+                // console.log(allTags);
 
                 /* Remove any duplicates */
                 let removeDups = (array) => {

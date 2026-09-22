@@ -1,7 +1,6 @@
 section#MACROS {
 	width: 96%;
 	transition-duration: 0.2s;
-/*	margin: 16px auto;*/
 }
 	section#MACROS.up {
 		margin-top: -80px;

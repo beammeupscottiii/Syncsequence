@@ -16,6 +16,7 @@
   		- delete
   		- privatize
 - Update <Macrospage> design
+	- ensure they work + route functions to <OptionsButton>
 - <Messages> to be *added*
 - <EditProfile> to be *added*
 - Color Scheme options in Settings
@@ -25,6 +26,22 @@ S m a l l  A d d s  &  F i x e s
 - add popups for error responses in <createPost>
 - add popup with info or link on to how to set location
 
+
+### 09. 22. 2026
+@1540
+<Macrospage> is reconnected! 
+can move it over to /cmpnts folder.
+Not sure the design needs to be updated all that much outside of the <Log>
+
+To Do Next:
+- Move over to /cmpnts
+- remove 'return' button
+- work on <manageMacros> first
+- then work on fixing + routing <Macrospage> functions to <OptionsButton>
+
+@1125
+Trying to figure out why im getting issue at routes/groups.js line 244 concerning reading
+the type. the groupID for querying a topic should be available, but it's not being read...
 
 ### 09. 19. 2026
 @2050

@@ -146,7 +146,7 @@ function Home({
       topics = topics.split(', ');
       setUserTopics(topics);
 
-      document.title = 'Syncseq.xyz/home';
+      document.title = `Resync'd | Home`;
       updateLog();
       getUnreadCount();
   }, [])
@@ -647,6 +647,8 @@ export default function Main() {
       createPost: '',
       manageConnections: '',
       manageMacros: '',
+      post: '',
+      macrospage: ''
   })
   const [current, setCurrent] = React.useState({
     section: 'home', //0, 1, 2, 3, 4
@@ -816,6 +818,26 @@ export default function Main() {
             }
           },
           element: 
+            // <UserProfile
+            //       // socket stuff
+            //       socketURL={socketURL}
+            //       socketMessage={socketMessage}
+            //       setSocketMessage={setSocketMessage}
+            //       sendMessage={sendMessage}
+            //       isActive={isActive}
+            //       setActive={setActive}
+            //       accessID={accessID}
+            //       setAccessID={setAccessID}
+            //       unreadCount={unreadCount}
+            //       setUnreadCount={setUnreadCount}
+            //       getUnreadCount={getUnreadCount}
+            //       lastMessage={lastMessage}
+            //       current={current}
+            //       setCurrent={setCurrent}
+            //       // socket stuff
+            //       selectedDate={selectedDate}
+            //       setSelectedDate={setSelectedDate}
+            // />
             <Profile
               current={current}
               setCurrent={setCurrent}
@@ -833,7 +855,11 @@ export default function Main() {
           path: '/macros/:macroname/:macroid',
           loader: async({ params }) => {
             let macroInfo = await accessAPI.getTagData(params.macroid, params.macroname);
-            let macroPosts = await accessAPI.groupPosts({action: 'getPosts', groupID: params.macroid, groupName: params.macroname});
+            let macroPosts = await accessAPI.groupPosts({
+              action: 'getPosts',
+              type: macroInfo.response ? macroInfo.response : macroInfo.type, 
+              groupID: params.macroid, 
+              groupName: params.macroname});
              
             let doesHaveAccess;
             if(macroInfo.response == 'topic') {
@@ -871,6 +897,7 @@ export default function Main() {
                 // setUnreadCount={setUnreadCount}
                 // getUnreadCount={getUnreadCount}
                 // lastMessage={lastMessage}
+                sectionClass={sectionClass}
                 current={current}
                 setCurrent={setCurrent}
                 // socket stuff
@@ -1029,9 +1056,9 @@ export default function Main() {
                 // setUnreadCount={setUnreadCount}
                 // getUnreadCount={getUnreadCount}
                 // lastMessage={lastMessage}
+                sectionClass={sectionClass}
                 current={current}
                 setCurrent={setCurrent}
-                // socket stuff
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
                 tags={tags}
