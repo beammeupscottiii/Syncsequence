@@ -1,4 +1,6 @@
-/* * * B a s e  L a y e r * * */
+/* * * 
+  V i T A L s
+ * * */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {useNavigate} from 'react-router-dom';
@@ -17,8 +19,13 @@ import CalInfo from './components/calInfo'
 
 import './Base.css';
 import './components/base/home.css';
+import './components/sections/sections.css';
 
-/* * * C o m p o n e n t s * * */
+/* * * 
+  C o m p o n e n t s 
+    o f
+  H O M E
+* * */
 import Entry from './components/entry/entry';
 import Header from './cmpnts/Header/Header';
 import NotificationList from './components/notifs/notifsList';
@@ -27,19 +34,9 @@ import SectionWrapper from './cmpnts/SectionWrapper/SectionWrapper';
 import OptionsButton from './cmpnts/OptionsButton/OptionsButton';
 import Instants from './cmpnts/Instants/Instants'
 
-import Macrospage from './components/macrospage/macrospage';
-import Post from './components/blog/post';
-import Instant from './components/notifs/instant';
-import UserSettings from './components/base/userSettings';
-import UserProfile from './components/base/userProfile';
-import AboutPage from './components/base/aboutPage';
-
-
-
-/*
-  09. 16. 2025
-  These will technically be temporary
-*/
+/* * * 
+  M a i n  S e c t i o n s 
+* * */
 /* import UserLog from './components/sections/userLog'; */
 import Profile from './cmpnts/Profile/Profile';
 import SocialSection from './cmpnts/Socials/SocialSection';
@@ -47,7 +44,9 @@ import UserLog from './cmpnts/Home/Home';
 import Macross from './cmpnts/Macros/macros';
 import Settings from './cmpnts/Settings/Settings';
 
-/*** Sub Sections ***/
+/* * * 
+  S u b  S e c t i o n s 
+* * */
 // import { CreatePost } from './components/sections/userLog';
 // import { ManageConnections } from './components/sections/socialLog';
 import CreatePostt from "./cmpnts/CreatePost/CreatePost";
@@ -59,11 +58,20 @@ import Mapp from './cmpnts/Map/Map';
 import DragSlider from './components/base/dragSlider';
 import CustomLogEditor from './components/base/customLogEditor/customLogEditor';
 
-import './components/sections/sections.css';
+/* * * 
+  P A G E S 
+***/
+// import Macrospage from './components/macrospage/macrospage';
+import Macrospage from './cmpnts/MacrosPage/macrospage';
+import Post from './components/blog/post';
+import AboutPage from './components/base/aboutPage';
+
+
+
+
 
 /* * * I n i t i a l i z e * * */
 const accessAPI = APIaccess();
-
 
 
 
@@ -76,7 +84,12 @@ function HomeOrEntry({ children }) {
   return authed === true ? ( children ) : <Navigate to="/entry" replace state={{ path: location.pathname }} />
 }
 
-/* * * H O M E  C o m p o n e n t * * */
+
+
+/* * * 
+  H O M E  
+  C o m p o n e n t 
+* * */
 function Home({
   current,
   setCurrent,
@@ -163,7 +176,9 @@ function Home({
   let profileRef = React.useRef();
   let settingsRef = React.useRef();
 
-  //Home section
+  /***
+   * Home section stuff
+  ***/
   const [createPostToggle, setCreatePostToggle] = React.useReducer(state => !state, false);
   const [draftsList, setDraftsList] = React.useReducer(state => !state, false);
 
@@ -177,11 +192,15 @@ function Home({
 
 
 
-  //Social Section
+  /***
+   * Social Section stuff
+   ***/
   const [manageConnectionsToggle, setManageConnectionsToggle] = React.useReducer(state => !state, false);
 
   
-  //Macros Section
+  /***
+   * Macros Section & Macrospage stuff
+   ***/
   const [manageMacrosToggle, set_ManageMacrosToggle] = React.useReducer(state => !state, false);
   const [createTagToggle, set_CreateTagToggle] = React.useReducer(state => !state, false);
   const [deleteTagsToggle, set_DeleteTagsToggle] = React.useReducer(state => !state, false);
@@ -201,18 +220,27 @@ function Home({
     }
   }, [manageMacrosToggle])
 
-  //for connection functions in <Profile>
+
+
+
+
+  /***
+   * Profile stuff
+  ***/
   // const profileContext = React.createContext(null);
   const removeConnectionRef = React.useRef(null);
   const requestConnectionRef = React.useRef(null);
   const subscriptionRequestRef = React.useRef(null);
 
-  //
+  // For when UserProfile loads, to update OptionsButton options
+  // can be  conn, subbed or subber
+  const [viewedUserConnStatus, setViewedUserConnStatus] = React.useState('');
 
-  /* 
-    09. 20. 2025
+
+
+  /*** 
     For Scroll Tracking on div#sections
-  */ 
+  ***/ 
   const [headerVisible, setHeaderVisible] = React.useState(true);
   const [socialPaddingAdjust, setSocialPaddingAdjust] = React.useState(false);
   const scrollAccumulator = React.useRef(0);
@@ -240,14 +268,15 @@ function Home({
     }
   }
 
-  //Conditionals for whether the Header displays the back button
+  
+
+  /***
+   * Conditionals for whether the Header displays the back button
+  ***/
   const isSubPage = location.pathname.includes('/post/') ||
                     location.pathname.includes('/macros') ||
                     location.pathname.includes('/user');
 
-  // For when UserProfile loads, to update OptionsButton options
-  // can be  conn, subbed or subber
-  const [viewedUserConnStatus, setViewedUserConnStatus] = React.useState('');
 
   // for page navigation requiring <Home> to fade in and out
   const navigation = useNavigation();
@@ -709,13 +738,18 @@ export default function Main() {
   const [log, setLog] = React.useState([]);
 
 
-  /* Top Level state for tags */
-  const [tags, setTags] = React.useState([]);
+  
 
   /*
-    For macrospage to discern whether a user already has a topic saved to their profile
+    For macrospage to discern whether a user already 
+    has a topic saved to their profile
   */
+  const [tags, setTags] = React.useState([]);
   const [userTopics, setUserTopics] = React.useState([]);
+  const [collections, setCollections] = React.useState([]);
+
+  
+
 
   
   /*
@@ -842,9 +876,6 @@ export default function Main() {
               current={current}
               setCurrent={setCurrent}
               sectionClass={sectionClass}
-              // refe={profileRef}
-              // accessID={accessID}
-              // setAccessID={setAccessID}
               log={log}
               setLog={setLog}
             />
@@ -991,25 +1022,12 @@ export default function Main() {
             return data;
           },
           element: 
-            <UserProfile
-                  // socket stuff
-                  // socketURL={socketURL}
-                  // socketMessage={socketMessage}
-                  // setSocketMessage={setSocketMessage}
-                  // sendMessage={sendMessage}
-                  // isActive={isActive}
-                  // setActive={setActive}
-                  // accessID={accessID}
-                  // setAccessID={setAccessID}
-                  // unreadCount={unreadCount}
-                  // setUnreadCount={setUnreadCount}
-                  // getUnreadCount={getUnreadCount}
-                  // lastMessage={lastMessage}
-                  current={current}
-                  setCurrent={setCurrent}
-                  // socket stuff
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
+            <Profile
+              current={current}
+              setCurrent={setCurrent}
+              sectionClass={sectionClass}
+              log={log}
+              setLog={setLog}
             />
         },
 

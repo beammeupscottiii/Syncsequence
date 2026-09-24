@@ -30,9 +30,10 @@ export default function UserLog({active, setCurrent, current, log, setLog, secti
 
 	return (
 		<div id="HOMELOG" className={ `${sectionClass.home}` } ref={refe}>
-			<Log data={log} 
-				 section={"user"} 
-				 noHeading={noHeading} 
+			<Log  
+				 // section={"user"} 
+				 // noHeading={noHeading}
+				 data={log} 
 				 current={current} 
 				 setCurrent={setCurrent}
 				 updateLog={updateLog}/>

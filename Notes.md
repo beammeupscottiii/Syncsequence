@@ -27,6 +27,85 @@ S m a l l  A d d s  &  F i x e s
 - add popup with info or link on to how to set location
 
 
+
+### 09. 24. 2026
+@0135
+
+Alright, a user's tags, topics and collections (and probably privatePosts) need to be saved
+to <Main> component. Or do they?
+Gem recommends yes.
+
+Backend must check for all collections whether they are private, and the groupOwner is also
+the requesting user.
+
+*Process
+- add 'UserDocumentSettings' to UIC
+	- to include: lon, lat, location_name, topics, tags, collections, privacySetting, profilePhoto
+	- collection & tag info stored to include: name, id, groupOwner
+- in login subroute on backend, include all these in response object
+- <Macrospage> will draw topics, tags and collections UIC to check whether user has them included
+	or is owner
+- on backend, subroute posts, action:getPosts for tags and collections needs to check whether requesting user is same as groupOwner, and if group is private.
+if yes to all, send appropiate response.
+
+
+
+!!! only userID, userKey and *maybe* userName to be saved in sessionStorage
+
+
+
+
+@0105
+*Piping Functions from Component to OptionsButton
+create function ref within <Base>, 
+- pipe down to component housing function
+- pipe down to <OptionsButton>
+declare function within component
+within useLayoutEffect, set function to it's ref.current
+- cleanup on unmount, within return function, set refs.current to null
+- set ref and function as bottom parameters
+in <OptionsButton>, option runs ref.current()
+
+	React.useLayoutEffect(() => {
+	    if(current.section == 'User') {
+	    	if (removeConnectionRef) {
+		        removeConnectionRef.current = removeConnection;
+		    }
+
+		    // Register Draft Logic
+		    if (requestConnectionRef) {
+		        requestConnectionRef.current = requestConnection;
+		    }
+
+		    if(subscriptionRequestRef) {
+		    	subscriptionRequestRef.current = subscriptionRequest;
+		    }
+
+		    // Cleanup both on unmount
+		    return () => {
+
+		       	if (removeConnectionRef) removeConnection.current = null;
+				if (requestConnectionRef) requestConnection.current = null;
+				if (subscriptionRequestRef) subscriptionRequest.current = null;
+		    };
+	    }
+	}, [removeConnectionRef, requestConnectionRef, subscriptionRequestRef,
+		removeConnection, requestConnection, subscriptionRequest ]);
+
+
+
+
+@0940
+Gonna work on setting up routing <Macrospage> options to <OptionsButton>
+
+
+### 09. 23. 2026
+@1900
+May need to figure out a new way of removing posts from groups, in general. 
+I think the best option may be 'selectionMode' in <log>, where selecting
+posts exports the collection of IDs to another function doing the api call. 
+
+
 ### 09. 22. 2026
 @1540
 <Macrospage> is reconnected! 
@@ -34,10 +113,19 @@ can move it over to /cmpnts folder.
 Not sure the design needs to be updated all that much outside of the <Log>
 
 To Do Next:
-- Move over to /cmpnts
+- fix <Log> design in <Macrospage> ✔️
+- Move over to /cmpnts ✔️
 - remove 'return' button
 - work on <manageMacros> first
 - then work on fixing + routing <Macrospage> functions to <OptionsButton>
+
+
+<Macrospage> needs to determine:
+if collection is public or private,
+if currently viewing user is owner, if private:
+
+Pretty much needs to follow similar logic pattern as <Profile> for <OptionsButton>
+
 
 @1125
 Trying to figure out why im getting issue at routes/groups.js line 244 concerning reading
