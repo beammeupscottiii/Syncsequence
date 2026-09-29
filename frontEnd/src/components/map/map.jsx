@@ -16,6 +16,7 @@ import Control from 'ol/control/Control';
 import Header from '../../components/base/header';
 
 import {useNavigate} from 'react-router-dom';
+import { useUIC } from '../../UIcontext';
 import APIaccess from '../../apiaccess';
 import Log from '../blog/log';
 import 'ol/ol.css';
@@ -73,7 +74,9 @@ export default function MapComponent ({
 }) {
 
 	const navigate = useNavigate();
+	const {} = useUIC();
 	const [mapState, setMapState] = React.useState(null);
+	const { userSettings, setUserSettings } = useUIC();
 	const [currentCenter, setCurrentCenter] = React.useState(
 		[sessionStorage.getItem('settings_preferredLocation_lon'),
 		sessionStorage.getItem('settings_preferredLocation_lat')]
@@ -549,10 +552,13 @@ export default function MapComponent ({
 		})
 
 		if(request.confirmation == true) {
-			setSocketMessage({
-				type: 'simpleNotif',
-				message: `Default Location saved to ${locationName}`
-			})
+			// setSocketMessage({
+			// 	type: 'simpleNotif',
+			// 	message: `Default Location saved to ${locationName}`
+			// })
+			triggerPopup({
+                message: `Default Location saved to ${locationName}`, 
+            });
 		}
 	}
 
@@ -654,14 +660,10 @@ export default function MapComponent ({
   			return;
   		}
 
-  		// if(selectedPlace.name == searchTerm) {
-  		// 	return;
-  		// }
-
   		getLocationSuggestions(searchTerm)
   	}, [searchTerm])
 
-
+  	//check this next
   	const handleSelectSuggestion = async(place) => {
 
   		const response = await accessAPI.userSettings({
@@ -680,17 +682,30 @@ export default function MapComponent ({
 		const update = await accessAPI.userSettings({
   			option: 'updateLocation',
   			name: place.description,
+  			city: place.city,
+  			state: place.state,
   			lonLat: response.lonLat
   		})
 
-  		sessionStorage.setItem('settings_preferredLocation_lon', response.lonLat[0]);
-  		sessionStorage.setItem('settings_preferredLocation_lat', response.lonLat[1]);
-  		sessionStorage.setItem('settings_preferredLocation_name', place.description);
+		//replace with userSettings.lon & lat
+		setUserSettings({
+			...userSettings,
+			lon: response.lonLat[0],
+			lat: response.lonLat[1]
+			location_city: place.city,
+			location_state: place.state
+		})
+  		// sessionStorage.setItem('settings_preferredLocation_lon', response.lonLat[0]);
+  		// sessionStorage.setItem('settings_preferredLocation_lat', response.lonLat[1]);
+  		// sessionStorage.setItem('settings_preferredLocation_name', place.description);
 
-  		setSocketMessage({
-	  		type: 'simpleNotif',
-	  		message: 'Default Location updated!'
-	  	})	
+  		// setSocketMessage({
+	  	// 	type: 'simpleNotif',
+	  	// 	message: 'Default Location updated!'
+	  	// })
+	  	triggerPopup({
+            message: `Default Location updated!`, 
+        });	
   	}
 
   	const handleClearSelection = () => {
@@ -950,7 +965,7 @@ export default function MapComponent ({
 						              className=""
 						              onClick={() => handleSelectSuggestion(place)}
 						            >
-						              {place.description}
+						              {place.name}
 						            </li>
 						          ))}
 						       </ul>

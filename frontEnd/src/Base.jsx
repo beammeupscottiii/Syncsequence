@@ -102,8 +102,8 @@ function Home({
   setLog,
   navOptions,
   setNavOptions,
-  tags,
-  setTags,
+  // tags,
+  // setTags,
   userTopics,
   setUserTopics,
   sectionClass,
@@ -155,10 +155,6 @@ function Home({
   } 
 
   React.useEffect(()=> {
-      let topics = sessionStorage.getItem('topicsAsString');
-      topics = topics.split(', ');
-      setUserTopics(topics);
-
       document.title = `Resync'd | Home`;
       updateLog();
       getUnreadCount();
@@ -471,10 +467,10 @@ function Home({
             <Macross
               current={current} 
               setCurrent={setCurrent}
-              tags={tags}
-              setTags={setTags} 
-              userTopics={userTopics}
-              setUserTopics={setUserTopics}
+              // tags={tags}
+              // setTags={setTags} 
+              // userTopics={userTopics}
+              // setUserTopics={setUserTopics}
               sectionClass={sectionClass}
               refe={macrosRef}
               socialPaddingAdjust={socialPaddingAdjust}
@@ -541,18 +537,18 @@ function Home({
           />
         }
 
-        {/*{manageMacrosToggle &&
+        {manageMacrosToggle &&
           <ManageMacross current={current} 
                          setCurrent={setCurrent}
                          sectionClass={sectionClass}
                          setSectionClass={setSectionClass}
                          set_ManageMacrosToggle={set_ManageMacrosToggle}
                          createTagToggle={createTagToggle}
-                         deleteTagsToggle={deleteTagsToggle}
+                         // deleteTagsToggle={deleteTagsToggle}
                          newCollectionToggle={newCollectionToggle}
                          manageCollectionsToggle={manageCollectionsToggle} 
           />
-        }*/}
+        }
         
 
 
@@ -657,12 +653,19 @@ function Home({
 export default function Main() {
 
   /**
-   * W e b  S o c k e t
-   * A n d
-   * N o t i f i c a t i o n s
+   * T O P
+   *  L E V E L
+   *    V I T A L S
    */
-  const { authed, unreadCount, setUnreadCount, getUnreadCount } = useUIC();
-  let userID = sessionStorage.getItem('userID');
+  const userID = sessionStorage.getItem('userID');
+  const { 
+    authed, 
+    unreadCount, 
+    setUnreadCount, 
+    getUnreadCount,
+    userSettings,
+    setUserSettings 
+  } = useUIC();
     
   const [sectionClass, setSectionClass] = React.useState({
       profile: 'enter',
@@ -714,12 +717,6 @@ export default function Main() {
   })
 
 
-  const [mapData, setMapData] = React.useState({
-    currentCity: 'NY',
-    currentState: 'NYC'
-  })
-
-
   let [initialLogin, setInitialLogin] = React.useState(true);
   if(initialLogin == true) {
     setCurrent({
@@ -738,16 +735,31 @@ export default function Main() {
   const [log, setLog] = React.useState([]);
 
 
-  
+  /* Update User Settings Every Refresh */
 
-  /*
-    For macrospage to discern whether a user already 
-    has a topic saved to their profile
-  */
-  const [tags, setTags] = React.useState([]);
-  const [userTopics, setUserTopics] = React.useState([]);
-  const [collections, setCollections] = React.useState([]);
+  const updateUserSettings = async() => {
+    let request = await accessAPI.userSettings({
+      option: 'getUserSettings'
+    })
 
+    console.log(request)
+
+    setUserSettings({
+      lon: request.lon, 
+      lat: request.lat, 
+      location_city: request.location_city,
+      location_state: request.location_state, 
+      topics: request.topics, 
+      tags: request.tags, 
+      collections: request.collections, 
+      privacySetting: request.privacySetting, 
+      profilePhoto: request.profilePhoto
+    })
+  }
+
+  React.useEffect(()=> {
+    updateUserSettings();
+  }, [])
   
 
 
@@ -790,15 +802,15 @@ export default function Main() {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
 
-              mapData={mapData}
-              setMapData={setMapData}
+              // mapData={mapData}
+              // setMapData={setMapData}
 
               log={log}
               setLog={setLog}
-              tags={tags}
-              setTags={setTags}
-              userTopics={userTopics}
-              setUserTopics={setUserTopics}
+              // tags={tags}
+              // setTags={setTags}
+              // userTopics={userTopics}
+              // setUserTopics={setUserTopics}
 
               sectionClass={sectionClass}
               setSectionClass={setSectionClass}
@@ -934,10 +946,10 @@ export default function Main() {
                 // socket stuff
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
-                tags={tags}
-                setTags={setTags}
-                userTopics={userTopics}
-                setUserTopics={setUserTopics}
+                // tags={tags}
+                // setTags={setTags}
+                // userTopics={userTopics}
+                // setUserTopics={setUserTopics}
               />
         },
       ]
@@ -969,15 +981,15 @@ export default function Main() {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
 
-              mapData={mapData}
-              setMapData={setMapData}
+              // mapData={mapData}
+              // setMapData={setMapData}
 
               log={log}
               setLog={setLog}
-              tags={tags}
-              setTags={setTags}
-              userTopics={userTopics}
-              setUserTopics={setUserTopics}
+              // tags={tags}
+              // setTags={setTags}
+              // userTopics={userTopics}
+              // setUserTopics={setUserTopics}
 
               sectionClass={sectionClass}
               setSectionClass={setSectionClass}
@@ -1079,10 +1091,10 @@ export default function Main() {
                 setCurrent={setCurrent}
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
-                tags={tags}
-                setTags={setTags}
-                userTopics={userTopics}
-                setUserTopics={setUserTopics}
+                // tags={tags}
+                // setTags={setTags}
+                // userTopics={userTopics}
+                // setUserTopics={setUserTopics}
               />
         },
       ]

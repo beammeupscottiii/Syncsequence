@@ -14,6 +14,7 @@ import { Circle as CircleStyle, Fill, Stroke, Style, Text} from 'ol/style';
 import Control from 'ol/control/Control';
 
 import {useNavigate} from 'react-router-dom';
+import { useUIC } from '../../UIcontext';
 import APIaccess from '../../apiaccess';
 import Log from '../Log/Log';
 import 'ol/ol.css';
@@ -72,11 +73,9 @@ export default function Mapp ({
 }) {
 
 	const navigate = useNavigate();
+	const { triggerPopup, userSettings, setUserSettings } = useUIC();
 	const [mapState, setMapState] = React.useState(null);
-	const [currentCenter, setCurrentCenter] = React.useState(
-		[sessionStorage.getItem('settings_preferredLocation_lon'),
-		sessionStorage.getItem('settings_preferredLocation_lat')]
-	);
+	const [currentCenter, setCurrentCenter] = React.useState([userSettings.lon, userSettings.lat]);
 	const [markers, setMarkers] = React.useState([
 		// { 
 		// 	id: 1, 
@@ -531,10 +530,9 @@ export default function Mapp ({
 		})
 
 		if(request.confirmation == true) {
-			setSocketMessage({
-				type: 'simpleNotif',
-				message: `Default Location saved to ${locationName}`
-			})
+			triggerPopup({
+                message: `Default Location saved to ${locationName}`, 
+            });
 		}
 	}
 
@@ -569,9 +567,9 @@ export default function Mapp ({
 	/* For Map Settings */
 	const [selectedPlace, setSelectedPlace] = React.useState(null); // Only allow one selection
   	const [suggestions, setSuggestions] = React.useState([]);
-  	const [searchTerm, setSearchTerm] = React.useState(
-  		sessionStorage.getItem('settings_preferredLocation_name') ?
-  		sessionStorage.getItem('settings_preferredLocation_name') : ''  );
+  	const [searchTerm, setSearchTerm] = React.useState( 
+  		userSettings.location_city ? 
+  		`${userSettings.location_city}, ${userSettings.location_state}`: '' );
   	const [inputType, setInputType] = React.useState("");
   	const [loadingResults, setLoadingResults] = React.useState(false);
   	const inputRef = React.useRef(null);
@@ -612,17 +610,14 @@ export default function Mapp ({
   		const value = e.target.value;
   		setInputType(e.nativeEvent.inputType);
   		setSearchTerm(value)
-
-  		// if (e.nativeEvent.inputType === "deleteContentBackward") {
-		//     return;
-		// }
   	}
 
   	React.useEffect(()=> {
 
   		console.log(searchTerm.length);
 
-  		if(searchTerm == sessionStorage.getItem('settings_preferredLocation_name')) {
+  		// if(searchTerm == sessionStorage.getItem('settings_preferredLocation_name')) {
+  		if(searchTerm.includes(userSettings.location_city)) {
   			return;
   		}
 
@@ -630,15 +625,14 @@ export default function Mapp ({
 	      	return;
 	    }
 
-  		if(searchTerm.length < 2) {
-  			console.log('empty')
-  			setSuggestions([]);
-  			return;
-  		}
-
-  		// if(selectedPlace.name == searchTerm) {
-  		// 	return;
-  		// }
+	    if(searchTerm) {
+	    	if(searchTerm?.length < 2) {
+	  			console.log('empty')
+	  			setSuggestions([]);
+	  			return;
+	  		}
+	    }
+  		
 
   		getLocationSuggestions(searchTerm)
   	}, [searchTerm])
@@ -652,27 +646,35 @@ export default function Mapp ({
   		});
 
   		setSelectedPlace({
-  			name: place.description,
+  			name: place.name,
   			lonLat: response.lonLat
   		})
 
   		setSuggestions([]);
-  		setSearchTerm(place.description);
+  		setSearchTerm(place.name);
 
-		const update = await accessAPI.userSettings({
+  		const update = await accessAPI.userSettings({
   			option: 'updateLocation',
   			name: place.description,
+  			city: place.city,
+  			state: place.state,
   			lonLat: response.lonLat
   		})
 
-  		sessionStorage.setItem('settings_preferredLocation_lon', response.lonLat[0]);
-  		sessionStorage.setItem('settings_preferredLocation_lat', response.lonLat[1]);
-  		sessionStorage.setItem('settings_preferredLocation_name', place.description);
+		//replace with userSettings.lon & lat
+		setUserSettings({
+			...userSettings,
+			lon: response.lonLat[0],
+			lat: response.lonLat[1],
+			location_city: place.city,
+			location_state: place.state
+		})
 
-  		setSocketMessage({
-	  		type: 'simpleNotif',
-	  		message: 'Default Location updated!'
-	  	})	
+		setCurrentCenter([response.lonLat[0], response.lonLat[1]]);
+
+	  	triggerPopup({
+            message: `Default location updated!`, 
+        });	
   	}
 
   	const handleClearSelection = () => {
@@ -715,6 +717,7 @@ export default function Mapp ({
 					<p>Function Pending</p>
 				}
 			</div>	
+
 
 			{/* T H I S  I S  T H E  O L  M A P */}
 			<div id="ol_map" ref={mapRef}></div>
@@ -937,7 +940,7 @@ export default function Mapp ({
 						              className=""
 						              onClick={() => handleSelectSuggestion(place)}
 						            >
-						              {place.description}
+						              {place.name}
 						            </li>
 						          ))}
 						       </ul>

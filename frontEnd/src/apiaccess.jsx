@@ -117,24 +117,30 @@ export default function APIaccess(key) {
 				sessionStorage.setItem('userKey', userToken);
 				sessionStorage.setItem('userID', userInfo._id);
 				sessionStorage.setItem('userName', userInfo._username);
-				sessionStorage.setItem('profilePhoto', request.profilePhoto);
-				sessionStorage.setItem('privacySetting', request.privacySetting);
+				// sessionStorage.setItem('profilePhoto', request.profilePhoto);
+				// sessionStorage.setItem('privacySetting', request.privacySetting);
 
 
-				let topicsAsString = request.settings.topics.join(', ');
-				console.log(topicsAsString);
-				console.log(request.settings);
-				sessionStorage.setItem('topicsAsString', topicsAsString);
+				// let topicsAsString = request.settings.topics.join(', ');
+				// console.log(topicsAsString);
+				// console.log(request.settings);
+				// sessionStorage.setItem('topicsAsString', topicsAsString);
 
 				return {
 					confirm: true,
-					settings: request.settings
+					userSettings: request.userSettings
 				}
 
 			} else if (request.error == true) {
 				console.log(request);
 				return request.message
 			}	
+		},
+
+		async getUserSettings() {
+
+
+
 		},	
 
 		async pullUserLog(data) {

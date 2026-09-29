@@ -206,13 +206,56 @@ app.post('/login', async (req, res) => {
         console.log(JWTpayload)
 
         const signature = JWT.sign(JWTpayload, process.env.TOKEN_SECRET);
+        // res.status(200).send({
+        //     confirm: true, 
+        //     JWT: signature, 
+        //     profilePhoto: user.profilePhoto,
+        //     privacySetting: user.privacySetting,
+        //     settings: user.settings
+        // });
+
+        const userTags = await Groups.find({hasAccess: user._id, type: 'tag'});
+
+        let collections = await Groups.find(
+            {admins: {$elemMatch: {$eq: user._id}}, 
+            type: 'collection'}
+        );
+
+        if(collections.length > 0) {
+
+            let bookmarks = collections.filter(col => col.name == 'BOOKMARKS')[0];
+            collections = collections.filter(col => col.name != 'BOOKMARKS');
+            collections.unshift(bookmarks);
+        }
+
+        let userCollections = collections.map( col => {
+            return {
+                id: col._id,
+                name: col.name,
+                ownerID: col.admins[0],
+                ownerUsername: col.ownerUsername,
+                isPrivate: col.isPrivate
+            }
+        }) 
+
         res.status(200).send({
-            confirm: true, 
-            JWT: signature, 
-            profilePhoto: user.profilePhoto,
-            privacySetting: user.privacySetting,
-            settings: user.settings
-        });
+            confirm: true,
+            JWT: signature,
+            //for userSettings in UIC
+            userSettings: {
+                lon: user.settings.preferredLocation.lonLat[0] ? user.settings.preferredLocation.lonLat[0] : null, 
+                lat: user.settings.preferredLocation.lonLat[1] ? user.settings.preferredLocation.lonLat[1] : null, 
+                location_city: user.settings.preferredLocation.city ? user.settings.preferredLocation.city : null,
+                location_state: user.settings.preferredLocation.state ? user.settings.preferredLocation.state : null, 
+                //is array of strings
+                topics: user.settings.topics ? user.settings.topics : [],  
+                tags: userTags ? userTags : [], 
+                collections: userCollections ? userCollections : [], 
+                privacySetting: user.privacySetting, 
+                profilePhoto: user.profilePhoto ? user.profilePhoto : null
+            }
+        })
+
         //res.send(JWTpayload);
         //this info needs to be within user request headers whenever performing account operations.
         
@@ -1292,13 +1335,46 @@ app.post('/settings', verify, upload.any(), async(req, res)=> {
 
         if(req.body.option == 'getUserSettings') {
             
-            let settings = {
-                profilePhoto: user.profilePhoto,
-                biography: user.bio,
-                privacy: user.privacySetting,
-                invites: user.invites.length
+            console.log(user.settings);
+            console.log(user.settings.preferredLocation);
+
+            let userTags = await Groups.find({hasAccess: user._id, type: 'tag'});
+            let collections = await Groups.find(
+                {admins: {$elemMatch: {$eq: user._id}}, 
+                type: 'collection'}
+            );
+
+            if(collections.length > 0) {
+
+                let bookmarks = collections.filter(col => col.name == 'BOOKMARKS')[0];
+                collections = collections.filter(col => col.name != 'BOOKMARKS');
+                collections.unshift(bookmarks);
             }
-            res.status(200).send(settings);
+
+            let userCollections = collections.map( col => {
+                return {
+                    id: col._id,
+                    name: col.name,
+                    ownerID: col.admins[0],
+                    ownerUsername: col.ownerUsername,
+                    isPrivate: col.isPrivate
+                }
+            }) 
+
+            let userSettings = {
+                lon: user.settings.preferredLocation.lonLat[0] ? user.settings.preferredLocation.lonLat[0] : null, 
+                lat: user.settings.preferredLocation.lonLat[1] ? user.settings.preferredLocation.lonLat[1] : null, 
+                location_city: user.settings.preferredLocation.city ? user.settings.preferredLocation.city : null,
+                location_state: user.settings.preferredLocation.state ? user.settings.preferredLocation.state : null, 
+                //is array of strings
+                topics: user.settings.topics ? user.settings.topics : [],  
+                tags: userTags ? userTags : [], 
+                collections: userCollections ? userCollections : [], 
+                privacySetting: user.privacySetting, 
+                profilePhoto: user.profilePhoto ? user.profilePhoto : null
+            }
+
+            res.status(200).send(userSettings);
         }
 
         else if(req.body.option == 'logout') {}
@@ -1439,7 +1515,8 @@ app.post('/settings', verify, upload.any(), async(req, res)=> {
         else if(req.body.option == 'updateLocation') {
 
             let newData = {
-                city: req.body.name,
+                city: req.body.city,
+                state: req.body.state,
                 lonLat: req.body.lonLat
             }
 
@@ -1463,6 +1540,7 @@ app.post('/settings', verify, upload.any(), async(req, res)=> {
             const data = await response.json();
 
             console.log(data);
+            console.log(data.result.geometry.location);
 
             let lonLat;
 
@@ -1470,7 +1548,9 @@ app.post('/settings', verify, upload.any(), async(req, res)=> {
                 lonLat = [data.result.geometry.location.lng, data.result.geometry.location.lat]
             }
 
-            res.status(200).send({lonLat: lonLat});
+            res.status(200).send({
+                lonLat: lonLat
+            });
         }
 
         else if(req.body.option == 'searchLocation') {
@@ -1516,9 +1596,14 @@ app.post('/settings', verify, upload.any(), async(req, res)=> {
                         cleanedName = `${city}, ${country}`;
                     }
 
+                    let city = terms[0].value;
+                    let state = terms[numTerms - 1].value == ('USA' || 'United States') ? terms[1].value : terms[numTerms - 1].value;
+
                     return {
                         name: cleanedName.trim(),
-                        place_id: place.place_id
+                        place_id: place.place_id,
+                        city: city,
+                        state: state
                     };
                 });
 

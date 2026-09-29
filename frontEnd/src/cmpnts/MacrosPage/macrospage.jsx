@@ -25,20 +25,19 @@ export default function Macrospage({
     set_selectedDate,
     current,
     setCurrent,
-    tags,
-    setTags,
-    userTopics,
-    setUserTopics
+    // tags,
+    // setTags,
+    // userTopics,
+    // setUserTopics
 }) {
 
 	const userID = sessionStorage.getItem('userID');
-	let userSettings = sessionStorage.getItem('settings');
 	const data = useLoaderData();
 	const navigate = useNavigate();
 	const [postData, setPostData] = React.useState(data.macroPosts);
 	const [macroInfo, setMacroInfo] = React.useState(data.macroInfo);
 	const macroID = macroInfo._id;
-	const { baseRef, setPrevSection, prevSection } = useUIC();
+	const { baseRef, setPrevSection, prevSection, userSettings } = useUIC();
 
 	console.log(macroInfo)
 	console.log(postData)
@@ -230,13 +229,13 @@ export default function Macrospage({
 		document.title = `Resync'd | Macro`
 
 		console.log(macroInfo.name)
-		console.log(userTopics.includes(macroInfo.mame))
-		if(userTopics.includes(macroInfo.mame)) {
-			setMacroInfo({
-				...macroInfo,
-				userHasAccess: true
-			})
-		}
+		// console.log(userTopics.includes(macroInfo.mame))
+		// if(userTopics.includes(macroInfo.mame)) {
+		// 	setMacroInfo({
+		// 		...macroInfo,
+		// 		userHasAccess: true
+		// 	})
+		// }
 		console.log(macroInfo);
 	}, [])
 

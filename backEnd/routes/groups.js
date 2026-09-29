@@ -241,6 +241,11 @@ app.use('/posts', verify, async (req,res) => {
                 else {
                     
                     let group = await Groups.findOne({_id: groupID});
+
+                    if(group.isPrivate == true && (_id !== group.admins[0])) {
+                        res.status(401).send({error: `user doesn't have permission to view this group`})
+                    }
+
                     if(group.type == 'tag') {
 
                         let group = await Groups.findOne({_id: groupID});
@@ -676,6 +681,7 @@ app.use('/posts', verify, async (req,res) => {
                     type: 'collection'}
                 );
 
+                //add bookmarks to top of list if there are more than ...1? bookmarks
                 if(userCollections.length > 0) {
 
                     let bookmarks = userCollections.filter(col => col.name == 'BOOKMARKS')[0];

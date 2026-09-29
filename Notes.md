@@ -16,21 +16,103 @@
   		- delete
   		- privatize
 - Update <Macrospage> design
-	- ensure they work + route functions to <OptionsButton>
+	- route functions to <OptionsButton> + ensure they work 
 - <Messages> to be *added*
 - <EditProfile> to be *added*
 - Color Scheme options in Settings
 - Transition from openMaps to mapbox
 
 S m a l l  A d d s  &  F i x e s
+- <Map> needs to update it's socketMessage notifs with triggerPopUp.... ✔️
 - add popups for error responses in <createPost>
 - add popup with info or link on to how to set location
+- when closing <Map> , <NavBar> title shows 'washome' before converting back to Home,
+	should fix this...
+- clicking on post dot in <Map> also opens 'filter posts by'. needs fix
 
+
+
+### 09. 29. 2026 [current]
+@1220
+And now for some reason, <Macrospage> is broken (._. )_
+
+Drop component in Gem, let em know the changes, see if it can pinpoint why
+it's looping on sending api requests.
+
+AND nvm,
+removing the old state vars fixed it.
+'testTag' is new though and causing backEnd to break
+
+
+@1205
+fixed issue with app crashing upon updating preferredLocation in <Map>
+- when closing <Map> , <NavBar> title shows 'washome' before converting back to Home,
+	should fix this...
+- clicking on post dot in <Map> also opens 'filter posts by'. needs fix
+
+To Do Next:
+- ReAdd functions to <Macros>
+- AARD functions within <Macrospage>
+
+
+
+### 09. 28. 2026
+@2130
+preferredLocation updates correctly on the backEnd, but frontEnd crashing after 
+option selection
+
+
+
+### 09. 25. 2026
+@1755
+
+MAKE SURE
+- private tags or collections cannot be viewed by other users
+	- posts should show list of tags in post
+- can update user's preferred location using <Map> ✔️
+
+- Also, <Map> needs to update it's socketMessage notifs with triggerPopUp.... ✔️
+
+
+@1315
+userSettings now saved in UIC
+
+Next:
+- on backend, subroute posts, action:getPosts for tags and collections needs to check whether 					requesting user is same as groupOwner, and if group is private. ✔️
+	if yes to all, send appropiate response.
+	-	added if (group.isPrivate == true && (_id_ !== group.admins[0])) statement before the others
+		discerning for tagsor col or groups
+
+- find where: 
+	sessionStorage.getItem('settings_preferredLocation ✔️
+	sessionStorage.getItem('profilePhoto' ✔️
+	sessionStorage.getItem('privacySetting' ✔️
+	are used on frontEnd, replace with userSettings from UIC
+
+- Then work on AARD functions within <Macrospage>
+	- maybe we could put the viewed macro's ID in current state, then compare it to userID
+		to determine what shows
+
+
+@0915
+tags have .ownerUsername and .isPrivate. I imagine if both are true, then the tag or col is 
+private. macrospage needs to get this info...
+
+to do next:
+in entry, pass res.userSettings to _login_ function
+modify login function to accept it, and to add the fields to local userSettings state.
+
+Also, ask Gem to evaluate redundant code in the login component T-T
+
+sessionStorage.setItem('settings_preferredLocation*) are probably being used in other
+places... find them, switch to using userSettings info from UIC
+sessionStorage.setItem('profilePhoto'
+sessionStorage.setItem('privacySetting'
+these two also
 
 
 ### 09. 24. 2026
 @0135
-
 Alright, a user's tags, topics and collections (and probably privatePosts) need to be saved
 to <Main> component. Or do they?
 Gem recommends yes.
@@ -39,10 +121,11 @@ Backend must check for all collections whether they are private, and the groupOw
 the requesting user.
 
 *Process
-- add 'UserDocumentSettings' to UIC
+- add 'UserDocumentSettings' to UIC ✔️
 	- to include: lon, lat, location_name, topics, tags, collections, privacySetting, profilePhoto
 	- collection & tag info stored to include: name, id, groupOwner
-- in login subroute on backend, include all these in response object
+- in login subroute on backend, include all these in response object ✔️
+
 - <Macrospage> will draw topics, tags and collections UIC to check whether user has them included
 	or is owner
 - on backend, subroute posts, action:getPosts for tags and collections needs to check whether requesting user is same as groupOwner, and if group is private.

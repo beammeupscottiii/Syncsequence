@@ -885,7 +885,7 @@ export default function CreatePostt ({
 }) {
 
   const navigate = useNavigate();
-	const { triggerPopup } = useUIC();
+	const { triggerPopup, userSettings, setUserSettings } = useUIC();
 	const userID = sessionStorage.getItem('userID');
 	const username = sessionStorage.getItem('userName');
 	const privacySetting = sessionStorage.getItem('privacySetting');
@@ -996,8 +996,10 @@ export default function CreatePostt ({
 			submission.append('type', 'entry');
 			submission.append('title', formData.title ? formData.title : title.value);
 			submission.append('isPrivate', isPrivate);
-			submission.append('privacyTogglable', sessionStorage.getItem('privacySetting'));
-			submission.append('profilePhoto', sessionStorage.getItem('profilePhoto'));
+			// submission.append('privacyTogglable', sessionStorage.getItem('privacySetting'));
+      submission.append('privacyTogglable', userSettings.privacySetting)
+			// submission.append('profilePhoto', sessionStorage.getItem('profilePhoto'));
+      submission.append('profilePhoto', userSettings.profilePhoto);
 
 			for(let i=0; i < postContent.length; i++) {
 
@@ -1130,8 +1132,10 @@ export default function CreatePostt ({
 			submission.append('type', 'draft');
 			submission.append('title', formData.title);
 			submission.append('isPrivate', isPrivate);
-			submission.append('privacyTogglable', sessionStorage.getItem('privacySetting'));
-			submission.append('profilePhoto', sessionStorage.getItem('profilePhoto'));
+			// submission.append('privacyTogglable', sessionStorage.getItem('privacySetting'));
+      submission.append('privacyTogglable', userSettings.privacySetting)
+			// submission.append('profilePhoto', sessionStorage.getItem('profilePhoto'));
+      submission.append('profilePhoto', userSettings.profilePhoto);
 
 			for(let i=0; i < postContent.length; i++){
 				if(postContent[i].type == 'text') {

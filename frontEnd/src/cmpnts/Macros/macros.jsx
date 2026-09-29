@@ -3,24 +3,30 @@ import APIaccess from '../../apiaccess';
 import {useNavigate} from 'react-router-dom';
 import './macros.css';
 
+import { useUIC } from '../../UIcontext';
 let accessAPI = APIaccess();
 
 export default function Macross({
 	current, 
 	setCurrent, 
-	tags, 
-	setTags, 
-	userTopics, 
-	setUserTopics, 
+	// tags, 
+	// setTags, 
+	// userTopics, 
+	// setUserTopics, 
 	sectionClass,
 	refe,
 	socialPaddingAdjust
 }) {
 
 	const userID = sessionStorage.getItem('userID');
+	const {
+		userSettings,
+		setUserSettings
+	} = useUIC();
 	const navigate = useNavigate();
 
 	let [tagsSection, toggleTags] = React.useReducer(state => !state, true);
+	let [tags, setTags] = React.useState(userSettings.tags);
 
 	let [privatePostsSection, togglePrivatePosts] = React.useReducer(state => !state, false);
 	let [privatePosts_visibleCount, setPrivatePosts_visibleCount] = React.useState(6);

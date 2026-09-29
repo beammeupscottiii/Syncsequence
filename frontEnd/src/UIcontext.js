@@ -30,16 +30,20 @@ export function UIContextProvider({ children }) {
 			if(request.confirm == true) {
 				if(sessionStorage.getItem('userKey')) {
 
-					//setColorScheme to options set in request.settings.colorScheme
+					setUserSettings({
+						lon: request.userSettings.lon, 
+				  	lat: request.userSettings.lat, 
+				  	location_city: request.userSettings.location_city,
+				  	location_state: request.userSettings.location_state, 
+				  	topics: request.userSettings.topics, 
+				  	tags: request.userSettings.tags, 
+				  	collections: request.userSettings.collections, 
+				  	privacySetting: request.userSettings.privacySetting, 
+				  	profilePhoto: request.userSettings.profilePhoto
+					});
 
-					sessionStorage.setItem('settings_preferredLocation_name', request.settings.preferredLocation.city ? request.settings.preferredLocation.city : null);
-					sessionStorage.setItem('settings_preferredLocation_lon', request.settings.preferredLocation.lonLat[0] ? request.settings.preferredLocation.lonLat[0] : null);
-					sessionStorage.setItem('settings_preferredLocation_lat', request.settings.preferredLocation.lonLat[1] ? request.settings.preferredLocation.lonLat[1] : null);
-
-					// setAuth(true);
 					return {
 						confirm: true,
-						// settings: request.settings
 					};
 				}
 			} else {
@@ -108,7 +112,7 @@ export function UIContextProvider({ children }) {
     setUnreadCount(count);
 	}
 
-	// 3. Connect to Server upon successful log in verification
+	//Connect to Server upon successful log in verification
   React.useEffect(() => {
     if (authed && userID) {
       setSocketURL(`ws://127.0.0.1:3333/?${userID}`);
@@ -138,6 +142,28 @@ export function UIContextProvider({ children }) {
   	setMessage: setSocketMessage,
   	send: sendMessage
   }
+
+
+  const [userSettings, setUserSettings] = React.useState({
+  	lon: null, 
+  	lat: null, 
+  	location_city: null,
+  	location_state: null, 
+  	topics: null, 
+  	tags: null, 
+  	collections: null, 
+  	privacySetting: null, 
+  	profilePhoto: null
+  })
+
+  // collections: {
+  // 	id: col._id,
+  // 	name: col.name,
+  // 	ownerID: col.admins[0],
+  // 	ownerUsername: col.ownerUsername,
+  // 	isPrivate:
+  //}
+
 
 	const [colorScheme, setColorScheme] = React.useState({
         bg: null, 
@@ -207,7 +233,9 @@ export function UIContextProvider({ children }) {
 	    websocket,
 	    unreadCount,
 	    setUnreadCount,
-	    getUnreadCount
+	    getUnreadCount,
+	    userSettings,
+	    setUserSettings
    	}
 
 	return <uiContext.Provider value={UIC}>

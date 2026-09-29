@@ -46,7 +46,7 @@ export default function Post({
 }) {
 	const userID = sessionStorage.getItem('userID');
 	const data = useLoaderData();
-	// console.log(data);
+	const {userSettings} = useUIC();
 	const { postID } = useParams();
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -80,7 +80,7 @@ export default function Post({
 			postedOn_day: date.getDate(),
 			postedOn_year: date.getFullYear(),
 			commentNumber: access.commentNumber,
-			profilePhoto: sessionStorage.getItem('profilePhoto'),
+			profilePhoto: userSettings.profilePhoto,
 			respondeeId: access.commentOwner,
 			postOwner: postData.owner
 		}
