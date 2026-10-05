@@ -180,7 +180,6 @@ app.use('/posts', verify, async (req,res) => {
 
                     let hasAccess;
                     if(user.settings.topics.includes(req.body.groupName)) {
-                        // hasAccess = [_id];
                         hasAccess = true;
                     } 
                     else {
@@ -190,7 +189,9 @@ app.use('/posts', verify, async (req,res) => {
                     res.status(200).send({response:'topic', hasAccess: hasAccess});
                 }
                 else {
-                    let group = await Groups.findOne({_id: groupID});
+                    let group = await Groups.findOne({_id: groupID})
+                      .populate('admins', 'userName _id')
+                      .populate('hasAccess', 'userName _id');
                     res.status(200).send(group);
                 }
             }

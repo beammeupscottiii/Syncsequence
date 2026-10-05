@@ -1,8 +1,13 @@
 /* * * V I T A L S * * */
 import * as React from 'react';
-import {useParams, useLocation, useLoaderData} from 'react-router-dom';
+import { 
+	useParams, 
+	useLocation, 
+	useLoaderData, 
+	useOutletContext, 
+	useNavigate 
+} from 'react-router-dom';
 import APIaccess from '../../apiaccess';
-import {useNavigate} from 'react-router-dom';
 
 
 /* * * C O M P O N E N T S * * */
@@ -10,11 +15,10 @@ import Log from '../Log/Log'
 import FullList from '../../components/base/fullList';
 import DragSlider from '../../components/base/dragSlider';
 
-import { useUIC } from '../../UIcontext';
-
 import './macrospage.css';
-
+import { useUIC } from '../../UIcontext';
 const accessAPI = APIaccess(); 
+
 
 
 
@@ -38,6 +42,7 @@ export default function Macrospage({
 	const [macroInfo, setMacroInfo] = React.useState(data.macroInfo);
 	const macroID = macroInfo._id;
 	const { baseRef, setPrevSection, prevSection, userSettings } = useUIC();
+	const {arrd, setarrd} = useOutletContext() || {}
 
 	console.log(macroInfo)
 	console.log(postData)
@@ -198,7 +203,6 @@ export default function Macrospage({
 			}
 		}
 	}
-
 
 	const onInitialLoad = () => {
 

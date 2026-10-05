@@ -156,6 +156,8 @@ export function UIContextProvider({ children }) {
   	profilePhoto: null
   })
 
+  //const getUserSettings = async() => {}
+
   // collections: {
   // 	id: col._id,
   // 	name: col.name,

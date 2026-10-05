@@ -172,6 +172,8 @@ function Home({
   let profileRef = React.useRef();
   let settingsRef = React.useRef();
 
+
+
   /***
    * Home section stuff
   ***/
@@ -202,6 +204,8 @@ function Home({
   const [deleteTagsToggle, set_DeleteTagsToggle] = React.useReducer(state => !state, false);
   const [newCollectionToggle, set_NewCollectionToggle ] = React.useReducer(state => !state, false);
   const [manageCollectionsToggle, set_ManageCollectionsToggle] = React.useReducer(state => !state, false);
+  const [arrd, setArrd] = React.useState('');
+
 
   React.useEffect(()=> {
     if(!manageMacrosToggle) {
@@ -864,26 +868,6 @@ export default function Main() {
             }
           },
           element: 
-            // <UserProfile
-            //       // socket stuff
-            //       socketURL={socketURL}
-            //       socketMessage={socketMessage}
-            //       setSocketMessage={setSocketMessage}
-            //       sendMessage={sendMessage}
-            //       isActive={isActive}
-            //       setActive={setActive}
-            //       accessID={accessID}
-            //       setAccessID={setAccessID}
-            //       unreadCount={unreadCount}
-            //       setUnreadCount={setUnreadCount}
-            //       getUnreadCount={getUnreadCount}
-            //       lastMessage={lastMessage}
-            //       current={current}
-            //       setCurrent={setCurrent}
-            //       // socket stuff
-            //       selectedDate={selectedDate}
-            //       setSelectedDate={setSelectedDate}
-            // />
             <Profile
               current={current}
               setCurrent={setCurrent}
@@ -903,13 +887,12 @@ export default function Main() {
               type: macroInfo.response ? macroInfo.response : macroInfo.type, 
               groupID: params.macroid, 
               groupName: params.macroname});
-             
             let doesHaveAccess;
+
             if(macroInfo.response == 'topic') {
               macroInfo.userHasAccess = macroInfo.hasAccess;
-              // macroInfo._id = 'topic';
             }
-            // else if(macroInfo.hasAccess) {
+            
             else {
               doesHaveAccess = macroInfo.hasAccess.filter(el => el == userID);
               doesHaveAccess = doesHaveAccess.length > 0 ? true : false;

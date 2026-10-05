@@ -32,6 +32,41 @@ S m a l l  A d d s  &  F i x e s
 
 
 
+------------------------------------------------------------------------------------------------------
+
+
+
+### 10. 05. 2026
+@1445
+Updated 'getTagInfo' backend subroute to include username and id for 'admins' and 'hasAccess' ❗
+
+Do Next:
+- edit 'setArrd' calls in useEffect to reflect notes below...
+
+
+@0410
+ARRD can be declared within <Home> and passed down to <Macrospage> and <OptionsButton>
+It's value is set within <Macrospage>
+
+- add (if public. tag, col.)
+	- if(!macroInfo.userHasAccess && !macroInfo.isMacroPrivate)
+
+- remove (not owner. tag, col.)
+	- if(macroInfo.userHasAccess == true) and is not an admin
+
+- delete (if owner. tag, col)
+	- if(macroInfo.admin[0] == userID)
+
+- request (other user is owner. tag, col)
+	- if(!macroInfo.userHasAccess && not an admin)
+
+We should update the 'admins' field for groups to be a ref to users, so we can easily
+get ID and username...
+Hmm, it actually already is, but only ID is saved in the docs. we probably have to use
+populate - add the ID and the username.
+
+
+
 ### 09. 29. 2026 [current]
 @1220
 And now for some reason, <Macrospage> is broken (._. )_
