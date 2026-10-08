@@ -125,7 +125,10 @@ export default function OptionsButton({
 	set_CreateTagToggle,
 	set_DeleteTagsToggle,
 	set_NewCollectionToggle,
-	set_ManageCollectionsToggle
+	set_ManageCollectionsToggle,
+	arrd,
+	setArrd,
+	arrdFunctionRef
 }) {
 
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -361,8 +364,8 @@ export default function OptionsButton({
 						...current,
 						manageMacros: true
 					})
+					set_ManageMacrosToggle();
 					set_ManageCollectionsToggle();
-					set_CreateTagToggle();
 					setOptionsOpen(false);
 				},
 				class: '',
@@ -607,11 +610,23 @@ export default function OptionsButton({
 
 		const macrospageOptions = [
 			{
-				name: '',
-				function: null,
+				name: 'Add Macro',
+				function: ()=> { arrdFunctionRef.current(); setOptionsOpen(false); },
 				class: '',
-				display: true
+				display: arrd == 'add' ? true : false
 			},
+			{
+				name: 'Remove',
+				function: ()=> { arrdFunctionRef.current(); setOptionsOpen(false); },
+				class: '',
+				display: arrd == 'remove' ? true : false
+			},
+			{
+				name: 'Delete',
+				function: ()=> { arrdFunctionRef.current(); setOptionsOpen(false); },
+				class: '',
+				display: arrd == 'delete' ? true : false
+			}
 		];
 
 
@@ -636,6 +651,7 @@ export default function OptionsButton({
     if (current.section === 'profile' || current.section === 'User') return 'profile';
     if (current.section === 'social') return 'social';
     if (current.section === 'macros') return 'macros';
+    if (current.section === 'Macro') return 'macrosPage';
     return 'home';
 	}, [current]);
 

@@ -41,17 +41,14 @@ export default function Macrospage({
 	const [postData, setPostData] = React.useState(data.macroPosts);
 	const [macroInfo, setMacroInfo] = React.useState(data.macroInfo);
 	const macroID = macroInfo._id;
-	const { baseRef, setPrevSection, prevSection, userSettings } = useUIC();
-	const {arrd, setarrd} = useOutletContext() || {}
+	const { baseRef, setPrevSection, prevSection, userSettings, triggerPopup } = useUIC();
+	const {arrd, setArrd, arrdFunctionRef } = useOutletContext() || {}
 
 	console.log(macroInfo)
 	console.log(postData)
 
 
 	let goToProfile = async(userID) => {
-
-		let elCurrent = el.current;
-		elCurrent.classList.add('_enter');
 
 		let data = await accessAPI.getSingleUser(userID);
 		
@@ -87,122 +84,133 @@ export default function Macrospage({
 	const [menu, toggleMenu] = React.useReducer(state => !state, false);
 	const [fullList, toggleFullList] = React.useReducer(state => !state, false);
 	const source = macroInfo.name == 'BOOKMARKS' ? `${macroInfo.ownerUsername}'s ${macroInfo.name}` : macroInfo.name;
-	let [ARRD, setARRD] = React.useState();
 
 	let addRemoveRequestDelete = async() => {
-		if(ARRD == 'delete') {
-			let request = await accessAPI.manageGroup('deleteGroup', {
-				type: 'tag',
-				groupID: macroInfo._id,
-			});
 
-			if(request.confirmation) {
-				navigate(-1);
-				let delay = setTimeout(()=> {
-					// setSocketMessage({
-					// 	type: 'simpleNotif',
-					// 	message: `Deleted "${macroInfo.name}"`
-					// })
-				}, 200)
-			}
-		}
+		console.log('it does run');
 
-		else if(ARRD == 'remove') {
+		if(arrd == 'delete') {
+			// let request = await accessAPI.manageGroup('deleteGroup', {
+			// 	type: 'tag',
+			// 	groupID: macroInfo._id,
+			// });
 
-			if(macroInfo.type == 'topic') {
+			// if(request.confirmation) {
+			// 	navigate(-1);
+			// 	let delay = setTimeout(()=> {
 
-				let request = await accessAPI.manageGroup('removeUser', {
-					topic: macroInfo.name
-				}).then((data) => {
-					if(data.confirmation == true) {
-						setARRD('add')
-					}
-				})
-				// setSocketMessage({
-				// 	type: 'simpleNotif',
-				// 	message: `Removed "${macroInfo.name}" from your topics`
-				// })
-			}
-			else {
-				let request = await accessAPI.manageGroup('removeUser', {
-					groupID: macroInfo._id,
-				}).then((data) => {
-					if(data.confirmation == true) {
-						if(macroInfo.isMacroPrivate) {
-							setARRD('request')
-							// ARRD = 'request'
-						}
-						else {
-							setARRD('add')
-							// ARRD = 'add'
-						}
-					}
-				})
-				// setSocketMessage({
-				// 	type: 'simpleNotif',
-				// 	message: `Removed "${macroInfo.name}" to your tags`
-				// })
-			}
-		}
-
-		else if(ARRD == 'request') {
-
-			let request = accessAPI.newInteraction({
-				type: 'request',
-				message: 'accessRequested',
-				senderID: userID,
-				recipients: [macroInfo.ownerID],
-				recipientUsernames: macroInfo.ownerUsername,
-				groupID: macroID,
-				groupName: macroInfo.name
-			}).then(data => {
-				if(data.confirmation == true) {
-					console.log('request sent')
-
-					// setSocketMessage({
-					// 	message: `Request for access sent to @${macroInfo.ownerUsername}`,
-					// 	recipients: [macroInfo.ownerID],
-					// 	action: 'updateNotifs'
-					// })
-				}
-				else {
-					// setSocketMessage({
-					// 	type: 'error',
-					// 	message: data.message
-					// })
-				}
+			// 		triggerPopup({
+			// 			message: `Deleted macro "${macroInfo.name}"`
+			// 		})
+			// 	}, 400)
+			// }
+			triggerPopup({
+				message: `Deleted macro "${macroInfo.name}"`
 			})
 		}
 
-		else if(ARRD == 'add') {
+		else if(arrd == 'remove') {
+
 			if(macroInfo.type == 'topic') {
-				let request = await accessAPI.manageGroup('addUser', {
-					topic: macroInfo.name
-				}).then((data) => {
-					if(data.confirmation == true) {
-						setARRD('remove')
-					}
-				})
-				// setSocketMessage({
-				// 	type: 'simpleNotif',
-				// 	message: `Added "${macroInfo.name}" to your topics`
+
+				// let request = await accessAPI.manageGroup('removeUser', {
+				// 	topic: macroInfo.name
+				// }).then((data) => {
+				// 	if(data.confirmation == true) {
+				// 		setArrd('add')
+				// 	}
 				// })
+				setArrd('add')
+				triggerPopup({
+					message: `Removed "${macroInfo.name}" from your topics`
+				})
 			}
+
 			else {
-				let request = accessAPI.manageGroup('addUser', {
-					groupID: macroInfo._id,
-				}).then((data) => {
-					if(data.confirmation == true) {
-						setARRD('remove')
-					}
-				})
-				// setSocketMessage({
-				// 	type: 'simpleNotif',
-				// 	message: `Added "${macroInfo.name}" to your tags`
+				// let request = await accessAPI.manageGroup('removeUser', {
+				// 	groupID: macroInfo._id,
+				// }).then((data) => {
+				// 	if(data.confirmation == true) {
+				// 		setArrd('add')
+				// 	}
 				// })
+				setArrd('add')
+				triggerPopup({
+					message: `Removed "${macroInfo.name}" from your tags`
+				})
 			}
 		}
+
+		else if(arrd == 'add') {
+			if(macroInfo.type == 'topic') {
+				// let request = await accessAPI.manageGroup('addUser', {
+				// 	topic: macroInfo.name
+				// }).then((data) => {
+				// 	if(data.confirmation == true) {
+				// 		setArrd('remove')
+				// 	}
+				// })
+				setArrd('remove')
+				triggerPopup({
+					message: `Added "${macroInfo.name}" to your topics`
+				})
+			}
+
+			else {
+				// let request = accessAPI.manageGroup('addUser', {
+				// 	groupID: macroInfo._id,
+				// }).then((data) => {
+				// 	if(data.confirmation == true) {
+				// 		setArrd('remove')
+				// 	}
+				// })
+				setArrd('remove')
+				triggerPopup({
+					message: `Added "${macroInfo.name}" to your tags`
+				})
+			}
+		}
+
+		// else if(arrd == 'request') {
+
+		// 	let request = accessAPI.newInteraction({
+		// 		type: 'request',
+		// 		message: 'accessRequested',
+		// 		senderID: userID,
+		// 		recipients: [macroInfo.ownerID],
+		// 		recipientUsernames: macroInfo.ownerUsername,
+		// 		groupID: macroID,
+		// 		groupName: macroInfo.name
+		// 	}).then(data => {
+		// 		if(data.confirmation == true) {
+		// 			console.log('request sent')
+
+		// 			// setSocketMessage({
+		// 			// 	message: `Request for access sent to @${macroInfo.ownerUsername}`,
+		// 			// 	recipients: [macroInfo.ownerID],
+		// 			// 	action: 'updateNotifs'
+		// 			// })
+		// 		}
+		// 		else {
+		// 			// setSocketMessage({
+		// 			// 	type: 'error',
+		// 			// 	message: data.message
+		// 			// })
+		// 		}
+		// 	})
+		// }
 	}
+
+	React.useLayoutEffect(()=> {
+		if(arrdFunctionRef) {
+			arrdFunctionRef.current = addRemoveRequestDelete
+		}
+
+		return () => {
+			if(arrdFunctionRef) arrdFunctionRef.current = null
+		}
+	}, [arrdFunctionRef, addRemoveRequestDelete])
+
 
 	const onInitialLoad = () => {
 
@@ -233,52 +241,26 @@ export default function Macrospage({
 		document.title = `Resync'd | Macro`
 
 		console.log(macroInfo.name)
-		// console.log(userTopics.includes(macroInfo.mame))
-		// if(userTopics.includes(macroInfo.mame)) {
-		// 	setMacroInfo({
-		// 		...macroInfo,
-		// 		userHasAccess: true
-		// 	})
-		// }
 		console.log(macroInfo);
-	}, [])
 
-	let el = React.useRef();
-	React.useEffect(()=> {
-		let elCurrent = el.current;
-		let delay = setTimeout(()=> {
-			elCurrent.classList.remove('_enter');	
-		}, 300)
 
-		if(macroInfo.ownerID == userID) { 
-			setARRD('delete')
-			// ARRD = 'delete'
+		if(macroInfo.admins[0]._id == userID) { 
+			setArrd('delete')
 		}
-		// if hasAccess and not owner -> remove
+
 		else if(macroInfo.userHasAccess == true) {
-			setARRD('remove')
-			// ARRD = 'remove'
+			setArrd('remove')
 		}
-		// if noaccess and is not private -> add
-		else if(!macroInfo.userHasAccess && macroInfo.admins) {
-			setARRD('request')
-			// ARRD = 'request'
-		}
-		// if no access and is private -> request
 		else if(!macroInfo.userHasAccess && !macroInfo.isMacroPrivate) {
-			setARRD('add')
-			// ARRD = 'add'
+			setArrd('add')
 		}
 	}, []);
 
-	// Update posts when fullList is closed
-	React.useEffect(()=> {
-		updatePosts()
-	}, [fullList])
 
-		
+
+
 	return (
-		<section id="MACROSPAGE" ref={el} className={`${sectionClass.macrospage}`}>
+		<section id="MACROSPAGE" className={`${sectionClass.macrospage}`}>
 
 			<div id="mainWrapper">
 				

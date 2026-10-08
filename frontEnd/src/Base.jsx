@@ -205,6 +205,7 @@ function Home({
   const [newCollectionToggle, set_NewCollectionToggle ] = React.useReducer(state => !state, false);
   const [manageCollectionsToggle, set_ManageCollectionsToggle] = React.useReducer(state => !state, false);
   const [arrd, setArrd] = React.useState('');
+  const arrdFunctionRef = React.useRef(null);
 
 
   React.useEffect(()=> {
@@ -433,7 +434,10 @@ function Home({
           context={{ 
             removeConnectionRef, 
             requestConnectionRef, 
-            subscriptionRequestRef 
+            subscriptionRequestRef,
+            arrd,
+            setArrd,
+            arrdFunctionRef
           }}
           key={location.pathname}/>
 
@@ -530,7 +534,7 @@ function Home({
                       setDraftsList={setDraftsList}/>
         }
 
-        {manageMacrosToggle &&
+        {/*{manageMacrosToggle &&
           <ManageMacros current={current} 
                         setCurrent={setCurrent}
                         set_ManageMacrosToggle={set_ManageMacrosToggle}
@@ -539,7 +543,7 @@ function Home({
                         set_NewCollectionToggle={set_NewCollectionToggle}
                         set_ManageCollectionsToggle={set_ManageCollectionsToggle} 
           />
-        }
+        }*/}
 
         {manageMacrosToggle &&
           <ManageMacross current={current} 
@@ -548,7 +552,7 @@ function Home({
                          setSectionClass={setSectionClass}
                          set_ManageMacrosToggle={set_ManageMacrosToggle}
                          createTagToggle={createTagToggle}
-                         // deleteTagsToggle={deleteTagsToggle}
+                         deleteTagsToggle={deleteTagsToggle}
                          newCollectionToggle={newCollectionToggle}
                          manageCollectionsToggle={manageCollectionsToggle} 
           />
@@ -586,6 +590,10 @@ function Home({
             removeConnectionRef={removeConnectionRef}
             requestConnectionRef={requestConnectionRef}
             subscriptionRequestRef={subscriptionRequestRef}
+
+            setArrd={setArrd}
+            arrd={arrd}
+            arrdFunctionRef={arrdFunctionRef}
         />
 
 
@@ -786,36 +794,13 @@ export default function Main() {
       element: 
         <HomeOrEntry>
             <Home 
-              // socket & notif stuff
-              // socketURL={socketURL}
-              // socketMessage={socketMessage}
-              // setSocketMessage={setSocketMessage}
-              // sendMessage={sendMessage}
-              // isActive={isActive}
-              // setActive={setActive}
-              // accessID={accessID}
-              // setAccessID={setAccessID}
-              // unreadCount={unreadCount}
-              // setUnreadCount={setUnreadCount}
-              // getUnreadCount={getUnreadCount}
-              // lastMessage={lastMessage}
-              // socket & notif stuff
               cal={cal}
               current={current}
               setCurrent={setCurrent}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
-
-              // mapData={mapData}
-              // setMapData={setMapData}
-
               log={log}
               setLog={setLog}
-              // tags={tags}
-              // setTags={setTags}
-              // userTopics={userTopics}
-              // setUserTopics={setUserTopics}
-
               sectionClass={sectionClass}
               setSectionClass={setSectionClass}
             />
@@ -830,22 +815,8 @@ export default function Main() {
           },
           element:
               <Post 
-                // socket stuff
-                // socketURL={socketURL}
-                // socketMessage={socketMessage}
-                // setSocketMessage={setSocketMessage}
-                // sendMessage={sendMessage}
-                // isActive={isActive}
-                // setActive={setActive}
-                // accessID={accessID}
-                // setAccessID={setAccessID}
-                // unreadCount={unreadCount}
-                // setUnreadCount={setUnreadCount}
-                // getUnreadCount={getUnreadCount}
-                // lastMessage={lastMessage}
                 current={current}
-                setCurrent={setCurrent}
-                     
+                setCurrent={setCurrent}                   
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
               />
@@ -894,7 +865,7 @@ export default function Main() {
             }
             
             else {
-              doesHaveAccess = macroInfo.hasAccess.filter(el => el == userID);
+              doesHaveAccess = macroInfo.hasAccess.filter(user => user._id == userID);
               doesHaveAccess = doesHaveAccess.length > 0 ? true : false;
               macroInfo.userHasAccess = doesHaveAccess;
             }

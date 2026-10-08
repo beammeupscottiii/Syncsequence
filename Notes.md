@@ -31,9 +31,28 @@ S m a l l  A d d s  &  F i x e s
 - clicking on post dot in <Map> also opens 'filter posts by'. needs fix
 
 
+N O T E S
+- 10.07.2026 
+	- topics take a second to appear in Tags List, <Macros>
+	- <MacrosPage> crashes if topic is selected
 
 ------------------------------------------------------------------------------------------------------
 
+### 10. 07. 2026
+@2125
+arrdFunction piped to <OptionsButton>. Commented out main functionality, until we can test
+before adding <ManageMacros> funcs, fix issues with topics.
+
+
+### 10. 06. 2026
+@1815
+
+to do next:
+- route 'addRemoveRequestDelete' from <Macrospage> to <OptionsButton> ✔️
+
+then:
+- reinstate <ManageMacros> functions
+	copy over designs from old component
 
 
 ### 10. 05. 2026
@@ -41,7 +60,9 @@ S m a l l  A d d s  &  F i x e s
 Updated 'getTagInfo' backend subroute to include username and id for 'admins' and 'hasAccess' ❗
 
 Do Next:
-- edit 'setArrd' calls in useEffect to reflect notes below...
+- edit 'setArrd' calls in useEffect to reflect notes below ✔️
+- add options to <OptionsButton> for <MacrosPage>, make sure whether options
+	appear is dependant on 'arrd' state var ✔️
 
 
 @0410
@@ -57,8 +78,10 @@ It's value is set within <Macrospage>
 - delete (if owner. tag, col)
 	- if(macroInfo.admin[0] == userID)
 
+❗ removing 'request' for now.....
 - request (other user is owner. tag, col)
 	- if(!macroInfo.userHasAccess && not an admin)
+
 
 We should update the 'admins' field for groups to be a ref to users, so we can easily
 get ID and username...

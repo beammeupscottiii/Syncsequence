@@ -323,7 +323,6 @@ export default function Profile({
 		        removeConnectionRef.current = removeConnection;
 		    }
 
-		    // Register Draft Logic
 		    if (requestConnectionRef) {
 		        requestConnectionRef.current = requestConnection;
 		    }
