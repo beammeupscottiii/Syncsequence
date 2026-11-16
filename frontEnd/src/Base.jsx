@@ -756,12 +756,23 @@ export default function Main() {
 
     console.log(request)
 
+    let userTopics = [];
+    if(request.topics.length > 0) {
+      userTopics = request.topics.map(topic => {
+        return ({
+            name: topic,
+            type: 'topic',
+            _id: 'topic'
+        })
+      })
+    }
+
     setUserSettings({
       lon: request.lon, 
       lat: request.lat, 
       location_city: request.location_city,
       location_state: request.location_state, 
-      topics: request.topics, 
+      topics: userTopics.length > 0 ? userTopics : [], 
       tags: request.tags, 
       collections: request.collections, 
       privacySetting: request.privacySetting, 

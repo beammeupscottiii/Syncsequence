@@ -242,8 +242,10 @@ app.use('/posts', verify, async (req,res) => {
                 else {
                     
                     let group = await Groups.findOne({_id: groupID});
+                    console.log(_id)
+                    console.log(group.admins[0].toString())
 
-                    if(group.isPrivate == true && (_id !== group.admins[0])) {
+                    if(group.isPrivate == true && (_id !== group.admins[0].toString())) {
                         res.status(401).send({error: `user doesn't have permission to view this group`})
                     }
 
@@ -886,6 +888,9 @@ app.post('/manage/:action', verify, async (req,res) => {
         else if(req.params.action == 'deleteGroup') {
 
             if(group.type == 'tag') {
+
+                //10.13. 2026
+                //need to remove said tag from all posts which use it
 
                 if(group.isPrivate == true && group.owner == _id) {
                     (async()=> {

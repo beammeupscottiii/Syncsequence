@@ -30,12 +30,23 @@ export function UIContextProvider({ children }) {
 			if(request.confirm == true) {
 				if(sessionStorage.getItem('userKey')) {
 
+					let userTopics = [];
+					if(request.userSettings.topics.length > 0) {
+						userTopics = request.userSettings.topics.map(topic => {
+							return ({
+	                name: topic,
+	                type: 'topic',
+	                _id: 'topic'
+	            })
+						})
+					}
+					
 					setUserSettings({
 						lon: request.userSettings.lon, 
 				  	lat: request.userSettings.lat, 
 				  	location_city: request.userSettings.location_city,
 				  	location_state: request.userSettings.location_state, 
-				  	topics: request.userSettings.topics, 
+				  	topics: userTopics.length > 0 ? userTopics : [], 
 				  	tags: request.userSettings.tags, 
 				  	collections: request.userSettings.collections, 
 				  	privacySetting: request.userSettings.privacySetting, 

@@ -31,12 +31,61 @@ S m a l l  A d d s  &  F i x e s
 - clicking on post dot in <Map> also opens 'filter posts by'. needs fix
 
 
+
 N O T E S
+
+- 10.13.2026
+	- for 'deleteGroups' on backend, need to remove the tag from all posts which use it
+
 - 10.07.2026 
-	- topics take a second to appear in Tags List, <Macros>
-	- <MacrosPage> crashes if topic is selected
+	- topics take a second to appear in Tags List, <Macros> ✔️
+	- <MacrosPage> crashes if topic is selected ✔️
+
+
+
 
 ------------------------------------------------------------------------------------------------------
+
+### 11. 16. 2026
+@1755 fixed issue with private tags on the backend.
+need to make sure when outside user access private collection <MacrosPage>
+	that the frontEnd catches it and displays a message on the page.
+	probably need to add a contingency to the 'getTagData' and or 'getPosts' calls
+	Maybe lets see what happens when outside user tries to access private tag page
+	and see what happens, work from there
+
+continue with testing <Macros> section functions
+
+@1615
+going to 'Collections' page currently does not work, breaks backend
+
+'manageCollections' section in <ManageMacros> styles added, but need
+	to be editted....
+
+
+### 10. 17. 2026
+@1350
+Test all <ManageMacros> functions
+
+
+### 10. 10. 2026
+@1655
+Issues fixed with topics.
+
+To Do Next:
+- reAdd <ManageMacros> functions from old component
+	- Create Tag ✔️
+	- Delete Tags ✔️
+	- New Collection ✔️
+	- Manage Collections ✔️
+	- test, ensure all work
+- test <MacrosPage> functions
+
+- update <Post> design
+ 	- test macros functionalities from there
+
+- assess whether anything concerning commenting needs to be updated / fixed
+
 
 ### 10. 07. 2026
 @2125

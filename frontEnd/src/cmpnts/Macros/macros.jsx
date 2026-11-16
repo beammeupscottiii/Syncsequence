@@ -26,7 +26,7 @@ export default function Macross({
 	const navigate = useNavigate();
 
 	let [tagsSection, toggleTags] = React.useReducer(state => !state, true);
-	let [tags, setTags] = React.useState(userSettings.tags);
+	let [tags, setTags] = React.useState([...userSettings.topics, ...userSettings.tags]);
 
 	let [privatePostsSection, togglePrivatePosts] = React.useReducer(state => !state, false);
 	let [privatePosts_visibleCount, setPrivatePosts_visibleCount] = React.useState(6);

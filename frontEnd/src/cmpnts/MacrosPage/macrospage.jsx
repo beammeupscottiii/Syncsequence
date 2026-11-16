@@ -244,14 +244,14 @@ export default function Macrospage({
 		console.log(macroInfo);
 
 
-		if(macroInfo.admins[0]._id == userID) { 
+		if(macroInfo.type == 'tag' && macroInfo.admins[0]._id == userID) { 
 			setArrd('delete')
 		}
 
-		else if(macroInfo.userHasAccess == true) {
+		else if(userSettings.topics.filter(topic => topic.name == macroInfo.name) || macroInfo.userHasAccess == true) {
 			setArrd('remove')
 		}
-		else if(!macroInfo.userHasAccess && !macroInfo.isMacroPrivate) {
+		else if(!userSettings.topics.filter(topic => topic.name == macroInfo.name) || (!macroInfo.userHasAccess && !macroInfo.isMacroPrivate)) {
 			setArrd('add')
 		}
 	}, []);
